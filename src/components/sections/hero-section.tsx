@@ -65,7 +65,7 @@ export function HeroSection() {
           delay={300}
           className="text-xl sm:text-2xl md:text-3xl text-foreground/80 mb-10 max-w-3xl mx-auto"
         >
-          Where AI Magic Meets Engineering Precision
+          Where  AI  Magic  Meets  Engineering  Precision
         </AnimatedTitle>
 
         <div className="animate-fadeInGrow" style={{animationDelay: '600ms', opacity: 0}}>
