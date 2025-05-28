@@ -14,13 +14,11 @@ const GlassCardInnerContent = ({ className, children, ...props }: HTMLAttributes
   return (
     <div 
       className={cn(
-        "bg-card text-card-foreground w-full h-full",
-        // This needs to be rounded *less* than the parent's padding for the border to show.
-        // If parent is rounded-lg (var(--radius)), this should be calc(var(--radius) - var(--neon-border-thickness))
-        "p-5 md:p-6", // Original content padding from GlassCard
+        "bg-card text-card-foreground w-full h-full", // Actual card background and text color
+        "p-5 md:p-6", // Content padding
         className
       )}
-      // Apply precise rounding with inline style to respect --neon-border-thickness
+      // This ensures the inner content is rounded less than the outer border area
       style={{ borderRadius: `calc(var(--radius) - var(--neon-border-thickness))` }}
       {...props}
     >
@@ -36,10 +34,8 @@ export function GlassCard({ className, children, index = 0, ...props }: GlassCar
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className={cn(
-        "card-neon-animated-border", // Applies animated gradient bg and padding
-        "shadow-xl hover:shadow-2xl", // Enhanced shadow for neon pop
-        // The main rounding (var(--radius)) is applied by .card-neon-animated-border
-        // No direct 'rounded-lg' here anymore, it's part of the CSS class.
+        "card-neon-animated-border", // This class enables the animated border via globals.css
+        "shadow-xl hover:shadow-2xl", // Retaining shadow for depth
         className
       )}
       {...props}
@@ -50,6 +46,9 @@ export function GlassCard({ className, children, index = 0, ...props }: GlassCar
     </motion.div>
   );
 }
+
+// The rest of the GlassCard sub-components remain the same
+// as they are concerned with the structure *inside* GlassCardInnerContent.
 
 export function GlassCardHeader({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
@@ -76,7 +75,6 @@ export function GlassCardDescription({ className, children, ...props }: HTMLAttr
 }
 
 export function GlassCardContent({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) {
-  // Removed default padding from here as GlassCardInnerContent now handles it.
   return (
     <div className={cn("", className)} {...props}>
       {children}

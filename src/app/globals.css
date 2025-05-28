@@ -7,7 +7,6 @@ body {
   /* Rich dark gradients with subtle animated color shifts */
   background-color: hsl(var(--background-dark-end-raw)); /* Fallback */
   background-image: linear-gradient(180deg, hsl(var(--background-dark-start-raw)) 0%, hsl(var(--background-dark-end-raw)) 100%);
-  /* TODO: Add subtle animated color shifts for background if feasible via CSS only or simple JS */
   color: hsl(var(--foreground-raw)); /* Ensure text is readable */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -162,31 +161,29 @@ html {
 .card-neon-animated-border {
   position: relative;
   z-index: 0; 
-  border-radius: var(--radius); /* Ensure this matches the intended card radius */
+  border-radius: var(--radius); 
   padding: var(--neon-border-thickness); 
-  overflow: hidden; /* Important to clip the pseudo-element */
+  overflow: hidden; 
 }
 
 .card-neon-animated-border::before {
   content: '';
   position: absolute;
   z-index: -1; 
-  /* Make pseudo-element larger to ensure gradient covers edges during rotation */
-  /* A common factor is 1.5 to 2 times the size, then offset */
   width: 200%; 
   height: 200%;
-  top: -50%; /* (width - 100%) / -2 */
-  left: -50%; /* (height - 100%) / -2 */
+  top: -50%; 
+  left: -50%;
   
   background: conic-gradient(
-    from var(--neon-border-angle), /* Start angle of the gradient */
+    from var(--neon-border-angle),
     hsl(var(--neon-cyan-raw)), 
     hsl(var(--neon-magenta-raw)), 
-    hsl(var(--accent-raw)), /* Using existing neon lime/green */
+    hsl(var(--accent-raw)), 
     hsl(var(--neon-orange-raw)), 
     hsl(var(--neon-deep-purple-raw)),
     hsl(var(--neon-electric-blue-raw)),
-    hsl(var(--neon-cyan-raw)) /* Loop back to start color for smooth transition */
+    hsl(var(--neon-cyan-raw)) 
   );
   
   animation: rotate-neon-glow-animation 8s linear infinite;
