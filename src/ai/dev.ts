@@ -3,3 +3,4 @@ config();
 
 import '@/ai/flows/improve-prompt-suggestions.ts';
 import '@/ai/flows/live-ai-response-demo.ts';
+import '@/ai/flows/generate-from-assembled-prompt.ts';

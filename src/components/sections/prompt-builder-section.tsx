@@ -5,17 +5,24 @@ import { SectionContainer } from "@/components/shared/section-container";
 import { PromptComponentCard, type PromptComponentType } from "@/components/prompt-builder/prompt-component-card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
-import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2 } from "lucide-react";
+import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState, type DragEvent } from "react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useMutation } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
+import {
+  generateFromAssembledPrompt,
+  type GenerateFromAssembledPromptInput,
+} from '@/ai/flows/generate-from-assembled-prompt';
+
 
 interface AvailableComponent {
   type: PromptComponentType;
   title: string;
-  description: string; // This will now be the actual content of the prompt piece
+  description: string; 
   icon: LucideIcon;
 }
 
@@ -68,9 +75,36 @@ interface DroppedItem extends AvailableComponent {
   id: string;
 }
 
+const PLACEHOLDER_PROMPT_TEXT = "Your assembled prompt will appear here... Drag components from the left to build it!";
+
 export function PromptBuilderSection() {
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
   const [draggedOver, setDraggedOver] = useState(false);
+  const [aiResponse, setAiResponse] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  const livePreviewText = droppedItems.length > 0
+    ? droppedItems.map(item => `## ${item.title} (Component Type: ${item.type.toUpperCase()})\n\n${item.description}\n\n---\n`).join('\n')
+    : PLACEHOLDER_PROMPT_TEXT;
+
+  const generateResponseMutation = useMutation({
+    mutationFn: (input: GenerateFromAssembledPromptInput) => generateFromAssembledPrompt(input),
+    onSuccess: (data) => {
+      if (data && data.response) {
+        setAiResponse(data.response);
+        toast({ title: "AI Response Received!", description: "The AI has responded to your assembled prompt." });
+      } else {
+        const errorMessage = "AI did not return a valid response.";
+        setAiResponse(errorMessage);
+        toast({ variant: "destructive", title: "Response Error", description: errorMessage });
+      }
+    },
+    onError: (error: Error) => {
+      const errorMessage = `Error: ${error.message}`;
+      setAiResponse(errorMessage);
+      toast({ variant: "destructive", title: "Generation Error", description: error.message });
+    }
+  });
 
   const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -88,14 +122,11 @@ export function PromptBuilderSection() {
     
     const originalComponent = availableComponents.find(c => c.type === type);
     if (originalComponent) {
-      // Check if a component of the same type already exists, if it's a 'system' or 'user' type
-      // For other types, allow multiple instances.
       const isSingletonType = type === 'system' || type === 'user';
       const alreadyExists = isSingletonType && droppedItems.some(item => item.type === type);
 
       if (isSingletonType && alreadyExists) {
-        // Optionally, provide feedback to the user, e.g., via a toast
-        console.warn(`Component of type "${type}" can only be added once.`);
+        toast({ variant: "destructive", title: "Component Limit", description: `Component of type "${type}" can only be added once.`});
         return; 
       }
       setDroppedItems(prev => [...prev, { ...originalComponent, id: Date.now().toString() }]);
@@ -105,10 +136,15 @@ export function PromptBuilderSection() {
   const handleRemoveItem = (idToRemove: string) => {
     setDroppedItems(prev => prev.filter(item => item.id !== idToRemove));
   };
-
-  const livePreviewText = droppedItems.length > 0 
-    ? droppedItems.map(item => `## ${item.title} (Component Type: ${item.type.toUpperCase()})\n\n${item.description}\n\n---\n`).join('\n')
-    : "Your assembled prompt will appear here... Drag components from the left to build it!";
+  
+  const handleTestPrompt = () => {
+    if (droppedItems.length === 0 || livePreviewText === PLACEHOLDER_PROMPT_TEXT) {
+      toast({ variant: "destructive", title: "Empty Prompt", description: "Please assemble a prompt before testing." });
+      return;
+    }
+    setAiResponse(null); 
+    generateResponseMutation.mutate({ assembledPrompt: livePreviewText });
+  };
 
   return (
     <SectionContainer
@@ -134,7 +170,7 @@ export function PromptBuilderSection() {
                     key={comp.type}
                     type={comp.type}
                     title={comp.title}
-                    description={comp.description} // This will show the actual content on the card briefly
+                    description={comp.description}
                     icon={comp.icon}
                   />
                 ))}
@@ -172,7 +208,7 @@ export function PromptBuilderSection() {
                     <PromptComponentCard
                       type={item.type}
                       title={item.title}
-                      description={item.description} // Show full description when dropped
+                      description={item.description}
                       icon={item.icon}
                       isDraggable={false} 
                       className="opacity-95 group-hover:opacity-100 cursor-default"
@@ -196,7 +232,7 @@ export function PromptBuilderSection() {
               <h4 className="text-lg font-semibold text-primary mb-2">Live Prompt Preview (Raw Text):</h4>
               <Textarea
                 readOnly
-                placeholder="Your assembled prompt will appear here..."
+                placeholder={PLACEHOLDER_PROMPT_TEXT}
                 className="flex-grow bg-foreground/5 text-foreground/90 resize-none glass-card-content !p-3 !border-primary/30 custom-scrollbar" 
                 value={livePreviewText}
               />
@@ -204,9 +240,45 @@ export function PromptBuilderSection() {
           </GlassCardContent>
         </GlassCard>
       </div>
-       <Button variant="outline" size="lg" className="mt-8 border-accent text-accent hover:bg-accent hover:text-accent-foreground">
-          Test Assembled Prompt with AI (Coming Soon)
+       <Button 
+          variant="outline" 
+          size="lg" 
+          className="mt-8 border-accent text-accent hover:bg-accent hover:text-accent-foreground"
+          onClick={handleTestPrompt}
+          disabled={generateResponseMutation.isPending || droppedItems.length === 0}
+        >
+          {generateResponseMutation.isPending ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Bot className="mr-2 h-4 w-4" />
+          )}
+          Test Assembled Prompt with AI
         </Button>
+
+        { (generateResponseMutation.isPending || aiResponse) && (
+        <GlassCard className="mt-8">
+            <GlassCardHeader>
+            <GlassCardTitle className="text-primary flex items-center">
+                <Sparkles className="mr-2 h-5 w-5" /> AI Response
+            </GlassCardTitle>
+            </GlassCardHeader>
+            <GlassCardContent>
+            {generateResponseMutation.isPending && !aiResponse ? (
+                <div className="flex items-center justify-center p-8">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <p className="ml-3 text-foreground/80">Generating response...</p>
+                </div>
+            ) : (
+                <Textarea
+                readOnly
+                value={aiResponse || ""}
+                placeholder="AI response will appear here..."
+                className="h-64 bg-foreground/5 text-foreground/90 resize-none glass-card-content !p-3 !border-primary/30 custom-scrollbar"
+                />
+            )}
+            </GlassCardContent>
+        </GlassCard>
+        )}
     </SectionContainer>
   );
 }
