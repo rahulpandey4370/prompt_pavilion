@@ -11,10 +11,10 @@ export type PromptComponentType =
 interface PromptComponentCardProps {
   type: PromptComponentType;
   title: string;
-  description: string;
+  description: string; // This is the full content for example components
   icon: LucideIcon;
   className?: string;
-  isDraggable?: boolean; // To control draggable attribute for cards in the drop zone
+  isDraggable?: boolean;
 }
 
 const typeColors: Record<PromptComponentType, string> = {
@@ -42,10 +42,14 @@ export function PromptComponentCard({ type, title, description, icon: Icon, clas
   const handleDragStart = (event: DragEvent<HTMLDivElement>) => {
     if (!isDraggable) return;
     event.dataTransfer.setData("promptComponentType", type);
-    event.dataTransfer.setData("promptComponentTitle", title);
-    // You could also serialize the whole component data if needed
-    // event.dataTransfer.setData("application/json", JSON.stringify({ type, title, description, iconName: Icon.displayName }));
+    // We don't need to transfer title/description anymore as we look it up from availableComponents
+    // event.dataTransfer.setData("promptComponentTitle", title); 
   };
+
+  // For display on the card, truncate the description if it's very long, especially for library cards
+  const displayDescription = isDraggable && description.length > 70 
+    ? description.substring(0, 67) + "..." 
+    : description;
 
   return (
     <div
@@ -59,6 +63,7 @@ export function PromptComponentCard({ type, title, description, icon: Icon, clas
         isDraggable ? "cursor-grab active:cursor-grabbing" : "cursor-default",
         className
       )}
+      title={description} // Show full description on hover
     >
       <div className="absolute top-0 left-0 h-full w-1 bg-white/30"></div>
       <div className="flex items-center mb-2">
@@ -66,7 +71,9 @@ export function PromptComponentCard({ type, title, description, icon: Icon, clas
         <h3 className="font-semibold text-md">{title}</h3>
         {isDraggable && <GripVertical className="ml-auto w-5 h-5 text-white/50 cursor-grab" />}
       </div>
-      <p className="text-xs opacity-80">{description}</p>
+      <p className={cn("text-xs opacity-80", isDraggable ? "max-h-10 overflow-hidden" : "")}>
+        {displayDescription}
+      </p>
     </div>
   );
 }
