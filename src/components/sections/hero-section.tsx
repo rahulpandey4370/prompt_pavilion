@@ -1,41 +1,51 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { AnimatedTitle } from "@/components/shared/animated-title";
 import { ArrowDown, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import type { CSSProperties } from "react";
+
+interface ParticleStyle extends CSSProperties {}
 
 export function HeroSection() {
+  const [accentParticlesStyles, setAccentParticlesStyles] = useState<ParticleStyle[]>([]);
+  const [primaryParticlesStyles, setPrimaryParticlesStyles] = useState<ParticleStyle[]>([]);
+
+  useEffect(() => {
+    const generateStyles = (count: number, isAccent: boolean): ParticleStyle[] => {
+      return Array.from({ length: count }, () => ({
+        width: `${Math.random() * (isAccent ? 3 : 4) + 1}px`,
+        height: `${Math.random() * (isAccent ? 3 : 4) + 1}px`,
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        animationDelay: `${Math.random() * (isAccent ? 5 : 6)}s`,
+        animationDuration: `${Math.random() * (isAccent ? 5 : 6) + (isAccent ? 5 : 6)}s`,
+      }));
+    };
+
+    setAccentParticlesStyles(generateStyles(30, true));
+    setPrimaryParticlesStyles(generateStyles(20, false));
+  }, []); // Empty dependency array ensures this runs only on client-side after mount
+
   return (
     <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden p-4 bg-gradient-to-br from-background to-purple-900/30">
-      {/* Particle-like background (simplified) */}
+      {/* Particle-like background */}
       <div className="absolute inset-0 z-0 opacity-20">
-        {[...Array(30)].map((_, i) => (
+        {accentParticlesStyles.map((style, i) => (
           <div
-            key={i}
+            key={`accent-${i}`}
             className="absolute bg-accent rounded-full animate-pulse"
-            style={{
-              width: `${Math.random() * 3 + 1}px`,
-              height: `${Math.random() * 3 + 1}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${Math.random() * 5 + 5}s`,
-            }}
+            style={style}
           />
         ))}
-         {[...Array(20)].map((_, i) => (
+         {primaryParticlesStyles.map((style, i) => (
           <div
-            key={`p-${i}`}
+            key={`primary-${i}`}
             className="absolute bg-primary rounded-full animate-pulse"
-            style={{
-              width: `${Math.random() * 4 + 1}px`,
-              height: `${Math.random() * 4 + 1}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 6}s`,
-              animationDuration: `${Math.random() * 6 + 6}s`,
-            }}
+            style={style}
           />
         ))}
       </div>
