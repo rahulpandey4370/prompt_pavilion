@@ -3,24 +3,27 @@
 
 import { SectionContainer } from "@/components/shared/section-container";
 import { GlassCard, GlassCardContent, GlassCardTitle, GlassCardDescription } from "@/components/ui/glass-card";
-import { Lock, Zap, Star, Scaling, Gift } from "lucide-react"; // Added new icons
+import { Lightbulb, Zap, BarChartHorizontalBig } from "lucide-react"; // Original icons
 import type { LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils"; // Added missing import
+import { cn } from "@/lib/utils";
 
-interface FeatureCardProps {
+interface ContentCardProps {
   icon: LucideIcon;
-  iconBgClass: string; // Tailwind class for icon background
+  iconBgClass: string;
   title: string;
   description: string;
   index: number;
 }
 
-const FeatureCard = ({ icon: Icon, iconBgClass, title, description, index }: FeatureCardProps) => {
+const ContentCard = ({ icon: Icon, iconBgClass, title, description, index }: ContentCardProps) => {
   return (
-    <GlassCard index={index} className="flex flex-col text-center items-center md:text-left md:items-start !p-6 hover:scale-105"> {/* Ensure padding and hover effect */}
-      <motion.div 
-        className={cn("p-3 rounded-lg mb-4 w-12 h-12 flex items-center justify-center", iconBgClass)}
+    <GlassCard index={index} className="flex flex-col text-center items-center md:text-left md:items-start !p-6 hover:scale-105">
+      <motion.div
+        className={cn(
+          "p-3 rounded-lg mb-4 w-12 h-12 flex items-center justify-center self-center md:self-start",
+          iconBgClass
+        )}
         whileHover={{ scale: 1.1, rotate: 5 }}
         transition={{ type: "spring", stiffness: 300 }}
       >
@@ -34,36 +37,24 @@ const FeatureCard = ({ icon: Icon, iconBgClass, title, description, index }: Fea
   );
 };
 
-const features: Omit<FeatureCardProps, 'index'>[] = [
+const originalContent: Omit<ContentCardProps, 'index'>[] = [
   {
-    icon: Lock,
-    iconBgClass: "bg-[var(--icon-predictable-pricing-bg)]",
-    title: "Predictable Pricing",
-    description: "One flat monthly fee for unlimited design requests. No surprise costs or hidden fees."
+    icon: Lightbulb,
+    iconBgClass: "bg-[var(--icon-highest-quality-bg)]", // Using yellow/gold
+    title: "The Core Idea",
+    description: "Prompt engineering is like giving an AI a perfect set of instructions. The better the instructions, the better the AI's performance and the more accurate and relevant its output."
   },
   {
     icon: Zap,
-    iconBgClass: "bg-[var(--icon-fast-turnaround-bg)]",
-    title: "Fast Turnaround",
-    description: "Get your designs within 24-48 hours. Need revisions? We'll handle them right away."
+    iconBgClass: "bg-[var(--icon-fast-turnaround-bg)]", // Using vivid purple
+    title: "Why It Matters",
+    description: "Effective prompts can dramatically improve AI's creativity, problem-solving, and accuracy. It's the key to transforming AI from a tool into a powerful partner."
   },
   {
-    icon: Star,
-    iconBgClass: "bg-[var(--icon-highest-quality-bg)]",
-    title: "Highest Quality",
-    description: "Senior-level design quality at your fingertips, whenever you need it."
-  },
-  {
-    icon: Scaling, // Using Scaling icon
-    iconBgClass: "bg-[var(--icon-scale-anytime-bg)]",
-    title: "Scale Anytime",
-    description: "Scale up or down as needed, and pause or cancel at anytime."
-  },
-  {
-    icon: Gift, // Using Gift icon
-    iconBgClass: "bg-[var(--icon-unique-yours-bg)]",
-    title: "Unique & All Yours",
-    description: "Every design is made especially for you and is 100% yours."
+    icon: BarChartHorizontalBig,
+    iconBgClass: "bg-[var(--icon-predictable-pricing-bg)]", // Using vivid blue
+    title: "The Tangible Impact",
+    description: "Studies show well-engineered prompts can boost AI task success rates by over 50%. This studio helps you learn how. (Placeholder for animated counter/chart)"
   }
 ];
 
@@ -71,24 +62,23 @@ export function IntroductionSection() {
   return (
     <SectionContainer
       id="intro"
-      title="WHY CHOOSE SUBSCRIPTION?"
-      subtitle="Get reliable, high-quality design without the overhead of hiring in-house or dealing with freelancers."
-      isContainedCard={true} // This will make SectionContainer look like the large card
-      className="!py-12 md:!py-16" // Adjust padding for the container card
+      title="What is Prompt Engineering?"
+      subtitle="Unlock the full potential of AI by mastering the art and science of crafting effective prompts."
+      isContainedCard={true} 
+      className="!py-12 md:!py-16"
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 md:gap-8 w-full">
-        {features.map((feature, index) => (
-          <FeatureCard 
-            key={feature.title}
-            icon={feature.icon}
-            iconBgClass={feature.iconBgClass}
-            title={feature.title}
-            description={feature.description}
-            index={index} // Pass index for staggered animation
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full">
+        {originalContent.map((contentItem, index) => (
+          <ContentCard
+            key={contentItem.title}
+            icon={contentItem.icon}
+            iconBgClass={contentItem.iconBgClass}
+            title={contentItem.title}
+            description={contentItem.description}
+            index={index}
           />
         ))}
       </div>
     </SectionContainer>
   );
 }
-
