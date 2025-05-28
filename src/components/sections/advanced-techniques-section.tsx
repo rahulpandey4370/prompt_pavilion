@@ -1,8 +1,7 @@
 
 import { SectionContainer } from "@/components/shared/section-container";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
-import { Zap, Share2, Briefcase, Lightbulb, PackageSearch, BrainCircuit } from "lucide-react";
-// import Image from "next/image"; // Image component no longer needed
+import { Zap, Share2, Briefcase, Lightbulb, PackageSearch, BrainCircuit, GitFork, Network } from "lucide-react";
 
 export function AdvancedTechniquesSection() {
   return (
@@ -30,21 +29,27 @@ export function AdvancedTechniquesSection() {
           </GlassCardHeader>
           <GlassCardContent className="flex flex-col h-full">
             <p className="text-foreground/80 mb-4 flex-grow">
-              Enhance AI responses by grounding them in external, up-to-date, or proprietary knowledge. RAG systems retrieve relevant information
-              from a knowledge base (e.g., your company's documents, a specific dataset, recent news articles) and provide it to the LLM as context along with the user's query.
-              This helps reduce hallucinations, improves factual accuracy, and allows the AI to answer questions based on information beyond its initial training data. It's key for domain-specific chatbots and knowledge-intensive tasks.
+              Ground AI responses in external, current, or proprietary knowledge. RAG works by retrieving relevant information snippets 
+              from a knowledge source (like company documents or a database) and **dynamically inserting this information as additional context directly into the prompt** 
+              sent to the LLM. This augmented prompt, now rich with specific external data alongside the original user query, 
+              enables the LLM to generate more accurate, up-to-date, and contextually relevant answers, significantly reducing 
+              hallucinations and overcoming its static training data limitations. It's vital for domain-specific chatbots and 
+              knowledge-intensive applications.
             </p>
           </GlassCardContent>
         </GlassCard>
         <GlassCard>
           <GlassCardHeader>
-            <GlassCardTitle className="text-accent flex items-center"><BrainCircuit className="inline-block mr-2" />Agentic AI & Tool Use</GlassCardTitle>
+            <GlassCardTitle className="text-accent flex items-center"><GitFork className="inline-block mr-2" />Tree-of-Thought (ToT) Prompting</GlassCardTitle>
           </GlassCardHeader>
           <GlassCardContent className="flex flex-col h-full">
             <p className="text-foreground/80 mb-4 flex-grow">
-              Empower AIs to perform actions and interact with external systems. Agentic AI involves designing prompts and systems where the LLM can
-              autonomously decide to use predefined "tools" (functions or APIs) to gather information, execute tasks, or interact with other services.
-              This enables more complex, multi-step problem-solving and automation capabilities, allowing LLMs to act as intelligent agents that can, for example, book appointments, query databases, or control smart devices.
+              Tree-of-Thought (ToT) prompting extends Chain-of-Thought by enabling the LLM to explore multiple reasoning paths 
+              simultaneously. Instead of just one linear sequence of thoughts, ToT allows the model to generate several distinct 
+              thought branches, evaluate their viability, and strategically decide which path to pursue or backtrack from. 
+              This makes it more effective for complex problem-solving tasks where exploration and self-correction are crucial, 
+              mimicking a more human-like deliberation process. It often involves prompting the model to consider alternatives, 
+              assess intermediate results, and prune less promising branches.
             </p>
           </GlassCardContent>
         </GlassCard>
