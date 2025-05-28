@@ -1,4 +1,3 @@
-
 "use client";
 
 import { SectionContainer } from "@/components/shared/section-container";
@@ -27,51 +26,51 @@ import {
 interface AvailableComponent {
   type: PromptComponentType;
   title: string;
-  description: string; 
+  description: string;
   icon: LucideIcon;
 }
 
 const availableComponents: AvailableComponent[] = [
   {
     type: "system",
-    title: "Expert System Role",
-    description: "You are a seasoned travel expert with 20 years of experience planning bespoke itineraries for adventurous globetrotters. Your tone is enthusiastic, knowledgeable, and slightly witty. You always provide practical tips and cultural insights.",
+    title: "System: AI Creative Writing Assistant",
+    description: "You are 'Narrativa', an advanced AI creative writing assistant. Your expertise lies in generating compelling story hooks, character backstories, and vivid world-building descriptions. You have a slightly formal but highly imaginative tone. You avoid cliches and aim for originality. You should be able to adapt to various genres like fantasy, sci-fi, and mystery. When asked for multiple items, provide them as a numbered list.",
     icon: Bot
   },
   {
     type: "user",
-    title: "Specific User Goal",
-    description: "I'm planning a 10-day solo trip to Italy in late September. I'm interested in history, art, delicious food (especially pasta and gelato!), and scenic landscapes. I'd like to visit Rome, Florence, and Cinque Terre. My budget is moderate, around $200-250 per day excluding flights.",
+    title: "User: Request for Sci-Fi Story Ideas",
+    description: "I'm writing a new science fiction novel set in a dystopian future where water is a scarce and controlled commodity. I need three distinct story hooks that explore different facets of this world. Each hook should hint at a central conflict and a potential protagonist. I'm also looking for a brief (2-3 sentences) description of the main antagonist, 'The Aqua Baron', who controls the largest water reserve.",
     icon: Puzzle
   },
   {
     type: "rag",
-    title: "Relevant Context (RAG)",
-    description: "Context: Late September in Italy offers pleasant weather, typically sunny with average temperatures between 15-25°C (59-77°F). It's after the peak tourist season, so crowds are smaller. Key festivals: None major, but local food/wine sagre (festivals) might be happening.",
+    title: "RAG: World-Building Details",
+    description: "Contextual Information for Narrativa:\n- The year is 2242.\n- Earth's atmosphere is heavily polluted, making natural rainfall acidic and unusable.\n- 'Hydro-corps' are mega-corporations controlling purified water distribution.\n- Underground 'Aquifer' communities exist, attempting to live off-grid, often in conflict with Hydro-corps.\n- Technology for personal water purification is either banned or prohibitively expensive.\n- The average citizen receives daily water rations barely enough for survival.",
     icon: ListChecks
   },
   {
     type: "constraints",
-    title: "Output Constraints",
-    description: "Constraints: The itinerary should be detailed day-by-day. Include suggestions for 1-2 activities per day, and 2-3 food recommendations (mix of restaurants and casual spots). Suggest one 'splurge' activity or meal. Format the output as a markdown document with clear headings for each day and city.",
+    title: "Constraints: Output Format & Style",
+    description: "Output Constraints:\n1. Story hooks must be 1-2 paragraphs each.\n2. The Aqua Baron's description should be concise and impactful.\n3. Maintain a serious and slightly ominous tone, fitting the dystopian theme.\n4. Format the response in Markdown.\n5. Ensure character names are unique and fitting for a sci-fi setting.",
     icon: SlidersHorizontal
   },
   {
     type: "guardrails",
-    title: "Safety & Tone Guardrails",
-    description: "Guardrails: Ensure all activity suggestions are safe and suitable for a solo female traveler. Prioritize well-lit and centrally located accommodation options. Maintain an encouraging and respectful tone. Do not suggest activities that are extremely physically demanding unless offering alternatives.",
+    title: "Guardrails: Content & Safety",
+    description: "Guardrails:\n- Avoid overly graphic violence or mature themes unsuitable for a general audience.\n- Ensure that suggested conflicts, while dystopian, do not promote real-world harmful ideologies.\n- Do not generate content that could be interpreted as political commentary on current events.\n- The AI should not express personal opinions or beliefs.",
     icon: ShieldCheck
   },
   {
     type: "tools",
-    title: "Hypothetical Tool Usage Example",
-    description: "Tool Hint: To provide real-time suggestions, you might internally consult a 'LocalEventsAPI(city, date)' for festivals or a 'RestaurantBookingAPI(city, cuisine, price_range)' for dinner reservations. (This is a conceptual note for the AI).",
+    title: "Tools: Conceptual (Internal)",
+    description: "Tool Hint (for AI's internal process, not direct output):\n- `generateCharacterName(genre: 'sci-fi', role: 'protagonist' | 'antagonist')`: Used to ensure unique names.\n- `checkOriginality(text_snippet)`: To help avoid cliches for story hooks.\n- `worldConsistencyCheck(details_array)`: Ensures generated content aligns with established RAG context (e.g., water scarcity).",
     icon: Wrench
   },
   {
     type: "examples",
-    title: "Input/Output Formatting Example",
-    description: "Example Snippet of Expected Output:\n**Day 1: Rome - Ancient Wonders**\n*   Morning: Colosseum & Roman Forum (Book tickets online to save time!)\n*   Lunch: Pizza al taglio near the Forum.\n*   Afternoon: Palatine Hill & Trevi Fountain (Don't forget to toss a coin!).\n*   Dinner: Trattoria Da Enzo al 29 (authentic Roman pasta).",
+    title: "Examples: Input/Output Snippet",
+    description: "Example of Expected Output for one Story Hook:\n\n**Hook 1: The Last Free Spring**\n\nElara, a young scavenger from the parched Outlands, stumbles upon an ancient map hinting at an unrecorded, naturally purified spring hidden deep within the Aqua Baron's forbidden territories. Pursued by Hydro-corp enforcers and haunted by the dehydration sickness claiming her community, Elara must decipher the map's cryptic clues and navigate the treacherous, resource-stripped landscape. Her journey becomes a desperate race against time, not just for survival, but to bring back a symbol of hope – a source of water free from corporate control. The central conflict revolves around Elara's quest versus the Baron's oppressive regime and the moral dilemmas she faces in protecting her discovery.",
     icon: Eye
   },
 ];
@@ -277,23 +276,25 @@ export function PromptBuilderSection() {
           </GlassCardContent>
         </GlassCard>
       </div>
-       <Button 
-          variant="outline" 
-          size="lg" 
-          className="mt-8 border-accent text-accent hover:bg-accent hover:text-accent-foreground"
-          onClick={handleTestPrompt}
-          disabled={generateResponseMutation.isPending || ratePromptMutation.isPending || droppedItems.length === 0}
-        >
-          { (generateResponseMutation.isPending || ratePromptMutation.isPending) ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <Bot className="mr-2 h-4 w-4" />
-          )}
-          Test Assembled Prompt with AI
-        </Button>
+      <div className="w-full flex justify-center mt-8">
+        <Button 
+            size="lg" 
+            className="bg-accent hover:bg-accent/90 text-accent-foreground"
+            onClick={handleTestPrompt}
+            disabled={generateResponseMutation.isPending || ratePromptMutation.isPending || droppedItems.length === 0}
+          >
+            { (generateResponseMutation.isPending || ratePromptMutation.isPending) ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Bot className="mr-2 h-4 w-4" />
+            )}
+            Test Assembled Prompt with AI
+          </Button>
+      </div>
+
 
         { (generateResponseMutation.isPending || aiResponse) && (
-        <GlassCard className="mt-8">
+        <GlassCard className="mt-8 w-full"> {/* Added w-full for consistency */}
             <GlassCardHeader>
             <GlassCardTitle className="text-primary flex items-center">
                 <Sparkles className="mr-2 h-5 w-5" /> AI Response
@@ -319,7 +320,7 @@ export function PromptBuilderSection() {
 
         {/* Prompt Quality Analysis Card */}
         { (ratePromptMutation.isPending || promptAnalysis) && (
-          <GlassCard className="mt-8">
+          <GlassCard className="mt-8 w-full"> {/* Added w-full for consistency */}
             <GlassCardHeader>
               <GlassCardTitle className="text-primary flex items-center">
                 <BarChartHorizontalBig className="mr-2 h-5 w-5" /> Prompt Quality Analysis
@@ -361,3 +362,4 @@ export function PromptBuilderSection() {
     </SectionContainer>
   );
 }
+

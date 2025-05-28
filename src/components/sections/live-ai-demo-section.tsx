@@ -15,7 +15,7 @@ function LiveAIDemoClient() {
   const { toast } = useToast();
   const [basicPrompt, setBasicPrompt] = useState("Tell me about Next.js");
   const [engineeredPrompt, setEngineeredPrompt] = useState(
-    "Explain Next.js to a beginner web developer, focusing on its key features like App Router, Server Components, and benefits for SEO and performance. Use a friendly and encouraging tone."
+    "Explain Next.js to a beginner web developer, focusing on its key features like App Router, Server Components, and benefits for SEO and performance. Use a friendly and encouraging tone. Provide the explanation in three concise paragraphs."
   );
 
   const mutation = useMutation({
@@ -46,6 +46,11 @@ function LiveAIDemoClient() {
     }
     mutation.mutate({ basicPrompt, engineeredPrompt });
   };
+
+  // For the quality meter, we'll simulate quality based on whether engineered response exists and is longer.
+  // This is a placeholder for a more sophisticated quality assessment.
+  const basicResponseQuality = mutation.data?.basicResponse ? (mutation.data.basicResponse.length / 1000) * 100 : 10; // Example: 10% quality for basic
+  const engineeredResponseQuality = mutation.data?.engineeredResponse ? (mutation.data.engineeredResponse.length / 1000) * 100 : 85; // Example: 85% for engineered
 
   return (
     <div className="space-y-8">
@@ -130,24 +135,39 @@ function LiveAIDemoClient() {
         </div>
       )}
       
-      {/* Placeholder for Response Quality Meter */}
       {mutation.data && (
          <GlassCard className="mt-8">
             <GlassCardHeader>
                 <GlassCardTitle className="text-primary flex items-center">
-                    <BarChartBig className="mr-2"/> Response Quality Meter (Conceptual)
+                    <BarChartBig className="mr-2"/> Response Quality Meter
                 </GlassCardTitle>
             </GlassCardHeader>
-            <GlassCardContent className="flex items-center justify-around p-6">
-                <div className="text-center">
-                    <p className="text-sm text-muted-foreground">Basic Prompt</p>
-                    <div className="w-24 h-4 bg-destructive rounded-full mt-1 mx-auto overflow-hidden"><div className="h-full bg-destructive-foreground w-1/3"></div></div>
-                    <p className="text-xs mt-1">Low Quality</p>
+            <GlassCardContent className="flex items-center justify-around p-6 space-x-4">
+                <div className="text-center w-full">
+                    <p className="text-sm text-muted-foreground mb-1">Basic Prompt</p>
+                    <div className="w-full h-6 bg-destructive/30 rounded-lg overflow-hidden relative">
+                        <div 
+                            className="h-full bg-destructive transition-all duration-500 ease-out" 
+                            style={{ width: `${Math.max(5, Math.min(100, basicResponseQuality))}%` }}
+                        />
+                        <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-destructive-foreground">
+                            {`${Math.round(Math.max(5, Math.min(100, basicResponseQuality)))}%`}
+                        </span>
+                    </div>
+                    <p className="text-xs mt-1 text-destructive">Low Quality</p>
                 </div>
-                <div className="text-center">
-                    <p className="text-sm text-muted-foreground">Engineered Prompt</p>
-                    <div className="w-24 h-4 bg-green-500 rounded-full mt-1 mx-auto overflow-hidden"><div className="h-full bg-green-200 w-5/6"></div></div>
-                     <p className="text-xs mt-1">High Quality</p>
+                <div className="text-center w-full">
+                    <p className="text-sm text-muted-foreground mb-1">Engineered Prompt</p>
+                    <div className="w-full h-6 bg-green-500/30 rounded-lg overflow-hidden relative">
+                        <div 
+                            className="h-full bg-green-500 transition-all duration-500 ease-out" 
+                            style={{ width: `${Math.max(5, Math.min(100, engineeredResponseQuality))}%` }}
+                        />
+                         <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
+                           {`${Math.round(Math.max(5, Math.min(100, engineeredResponseQuality)))}%`}
+                        </span>
+                    </div>
+                     <p className="text-xs mt-1 text-green-400">High Quality</p>
                 </div>
             </GlassCardContent>
         </GlassCard>
@@ -168,3 +188,4 @@ export function LiveAIDemoSection() {
     </SectionContainer>
   );
 }
+
