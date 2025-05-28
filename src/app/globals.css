@@ -5,7 +5,7 @@
 
 body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
-  /* Rich dark gradients with subtle animated color shifts */
+  /* Dark Blue/Teal Gradient Background */
   background-color: hsl(var(--background-dark-end-raw)); /* Fallback */
   background-image: linear-gradient(180deg, hsl(var(--background-dark-start-raw)) 0%, hsl(var(--background-dark-end-raw)) 100%);
   color: hsl(var(--foreground-raw)); /* Ensure text is readable */
@@ -19,31 +19,28 @@ html {
 
 @layer base {
   :root {
-    /* Base Palette - Cyberpunk Neon Lab */
-    --background-dark-start-raw: 258 100% 3%; /* Very dark desaturated indigo/purple */
-    --background-dark-end-raw: 258 100% 2%;   /* Almost black, deep indigo/purple */
+    /* Base Palette - AI Playground Inspired */
+    --background-dark-start-raw: 200 50% 10%; /* Dark Slate Blue/Teal */
+    --background-dark-end-raw: 200 60% 5%;   /* Very Dark Slate Blue/Teal */
     --background-raw: var(--background-dark-end-raw); /* Applied as HSL */
-    --foreground-raw: 0 0% 100%; /* Bright White */
+    --foreground-raw: 0 0% 95%; /* Off-White for better contrast */
 
-    --card-raw: 258 80% 6%; /* Dark purple/indigo, slightly lighter than deep bg */
-    --card-foreground-raw: 0 0% 95%; /* Off-white for card text */
+    --card-raw: 200 40% 8%; /* Darker card for content areas, matches image */
+    --card-foreground-raw: 0 0% 90%; /* Lighter text for cards */
 
-    --popover-raw: 258 70% 8%;
-    --popover-foreground-raw: 0 0% 90%;
+    --popover-raw: 200 30% 10%;
+    --popover-foreground-raw: 0 0% 85%;
 
-    /* Primary Neons (Mapped to theme variables) */
+    /* Primary Neon (from previous cyberpunk, can be adjusted if needed) */
     --neon-cyan-raw: 180 100% 50%;        /* Electric Cyan */
     --neon-magenta-raw: 328 100% 54%;     /* Hot Magenta */
-    --neon-lime-raw: 130 100% 50%;        /* Laser Lime (#39FF14 is existing accent) */
+    --neon-lime-raw: 130 100% 50%;        /* Laser Lime */
     --neon-orange-raw: 16 100% 50%;       /* Nuclear Orange */
 
-    /* Secondary Glows (Can be used for borders, highlights if primary is too much) */
-    --neon-deep-purple-raw: 271 76% 53%;  /* Deep Purple */
-    --neon-electric-blue-raw: 217 100% 56%;/* Electric Blue */
-    --neon-acid-green-raw: 95 100% 59%;   /* Acid Green */
-    --neon-plasma-pink-raw: 330 100% 71%; /* Plasma Pink */
+    /* New Yellow Accent for AI Playground theme */
+    --neon-yellow-raw: 50 100% 50%;       /* Bright Yellow */
 
-    /* Theme Variable Assignments (using the new Neon Palette) */
+    /* Theme Variable Assignments */
     --background: var(--background-raw);
     --foreground: var(--foreground-raw);
 
@@ -53,34 +50,35 @@ html {
     --popover: var(--popover-raw);
     --popover-foreground: var(--popover-foreground-raw);
 
-    --primary: var(--neon-cyan-raw); /* Electric Cyan as primary */
-    --primary-foreground: 258 100% 5%; /* Dark for contrast on bright cyan */
+    /* Primary from previous theme, could be yellow if desired for full theme switch */
+    --primary: var(--neon-cyan-raw); 
+    --primary-foreground: 200 100% 5%; /* Dark for contrast on bright cyan */
 
-    --secondary: var(--neon-magenta-raw); /* Hot Magenta as secondary */
-    --secondary-foreground: 0 0% 100%; /* White for contrast on magenta */
+    --secondary: var(--neon-magenta-raw); 
+    --secondary-foreground: 0 0% 100%; 
 
-    --muted: 258 50% 15%; /* Desaturated dark purple */
-    --muted-foreground: 258 20% 65%;
+    --muted: 200 30% 15%; /* Muted version of background */
+    --muted-foreground: 200 15% 65%;
 
-    --accent: var(--neon-lime-raw); /* Laser Lime as accent */
-    --accent-foreground: 258 100% 5%; /* Dark for contrast on lime */
+    --accent: var(--neon-yellow-raw); /* Main Accent is now Yellow */
+    --accent-foreground: 200 100% 5%; /* Dark text for yellow accent background */
 
-    --destructive: var(--neon-orange-raw); /* Nuclear Orange for destructive states */
+    --destructive: var(--neon-orange-raw); 
     --destructive-foreground: 0 0% 100%;
 
-    --border-raw: 258 60% 12%; /* Darker, subtly glowing border */
+    --border-raw: 200 40% 15%; /* Subtler border for general elements */
     --border: var(--border-raw);
     --input: var(--border-raw);
-    --ring: var(--neon-cyan-raw); /* Ring color matches primary */
+    --ring: var(--neon-yellow-raw); /* Ring color to yellow */
 
     --radius: 0.8rem;
 
-    /* Chart colors - can be updated to neon if needed, keeping existing for now */
+    /* Chart colors - can be updated if needed */
     --chart-1: var(--neon-cyan-raw);
     --chart-2: var(--neon-magenta-raw);
-    --chart-3: var(--neon-deep-purple-raw);
+    --chart-3: 271 76% 53%;  /* Deep Purple */
     --chart-4: var(--neon-orange-raw);
-    --chart-5: var(--neon-plasma-pink-raw);
+    --chart-5: 330 100% 71%; /* Plasma Pink */
 
     /* Specific prompt component colors - Retained for semantic meaning */
     --prompt-system: 270 60% 50%;
@@ -91,19 +89,19 @@ html {
     --prompt-tools: 50 90% 60%;
     --prompt-examples: 180 70% 50%;
 
-    /* Icon chip background colors from "WHY CHOOSE SUBSCRIPTION" example */
-    --icon-predictable-pricing-bg: hsl(220, 90%, 60%); /* Vivid Blue */
-    --icon-fast-turnaround-bg: hsl(270, 75%, 65%);    /* Vivid Purple */
-    --icon-highest-quality-bg: hsl(45, 100%, 55%);    /* Bright Yellow/Gold */
-    --icon-scale-anytime-bg: hsl(330, 100%, 60%);     /* Hot Pink */
-    --icon-unique-yours-bg: hsl(35, 100%, 60%);      /* Bright Orange */
+    /* Icon chip background colors (from "WHY CHOOSE SUBSCRIPTION" example) */
+    --icon-predictable-pricing-bg: hsl(220, 90%, 60%);
+    --icon-fast-turnaround-bg: hsl(270, 75%, 65%);
+    --icon-highest-quality-bg: hsl(45, 100%, 55%);
+    --icon-scale-anytime-bg: hsl(330, 100%, 60%);
+    --icon-unique-yours-bg: hsl(35, 100%, 60%);
 
-    /* Neon Animated Border Variables */
+    /* Neon Animated Border Variables (Multi-color, kept for GlassCard if used elsewhere) */
     --neon-border-thickness: 3px;
     --neon-border-angle: 0deg;
 
     /* Background for the large container card in "WHY CHOOSE SUBSCRIPTION?" section */
-    --background-card-container-raw: 258 85% 4%; /* Slightly lighter than main bg, still very dark */
+    --background-card-container-raw: 200 50% 7%; /* Darker, slightly bluer than main card */
   }
 
   /* Default dark theme is now the only theme */
@@ -145,14 +143,14 @@ html {
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--accent) / 0.7); /* Neon green scrollbar thumb */
+  background: hsl(var(--neon-yellow-raw) / 0.7); /* Yellow scrollbar thumb */
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--accent));
+  background: hsl(var(--neon-yellow-raw));
 }
 
-/* Neon Animated Border for Cards */
+/* Multi-color Neon Animated Border for Cards (General) */
 @keyframes rotate-neon-glow-animation {
   0% {
     transform: rotate(0deg);
@@ -173,22 +171,40 @@ html {
 .card-neon-animated-border::before {
   content: '';
   position: absolute;
-  z-index: -1; /* Behind the inner content */
-  width: 200%; /* Larger to allow for rotation without gaps */
+  z-index: -1; 
+  width: 200%; 
   height: 200%;
-  top: -50%; /* Center the oversized pseudo-element */
+  top: -50%; 
   left: -50%;
-
   background: conic-gradient(
     from var(--neon-border-angle),
     hsl(var(--neon-cyan-raw)),
     hsl(var(--neon-magenta-raw)),
-    hsl(var(--accent-raw)), /* Using accent as laser lime */
+    hsl(var(--neon-lime-raw)), 
     hsl(var(--neon-orange-raw)),
-    hsl(var(--neon-deep-purple-raw)),
+    hsl(var(--neon-yellow-raw)), /* Added yellow to the mix */
     hsl(var(--neon-electric-blue-raw)),
-    hsl(var(--neon-cyan-raw)) /* Loop back to start for smooth animation */
+    hsl(var(--neon-cyan-raw))
   );
-
   animation: rotate-neon-glow-animation 8s linear infinite;
 }
+
+/* Pulsing Yellow Glow for AI Playground Style Content Boxes */
+@keyframes pulse-yellow-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px 2px hsl(var(--neon-yellow-raw)/0.3), 0 0 3px 0px hsl(var(--neon-yellow-raw)/0.5) inset;
+    border-color: hsl(var(--neon-yellow-raw)/0.6);
+  }
+  50% {
+    box-shadow: 0 0 20px 5px hsl(var(--neon-yellow-raw)/0.5), 0 0 7px 1px hsl(var(--neon-yellow-raw)/0.7) inset;
+    border-color: hsl(var(--neon-yellow-raw));
+  }
+}
+
+.yellow-glowing-box {
+  border-width: 2px; /* Make border visible */
+  border-radius: var(--radius); /* Consistent rounding */
+  /* background-color: hsl(var(--card-raw)); Re-apply if needed, but might be set by inner elements */
+  animation: pulse-yellow-glow 2.5s infinite ease-in-out;
+}
+

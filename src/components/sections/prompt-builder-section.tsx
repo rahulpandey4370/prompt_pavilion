@@ -26,7 +26,7 @@ interface AvailableComponent {
   title: string;
   description: string;
   icon: LucideIcon;
-  id: string; // Unique ID for each component within a scenario
+  id: string; 
 }
 
 interface Scenario {
@@ -204,10 +204,7 @@ const scenarios: Scenario[] = [
 ];
 
 
-interface DroppedItem extends AvailableComponent {
-  // id is already in AvailableComponent, but if we needed a truly unique ID for the dropped instance:
-  // droppedId: string; 
-}
+interface DroppedItem extends AvailableComponent {}
 
 const PLACEHOLDER_PROMPT_TEXT = "Your assembled prompt will appear here... Drag components from the left to build it!";
 
@@ -224,7 +221,6 @@ export function PromptBuilderSection() {
     const selectedScenario = scenarios.find(s => s.id === currentScenarioId);
     if (selectedScenario) {
       setCurrentAvailableComponents(selectedScenario.availableComponents);
-      // Reset workspace when scenario changes
       setDroppedItems([]);
       setAiResponse(null);
     }
@@ -278,7 +274,6 @@ export function PromptBuilderSection() {
         toast({ variant: "destructive", title: "Component Limit", description: `Component of type "${originalComponent.type}" can only be added once.`});
         return; 
       }
-      // Add the full component object, which now includes its unique ID from the scenario
       setDroppedItems(prev => [...prev, { ...originalComponent }]);
     }
   };
@@ -293,9 +288,7 @@ export function PromptBuilderSection() {
       return;
     }
     setAiResponse(null); 
-
     toast({ title: "Processing...", description: "Generating AI response..." });
-    
     generateResponseMutation.mutate({ assembledPrompt: livePreviewText });
   };
 
@@ -308,118 +301,116 @@ export function PromptBuilderSection() {
       id="workshop"
       title="PromptCraft Workshop"
       subtitle="Select a scenario, then assemble your AI prompts like building blocks. Drag pre-filled components from the left to the assembly area below."
-      className="bg-background"
     >
-      <div className="grid lg:grid-cols-3 gap-8 min-h-[70vh]">
-        {/* Component Library Sidebar */}
-        <GlassCard className="lg:col-span-1 h-full flex flex-col">
-          <GlassCardHeader>
-            <div className="flex flex-col space-y-3">
-                <GlassCardTitle className="text-accent flex items-center">
-                <Wand2 className="inline-block mr-2" />
-                Prompt Component Examples
-                </GlassCardTitle>
-                <div>
-                    <Label htmlFor="scenario-select" className="text-sm font-medium text-primary mb-1">Select Scenario:</Label>
-                    <Select value={currentScenarioId} onValueChange={handleScenarioChange}>
-                        <SelectTrigger id="scenario-select" className="w-full bg-foreground/5 border-border focus:ring-accent">
-                            <SelectValue placeholder="Select a scenario" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {scenarios.map(scenario => (
-                            <SelectItem key={scenario.id} value={scenario.id}>
-                                {scenario.name}
-                            </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                </div>
-            </div>
-          </GlassCardHeader>
-          <GlassCardContent className="flex-grow overflow-hidden">
-            <ScrollArea className="h-full pr-3">
-              <div className="space-y-3">
-                {currentAvailableComponents.map((comp) => (
-                  <PromptComponentCard
-                    key={comp.id} // Use unique component ID for key
-                    type={comp.type}
-                    title={comp.title}
-                    description={comp.description}
-                    icon={comp.icon}
-                    // Pass comp.id in drag data
-                    data-component-id={comp.id} 
-                  />
-                ))}
-              </div>
-              <ScrollBar orientation="vertical" />
-            </ScrollArea>
-          </GlassCardContent>
-        </GlassCard>
-
-        {/* Prompt Assembly Area & Preview */}
-        <GlassCard className="lg:col-span-2 h-full flex flex-col">
-          <GlassCardHeader>
-            <GlassCardTitle className="text-accent">
-              <Puzzle className="inline-block mr-2" />
-              Your Engineered Prompt & Live Preview
-            </GlassCardTitle>
-          </GlassCardHeader>
-          <GlassCardContent className="flex-grow grid grid-rows-2 gap-4 overflow-hidden">
-            {/* Drop Zone */}
-            <div 
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
-              onDragLeave={handleDragLeave}
-              className={cn(
-                "bg-foreground/5 p-4 rounded-md border-2 border-dashed border-border row-span-1 overflow-y-auto space-y-2 custom-scrollbar",
-                draggedOver ? "border-primary ring-2 ring-primary" : "border-border",
-                droppedItems.length === 0 ? "flex items-center justify-center" : "block"
-              )}
-            >
-              {droppedItems.length === 0 ? (
-                <p className="text-muted-foreground text-center">Drag & Drop Prompt Components Here</p>
-              ) : (
-                droppedItems.map((item, index) => (
-                  <div key={`${item.id}-${index}`} className="relative group"> 
-                    <PromptComponentCard
-                      type={item.type}
-                      title={item.title}
-                      description={item.description}
-                      icon={item.icon}
-                      isDraggable={false} 
-                      className="opacity-95 group-hover:opacity-100 cursor-default"
-                    />
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="absolute top-1 right-1 h-7 w-7 text-red-500 hover:text-red-400 opacity-60 group-hover:opacity-100 z-10"
-                      onClick={() => handleRemoveItem(item.id)} // Pass component ID to remove
-                      aria-label="Remove component"
-                    >
-                      <Trash2 size={18} />
-                    </Button>
+      <div className="bg-card p-6 yellow-glowing-box rounded-lg"> {/* Added yellow-glowing-box and bg-card */}
+        <div className="grid lg:grid-cols-3 gap-8 min-h-[60vh]"> {/* Reduced min-h slightly */}
+          {/* Component Library Sidebar */}
+          <GlassCard className="lg:col-span-1 h-full flex flex-col !shadow-none !border-none !bg-transparent !p-0"> {/* Removed card-neon-animated-border, shadow, border, padding */}
+            <GlassCardHeader className="pb-3">
+              <div className="flex flex-col space-y-3">
+                  <GlassCardTitle className="text-neon-yellow flex items-center">
+                  <Wand2 className="inline-block mr-2" />
+                  Prompt Component Examples
+                  </GlassCardTitle>
+                  <div>
+                      <Label htmlFor="scenario-select" className="text-sm font-medium text-neon-yellow mb-1">Select Scenario:</Label>
+                      <Select value={currentScenarioId} onValueChange={handleScenarioChange}>
+                          <SelectTrigger id="scenario-select" className="w-full bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground">
+                              <SelectValue placeholder="Select a scenario" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-card border-neon-yellow text-foreground">
+                              {scenarios.map(scenario => (
+                              <SelectItem key={scenario.id} value={scenario.id} className="focus:bg-neon-yellow/20">
+                                  <div className="flex items-center"><scenario.icon className="mr-2 h-4 w-4 text-muted-foreground"/>{scenario.name}</div>
+                              </SelectItem>
+                              ))}
+                          </SelectContent>
+                      </Select>
                   </div>
-                ))
-              )}
-            </div>
-            
-            {/* Real-time Preview */}
-            <div className="row-span-1 flex flex-col">
-              <h4 className="text-lg font-semibold text-primary mb-2">Live Prompt Preview (Raw Text):</h4>
-              <Textarea
-                readOnly
-                placeholder={PLACEHOLDER_PROMPT_TEXT}
-                className="flex-grow bg-foreground/5 text-foreground/90 resize-none glass-card-content !p-3 !border-primary/30 custom-scrollbar" 
-                value={livePreviewText}
-              />
-            </div>
-          </GlassCardContent>
-        </GlassCard>
+              </div>
+            </GlassCardHeader>
+            <GlassCardContent className="flex-grow overflow-hidden pr-0">
+              <ScrollArea className="h-full pr-3"> {/* Added pr-3 back to ScrollArea for scrollbar spacing */}
+                <div className="space-y-3">
+                  {currentAvailableComponents.map((comp) => (
+                    <PromptComponentCard
+                      key={comp.id}
+                      type={comp.type}
+                      title={comp.title}
+                      description={comp.description}
+                      icon={comp.icon}
+                      data-component-id={comp.id} 
+                    />
+                  ))}
+                </div>
+                <ScrollBar orientation="vertical" />
+              </ScrollArea>
+            </GlassCardContent>
+          </GlassCard>
+
+          {/* Prompt Assembly Area & Preview */}
+          <GlassCard className="lg:col-span-2 h-full flex flex-col !shadow-none !border-none !bg-transparent !p-0"> {/* Removed card-neon-animated-border, shadow, border, padding */}
+            <GlassCardHeader className="pb-3">
+              <GlassCardTitle className="text-neon-yellow">
+                <Puzzle className="inline-block mr-2" />
+                Your Engineered Prompt & Live Preview
+              </GlassCardTitle>
+            </GlassCardHeader>
+            <GlassCardContent className="flex-grow grid grid-rows-2 gap-4 overflow-hidden">
+              <div 
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                onDragLeave={handleDragLeave}
+                className={cn(
+                  "bg-background/30 p-4 rounded-md border-2 border-dashed border-neon-yellow/50 row-span-1 overflow-y-auto space-y-2 custom-scrollbar",
+                  draggedOver ? "border-neon-yellow ring-2 ring-neon-yellow" : "border-neon-yellow/50",
+                  droppedItems.length === 0 ? "flex items-center justify-center" : "block"
+                )}
+              >
+                {droppedItems.length === 0 ? (
+                  <p className="text-muted-foreground text-center">Drag & Drop Prompt Components Here</p>
+                ) : (
+                  droppedItems.map((item, index) => (
+                    <div key={`${item.id}-${index}`} className="relative group"> 
+                      <PromptComponentCard
+                        type={item.type}
+                        title={item.title}
+                        description={item.description}
+                        icon={item.icon}
+                        isDraggable={false} 
+                        className="opacity-95 group-hover:opacity-100 cursor-default"
+                      />
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="absolute top-1 right-1 h-7 w-7 text-red-500 hover:text-red-400 opacity-60 group-hover:opacity-100 z-10"
+                        onClick={() => handleRemoveItem(item.id)}
+                        aria-label="Remove component"
+                      >
+                        <Trash2 size={18} />
+                      </Button>
+                    </div>
+                  ))
+                )}
+              </div>
+              
+              <div className="row-span-1 flex flex-col">
+                <h4 className="text-lg font-semibold text-neon-yellow mb-2">Live Prompt Preview (Raw Text):</h4>
+                <Textarea
+                  readOnly
+                  placeholder={PLACEHOLDER_PROMPT_TEXT}
+                  className="flex-grow bg-background/30 text-foreground/90 resize-none !p-3 !border-neon-yellow/50 custom-scrollbar" 
+                  value={livePreviewText}
+                />
+              </div>
+            </GlassCardContent>
+          </GlassCard>
+        </div>
       </div>
       <div className="w-full flex justify-center mt-8">
         <Button 
             size="lg" 
-            className="bg-accent hover:bg-accent/90 text-accent-foreground"
+            className="bg-neon-yellow hover:bg-neon-yellow/90 text-neon-yellow-foreground"
             onClick={handleTestPrompt}
             disabled={generateResponseMutation.isPending || droppedItems.length === 0}
           >
@@ -433,16 +424,16 @@ export function PromptBuilderSection() {
       </div>
 
         {(generateResponseMutation.isPending || aiResponse) && (
-        <GlassCard className="mt-8 w-full">
-            <GlassCardHeader>
-            <GlassCardTitle className="text-primary flex items-center">
+        <GlassCard className="mt-8 w-full !shadow-none !border-none !bg-transparent !p-0"> {/* Removed card-neon-animated-border, shadow, border, padding */}
+            <GlassCardHeader className="pb-3">
+            <GlassCardTitle className="text-neon-yellow flex items-center">
                 <Sparkles className="mr-2 h-5 w-5" /> AI Response
             </GlassCardTitle>
             </GlassCardHeader>
             <GlassCardContent>
             {generateResponseMutation.isPending && !aiResponse ? (
                 <div className="flex items-center justify-center p-8">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <Loader2 className="h-8 w-8 animate-spin text-neon-yellow" />
                 <p className="ml-3 text-foreground/80">Generating response...</p>
                 </div>
             ) : (
@@ -450,7 +441,7 @@ export function PromptBuilderSection() {
                 readOnly
                 value={aiResponse || ""}
                 placeholder="AI response will appear here..."
-                className="h-64 bg-foreground/5 text-foreground/90 resize-none glass-card-content !p-3 !border-primary/30 custom-scrollbar"
+                className="h-64 bg-background/30 text-foreground/90 resize-none !p-3 !border-neon-yellow/50 custom-scrollbar"
                 />
             )}
             </GlassCardContent>

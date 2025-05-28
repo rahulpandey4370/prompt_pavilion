@@ -10,11 +10,11 @@ export default {
   theme: {
   	extend: {
   		colors: {
-  			background: 'hsl(var(--background))', // Main page background
-        'background-card-container': 'hsl(var(--background-card-container-raw))', // For the large container card
+  			background: 'hsl(var(--background))', 
+        'background-card-container': 'hsl(var(--background-card-container-raw))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
-  				DEFAULT: 'hsl(var(--card-raw))', // For the smaller feature cards
+  				DEFAULT: 'hsl(var(--card-raw))', 
   				foreground: 'hsl(var(--card-foreground))'
   			},
   			popover: {
@@ -34,16 +34,20 @@ export default {
   				foreground: 'hsl(var(--muted-foreground))'
   			},
   			accent: {
-  				DEFAULT: 'hsl(var(--accent))',
+  				DEFAULT: 'hsl(var(--accent))', /* This is now neon-yellow */
   				foreground: 'hsl(var(--accent-foreground))'
   			},
+        'neon-yellow': {
+          DEFAULT: 'hsl(var(--neon-yellow-raw))',
+          foreground: 'hsl(var(--background-dark-end-raw))', /* Dark text on yellow */
+        },
   			destructive: {
   				DEFAULT: 'hsl(var(--destructive))',
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
-  			border: 'hsl(var(--border-raw))', // For feature card borders
+  			border: 'hsl(var(--border-raw))', 
   			input: 'hsl(var(--input))',
-  			ring: 'hsl(var(--ring))',
+  			ring: 'hsl(var(--ring))', /* This is now neon-yellow */
   			chart: {
   				'1': 'hsl(var(--chart-1))',
   				'2': 'hsl(var(--chart-2))',
@@ -68,8 +72,6 @@ export default {
         'prompt-guardrails': 'hsl(var(--prompt-guardrails))',
         'prompt-tools': 'hsl(var(--prompt-tools))',
         'prompt-examples': 'hsl(var(--prompt-examples))',
-
-        // Icon chip background colors - making them available in Tailwind
         'icon-predictable-pricing': 'var(--icon-predictable-pricing-bg)',
         'icon-fast-turnaround': 'var(--icon-fast-turnaround-bg)',
         'icon-highest-quality': 'var(--icon-highest-quality-bg)',
@@ -104,12 +106,23 @@ export default {
         },
         'shimmer': {
           '100%': { transform: 'translateX(100%)' },
+        },
+        'pulse-yellow-glow': { /* Added from globals.css for reference if needed directly in Tailwind */
+          '0%, 100%': {
+            boxShadow: '0 0 10px 2px hsl(var(--neon-yellow-raw)/0.3), 0 0 3px 0px hsl(var(--neon-yellow-raw)/0.5) inset',
+            borderColor: 'hsl(var(--neon-yellow-raw)/0.6)',
+          },
+          '50%': {
+            boxShadow: '0 0 20px 5px hsl(var(--neon-yellow-raw)/0.5), 0 0 7px 1px hsl(var(--neon-yellow-raw)/0.7) inset',
+            borderColor: 'hsl(var(--neon-yellow-raw))',
+          },
         }
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
         'fadeInGrow': 'fadeInGrow 0.5s ease-out forwards',
+        'pulse-yellow-glow': 'pulse-yellow-glow 2.5s infinite ease-in-out',
   		},
       fontFamily: {
         sans: ['var(--font-geist-sans)'],

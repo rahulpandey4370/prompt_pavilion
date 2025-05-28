@@ -293,14 +293,15 @@ Respond ONLY with a JSON object containing the keys "name", "email", and "phone"
 ];
 
 const PromptAnatomyLab = () => (
-  <GlassCard className="h-full">
-    <GlassCardHeader>
-      <GlassCardTitle className="text-accent">
+  <GlassCard className="h-full !p-0 !shadow-none !border-none !bg-transparent">
+    {/* Removed card-neon-animated-border from GlassCard here */}
+    <GlassCardHeader className="pt-6 px-6">
+      <GlassCardTitle className="text-neon-yellow flex items-center"> {/* Use neon-yellow */}
         <Microscope className="inline-block mr-2" />
         The Prompt Anatomy Lab
       </GlassCardTitle>
     </GlassCardHeader>
-    <GlassCardContent>
+    <GlassCardContent className="px-6 pb-6">
       <p className="text-foreground/80 mb-6">
         A well-crafted prompt is made of several key components. Hover over each block below to explore its role in guiding the AI.
       </p>
@@ -310,7 +311,7 @@ const PromptAnatomyLab = () => (
             <HoverCardTrigger asChild>
               <div
                 className={cn(
-                  "p-4 rounded-lg shadow-md cursor-pointer transition-all duration-150 ease-in-out transform hover:shadow-lg hover:ring-2 hover:ring-accent/70",
+                  "p-4 rounded-lg shadow-md cursor-pointer transition-all duration-150 ease-in-out transform hover:shadow-lg hover:ring-2 hover:ring-neon-yellow/70", // Use neon-yellow for ring
                   part.colorClass,
                   part.borderColorClass, 
                   part.textColorClass,
@@ -325,7 +326,7 @@ const PromptAnatomyLab = () => (
               side="bottom"
               align="start"
               className={cn(
-                "w-auto max-w-3xl",
+                "w-auto max-w-3xl z-50", // ensure high z-index
                 "bg-card text-card-foreground p-4 rounded-lg shadow-lg border",
                 part.borderColorClass, 
                 "max-h-[70vh] overflow-y-auto custom-scrollbar" 
@@ -423,23 +424,24 @@ const PromptEngineeringPlayground = () => {
 
 
   return (
-  <GlassCard className="h-full">
-    <GlassCardHeader>
-      <GlassCardTitle className="text-accent flex items-center">
+  <GlassCard className="h-full !p-0 !shadow-none !border-none !bg-transparent">
+    {/* Removed card-neon-animated-border from GlassCard here */}
+    <GlassCardHeader className="pt-6 px-6">
+      <GlassCardTitle className="text-neon-yellow flex items-center"> {/* Use neon-yellow */}
         <currentScenarioIcon className="inline-block mr-3 h-6 w-6" /> 
         Prompt Engineering Playground: {playgroundScenarios.find(s => s.id === selectedScenarioId)?.name}
       </GlassCardTitle>
     </GlassCardHeader>
-    <GlassCardContent className="space-y-6">
+    <GlassCardContent className="space-y-6 px-6 pb-6">
       <div>
-        <label htmlFor="scenario-select-playground" className="block text-sm font-medium text-primary mb-1">Select Scenario:</label>
+        <label htmlFor="scenario-select-playground" className="block text-sm font-medium text-neon-yellow mb-1">Select Scenario:</label> {/* Use neon-yellow */}
         <Select value={selectedScenarioId} onValueChange={setSelectedScenarioId}>
-          <SelectTrigger id="scenario-select-playground" className="w-full md:w-1/2 bg-foreground/5 border-border focus:ring-accent">
+          <SelectTrigger id="scenario-select-playground" className="w-full md:w-1/2 bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground"> {/* Adjusted styles */}
             <SelectValue placeholder="Choose a scenario" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-card border-neon-yellow text-foreground"> {/* Adjusted styles */}
             {playgroundScenarios.map(scenario => (
-              <SelectItem key={scenario.id} value={scenario.id}>
+              <SelectItem key={scenario.id} value={scenario.id} className="focus:bg-neon-yellow/20">
                 <div className="flex items-center">
                   <scenario.icon className="mr-2 h-4 w-4 text-muted-foreground" />
                   {scenario.name}
@@ -452,31 +454,31 @@ const PromptEngineeringPlayground = () => {
 
       <div className="grid md:grid-cols-2 gap-6">
         <div>
-          <label htmlFor="playgroundBasicPrompt" className="block text-sm font-medium text-primary mb-1">Basic Prompt</label>
+          <label htmlFor="playgroundBasicPrompt" className="block text-sm font-medium text-neon-yellow mb-1">Basic Prompt</label> {/* Use neon-yellow */}
           <Textarea
             id="playgroundBasicPrompt"
             value={basicPrompt}
             onChange={(e) => setBasicPrompt(e.target.value)}
             placeholder="Enter a basic prompt..."
             rows={8} 
-            className="bg-foreground/5 border-border focus:ring-accent"
+            className="bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90" /* Adjusted styles */
           />
         </div>
         <div>
-          <label htmlFor="playgroundEngineeredPrompt" className="block text-sm font-medium text-primary mb-1">Engineered Prompt</label>
+          <label htmlFor="playgroundEngineeredPrompt" className="block text-sm font-medium text-neon-yellow mb-1">Engineered Prompt</label> {/* Use neon-yellow */}
           <Textarea
             id="playgroundEngineeredPrompt"
             value={engineeredPrompt}
             onChange={(e) => setEngineeredPrompt(e.target.value)}
             placeholder="Enter an engineered prompt..."
             rows={8} 
-            className="bg-foreground/5 border-border focus:ring-accent"
+            className="bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90" /* Adjusted styles */
           />
         </div>
       </div>
 
       <div className="text-center">
-        <Button onClick={handleCompare} disabled={mutation.isPending} className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 text-base">
+        <Button onClick={handleCompare} disabled={mutation.isPending} className="bg-neon-yellow hover:bg-neon-yellow/90 text-neon-yellow-foreground px-6 py-3 text-base"> {/* Use neon-yellow */}
           {mutation.isPending ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Lightbulb className="mr-2 h-5 w-5" />} Compare AI Responses
         </Button>
       </div>
@@ -488,7 +490,7 @@ const PromptEngineeringPlayground = () => {
             <Textarea
               readOnly
               value={basicResponse}
-              className="h-56 bg-foreground/10 border-0 resize-none text-foreground/90" 
+              className="h-56 bg-card/50 border-0 resize-none text-foreground/90" 
               placeholder="AI response to basic prompt..."
             />
           </div>
@@ -497,7 +499,7 @@ const PromptEngineeringPlayground = () => {
             <Textarea
               readOnly
               value={engineeredResponse}
-              className="h-56 bg-foreground/10 border-0 resize-none text-foreground/90" 
+              className="h-56 bg-card/50 border-0 resize-none text-foreground/90" 
               placeholder="AI response to engineered prompt..."
             />
           </div>
@@ -541,14 +543,15 @@ const SmartSuggestionsTool = () => {
   const suggestions = mutation.data?.suggestions || [];
 
   return (
-    <GlassCard className="h-full">
-      <GlassCardHeader>
-        <GlassCardTitle className="text-accent flex items-center">
+    <GlassCard className="h-full !p-0 !shadow-none !border-none !bg-transparent">
+      {/* Removed card-neon-animated-border from GlassCard here */}
+      <GlassCardHeader className="pt-6 px-6">
+        <GlassCardTitle className="text-neon-yellow flex items-center"> {/* Use neon-yellow */}
           <Target className="inline-block mr-2 h-6 w-6" /> 
           Smart Prompt Suggestions
         </GlassCardTitle>
       </GlassCardHeader>
-      <GlassCardContent>
+      <GlassCardContent className="px-6 pb-6">
         <p className="text-foreground/80 mb-4">
           Enter your prompt below and get AI-powered suggestions for improvement.
         </p>
@@ -556,10 +559,10 @@ const SmartSuggestionsTool = () => {
           placeholder="Type your prompt here..." 
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          className="mb-4 bg-foreground/5 border-border focus:ring-accent"
+          className="mb-4 bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90" /* Adjusted styles */
           rows={6} 
         />
-        <Button onClick={handleGetSuggestions} disabled={mutation.isPending} className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 text-base">
+        <Button onClick={handleGetSuggestions} disabled={mutation.isPending} className="bg-neon-yellow hover:bg-neon-yellow/90 text-neon-yellow-foreground px-6 py-3 text-base"> {/* Use neon-yellow */}
           {mutation.isPending ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Lightbulb className="mr-2 h-5 w-5"/>} Get Suggestions
         </Button>
         
@@ -569,8 +572,8 @@ const SmartSuggestionsTool = () => {
 
         {suggestions.length > 0 && (
           <div className="mt-6">
-            <h4 className="font-semibold text-primary mb-2 text-lg">Suggestions:</h4>
-            <ul className="list-disc list-inside space-y-2 text-foreground/90 bg-foreground/5 p-4 rounded-md border border-border">
+            <h4 className="font-semibold text-neon-yellow mb-2 text-lg">Suggestions:</h4> {/* Use neon-yellow */}
+            <ul className="list-disc list-inside space-y-2 text-foreground/90 bg-card/50 p-4 rounded-md border border-neon-yellow/30"> {/* Adjusted styles */}
               {suggestions.map((s, i) => <li key={i}>{s}</li>)}
             </ul>
           </div>
@@ -592,28 +595,53 @@ export function LearningSections() {
       title="Interactive Learning Hub"
       subtitle="Explore the fundamentals and practice your prompt engineering skills in our interactive labs."
     >
-      <div 
-        className="card-neon-animated-border rounded-md mb-8" 
-        style={{ padding: 'var(--neon-border-thickness)' }}
-      >
+      <div className="mb-8"> {/* Outer wrapper for Tabs and its border */}
         <Tabs defaultValue="anatomy" className="w-full">
           <TabsList 
-            className="grid w-full grid-cols-1 md:grid-cols-3 bg-card backdrop-blur-sm"
-            style={{ borderRadius: `calc(var(--radius) - var(--neon-border-thickness))` }}
+            className="grid w-full grid-cols-1 md:grid-cols-3 bg-transparent p-0 rounded-none mb-0" // Removed bg, padding, rounded for list
           >
-            <TabsTrigger value="anatomy" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base py-2.5"><Microscope className="mr-2 h-5 w-5" />Prompt Anatomy Lab</TabsTrigger>
-            <TabsTrigger value="playground" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base py-2.5"><BookOpen className="mr-2 h-5 w-5"/>Engineering Playground</TabsTrigger>
-            <TabsTrigger value="suggestions" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base py-2.5"><Target className="mr-2 h-5 w-5"/>Smart Suggestions</TabsTrigger>
+            <TabsTrigger 
+              value="anatomy" 
+              className="data-[state=active]:bg-neon-yellow data-[state=active]:text-neon-yellow-foreground data-[state=active]:border-b-transparent 
+                         text-slate-300 hover:text-neon-yellow 
+                         border-2 border-neon-yellow/50 border-b-0 rounded-t-md rounded-b-none 
+                         py-3 text-base font-medium transition-all data-[state=inactive]:bg-card/50"
+            >
+              <Microscope className="mr-2 h-5 w-5" />Prompt Anatomy Lab
+            </TabsTrigger>
+            <TabsTrigger 
+              value="playground" 
+              className="data-[state=active]:bg-neon-yellow data-[state=active]:text-neon-yellow-foreground data-[state=active]:border-b-transparent 
+                         text-slate-300 hover:text-neon-yellow 
+                         border-2 border-neon-yellow/50 border-b-0 rounded-t-md rounded-b-none 
+                         py-3 text-base font-medium transition-all data-[state=inactive]:bg-card/50 md:mx-[-2px]" // mx for overlap
+            >
+              <BookOpen className="mr-2 h-5 w-5"/>Engineering Playground
+            </TabsTrigger>
+            <TabsTrigger 
+              value="suggestions" 
+              className="data-[state=active]:bg-neon-yellow data-[state=active]:text-neon-yellow-foreground data-[state=active]:border-b-transparent 
+                         text-slate-300 hover:text-neon-yellow 
+                         border-2 border-neon-yellow/50 border-b-0 rounded-t-md rounded-b-none 
+                         py-3 text-base font-medium transition-all data-[state=inactive]:bg-card/50"
+            >
+              <Target className="mr-2 h-5 w-5"/>Smart Suggestions
+            </TabsTrigger>
           </TabsList>
-          <TabsContent value="anatomy">
-            <PromptAnatomyLab />
-          </TabsContent>
-          <TabsContent value="playground">
-            <PromptEngineeringPlayground />
-          </TabsContent>
-          <TabsContent value="suggestions">
-            <SmartSuggestionsTool />
-          </TabsContent>
+          {/* Content Area with Glowing Border */}
+          <div className="bg-card p-0.5 yellow-glowing-box rounded-b-lg md:rounded-tr-lg">
+            <div className="bg-card rounded-b-md md:rounded-tr-md"> {/* Inner div for actual content background */}
+              <TabsContent value="anatomy" className="mt-0">
+                <PromptAnatomyLab />
+              </TabsContent>
+              <TabsContent value="playground" className="mt-0">
+                <PromptEngineeringPlayground />
+              </TabsContent>
+              <TabsContent value="suggestions" className="mt-0">
+                <SmartSuggestionsTool />
+              </TabsContent>
+            </div>
+          </div>
         </Tabs>
       </div>
     </SectionContainer>
