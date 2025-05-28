@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark"> {/* Apply dark class for ShadCN compatibility if needed, though root variables are dark */}
+    <html lang="en" className="dark">
       <body className={`${sansFont.variable} ${monoFont.variable} antialiased font-sans`}>
         <AppProviders>
           <Header />
