@@ -1,6 +1,6 @@
 
 import type { Metadata } from 'next';
-import { Inter, Roboto_Mono } from 'next/font/google'; // Changed from GeistSans, GeistMono
+import { Inter, Roboto_Mono, Orbitron } from 'next/font/google'; // Changed from GeistSans, GeistMono
 import './globals.css';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
@@ -17,6 +17,12 @@ const monoFont = Roboto_Mono({ // Changed from GeistMono to Roboto_Mono
   subsets: ['latin'],
 });
 
+const titleFont = Orbitron({
+  variable: '--font-orbitron',
+  subsets: ['latin'],
+  weight: ['400', '700'], // Include weights you might need
+});
+
 export const metadata: Metadata = {
   title: 'PromptCraft Studio',
   description: 'Where AI Magic Meets Engineering Precision. Interactive AI Prompt Engineering Showcase.',
@@ -29,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${sansFont.variable} ${monoFont.variable} antialiased font-sans`}>
+      <body className={`${sansFont.variable} ${monoFont.variable} ${titleFont.variable} antialiased font-sans`}>
         <AppProviders>
           <Header />
           <main className="flex-grow">{children}</main>

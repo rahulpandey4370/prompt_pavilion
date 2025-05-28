@@ -30,7 +30,10 @@ export function SectionContainer({
         {title && (
           <AnimatedTitle
             as="h2"
-            className={cn("text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-primary", titleClassName)}
+            className={cn(
+              "text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-6 text-primary font-title", // Added font-title and increased mb-4 to mb-6
+              titleClassName
+            )}
           >
             {title}
           </AnimatedTitle>
