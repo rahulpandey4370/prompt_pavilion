@@ -7,7 +7,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles, BarChartHorizontalBig, BookHeart, MessagesSquare, UtensilsCrossed } from "lucide-react";
+import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles, BookHeart, MessagesSquare, UtensilsCrossed } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState, type DragEvent, useEffect } from "react";
@@ -19,11 +19,6 @@ import {
   generateFromAssembledPrompt,
   type GenerateFromAssembledPromptInput,
 } from '@/ai/flows/generate-from-assembled-prompt';
-import {
-  ratePromptQuality,
-  type RatePromptQualityInput,
-  type RatePromptQualityOutput,
-} from '@/ai/flows/rate-prompt-quality';
 
 
 interface AvailableComponent {
@@ -223,7 +218,6 @@ export function PromptBuilderSection() {
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
   const [draggedOver, setDraggedOver] = useState(false);
   const [aiResponse, setAiResponse] = useState<string | null>(null);
-  const [promptAnalysis, setPromptAnalysis] = useState<RatePromptQualityOutput | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -233,7 +227,6 @@ export function PromptBuilderSection() {
       // Reset workspace when scenario changes
       setDroppedItems([]);
       setAiResponse(null);
-      setPromptAnalysis(null);
     }
   }, [currentScenarioId]);
 
@@ -257,31 +250,6 @@ export function PromptBuilderSection() {
       const errorMessage = `Error: ${error.message}`;
       setAiResponse(errorMessage);
       toast({ variant: "destructive", title: "Generation Error", description: error.message });
-    }
-  });
-
-  const ratePromptMutation = useMutation({
-    mutationFn: (input: RatePromptQualityInput) => ratePromptQuality(input),
-    onSuccess: (data) => {
-      if (data && data.rating && data.feedback && data.overallAssessment) {
-        setPromptAnalysis(data);
-        toast({ title: "Prompt Analysis Complete!", description: "Rating and feedback are now available." });
-      } else {
-        setPromptAnalysis({
-          rating: "N/A",
-          feedback: ["AI did not return valid analysis or all fields were not populated."],
-          overallAssessment: "Analysis unavailable."
-        });
-        toast({ variant: "destructive", title: "Analysis Error", description: "Could not get complete prompt rating and feedback." });
-      }
-    },
-    onError: (error: Error) => {
-      setPromptAnalysis({
-          rating: "Error",
-          feedback: [`Analysis Error: ${error.message}`],
-          overallAssessment: "Analysis failed."
-      });
-      toast({ variant: "destructive", title: "Analysis Error", description: error.message });
     }
   });
 
@@ -316,24 +284,6 @@ export function PromptBuilderSection() {
   };
 
   const handleRemoveItem = (idToRemove: string) => {
-    // Since dropped items now use the component's original ID from the scenario,
-    // and multiple instances of non-singleton types might share it,
-    // we need a unique ID for each *dropped instance* if we want to remove specific ones.
-    // For now, let's assume if a type can be added multiple times, removing one removes the *last one of that type*.
-    // A better approach would be to give each dropped item a truly unique ID upon drop.
-    // Let's simplify for now: the `id` on `DroppedItem` will be the original component's ID.
-    // To remove by instance, we'd need `droppedId: Date.now().toString()` on drop.
-    // For now, remove by the component's 'id' (which is unique in availableComponents but could be duplicated in droppedItems if we allow multiple of same non-singleton)
-    // Let's re-think: The current PromptComponentCard gets a key=item.id. If we drop same example twice, keys clash.
-    // Let's ensure each droppedItem has a unique `instanceId`.
-    setDroppedItems(prev => prev.filter(item => item.id !== idToRemove)); // This will remove ALL items of that component ID. Needs fixing if multiple of same component.
-    // Correct approach: iterate and remove the first one that matches, or add a unique ID per drop.
-    // For now, let's stick to unique ID on `AvailableComponent` and only allow one instance of each card to be dropped from the library.
-    // This means we need to adjust the logic to prevent re-dropping *any* component already in the list.
-
-    // Revised logic: Prevent re-dropping any specific component card from the library.
-    // The `id` on `AvailableComponent` is unique for each card in the library.
-    // `idToRemove` will be this unique component ID.
      setDroppedItems(prevItems => prevItems.filter(item => item.id !== idToRemove));
   };
   
@@ -343,12 +293,10 @@ export function PromptBuilderSection() {
       return;
     }
     setAiResponse(null); 
-    setPromptAnalysis(null);
 
-    toast({ title: "Processing...", description: "Generating AI response and analyzing prompt quality..." });
+    toast({ title: "Processing...", description: "Generating AI response..." });
     
     generateResponseMutation.mutate({ assembledPrompt: livePreviewText });
-    ratePromptMutation.mutate({ assembledPrompt: livePreviewText });
   };
 
   const handleScenarioChange = (scenarioId: string) => {
@@ -431,8 +379,6 @@ export function PromptBuilderSection() {
               {droppedItems.length === 0 ? (
                 <p className="text-muted-foreground text-center">Drag & Drop Prompt Components Here</p>
               ) : (
-                // Ensure each dropped item gets a unique key for rendering if multiple of same type are allowed
-                // For now, if item.id (original component id) is unique in droppedItems, this is fine.
                 droppedItems.map((item, index) => (
                   <div key={`${item.id}-${index}`} className="relative group"> 
                     <PromptComponentCard
@@ -475,9 +421,9 @@ export function PromptBuilderSection() {
             size="lg" 
             className="bg-accent hover:bg-accent/90 text-accent-foreground"
             onClick={handleTestPrompt}
-            disabled={generateResponseMutation.isPending || ratePromptMutation.isPending || droppedItems.length === 0}
+            disabled={generateResponseMutation.isPending || droppedItems.length === 0}
           >
-            { (generateResponseMutation.isPending || ratePromptMutation.isPending) ? (
+            {generateResponseMutation.isPending ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               <Bot className="mr-2 h-4 w-4" />
@@ -486,8 +432,7 @@ export function PromptBuilderSection() {
           </Button>
       </div>
 
-
-        { (generateResponseMutation.isPending || aiResponse) && (
+        {(generateResponseMutation.isPending || aiResponse) && (
         <GlassCard className="mt-8 w-full">
             <GlassCardHeader>
             <GlassCardTitle className="text-primary flex items-center">
@@ -510,47 +455,6 @@ export function PromptBuilderSection() {
             )}
             </GlassCardContent>
         </GlassCard>
-        )}
-
-        { (ratePromptMutation.isPending || promptAnalysis) && (
-          <GlassCard className="mt-8 w-full">
-            <GlassCardHeader>
-              <GlassCardTitle className="text-primary flex items-center">
-                <BarChartHorizontalBig className="mr-2 h-5 w-5" /> Prompt Quality Analysis
-              </GlassCardTitle>
-            </GlassCardHeader>
-            <GlassCardContent>
-              {ratePromptMutation.isPending && !promptAnalysis ? (
-                <div className="flex items-center justify-center p-8">
-                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                  <p className="ml-3 text-foreground/80">Analyzing prompt quality...</p>
-                </div>
-              ) : promptAnalysis ? (
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold text-accent">Overall Assessment:</h4>
-                    <p className="text-foreground/80">{promptAnalysis.overallAssessment}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-accent">Quality Rating:</h4>
-                    <p className="text-2xl font-bold text-primary">{typeof promptAnalysis.rating === 'number' ? `${promptAnalysis.rating}/10` : promptAnalysis.rating}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-accent">Feedback & Missing Things:</h4>
-                    {promptAnalysis.feedback && promptAnalysis.feedback.length > 0 ? (
-                      <ul className="list-disc list-inside space-y-1 text-foreground/80 pl-4">
-                        {promptAnalysis.feedback.map((item, index) => (
-                          <li key={index}>{item}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="text-foreground/80">No specific feedback items provided.</p>
-                    )}
-                  </div>
-                </div>
-              ) : null}
-            </GlassCardContent>
-          </GlassCard>
         )}
     </SectionContainer>
   );
