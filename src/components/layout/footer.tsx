@@ -12,7 +12,7 @@ export function Footer() {
 
   return (
     <footer className="py-8 border-t border-border/20 bg-background/50">
-      <div className="container mx-auto px-4 text-center text-muted-foreground">
+      <div className="w-full px-6 sm:px-10 lg:px-16 text-center text-muted-foreground">
         <p>&copy; {currentYear} Prompt Pavilion. All rights reserved.</p>
         <p className="text-sm mt-1">Showcasing AI Engineering Excellence.</p>
       </div>

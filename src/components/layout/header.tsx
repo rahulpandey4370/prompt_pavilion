@@ -39,7 +39,7 @@ export function Header() {
   if (!mounted) {
     return (
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div className="w-full px-6 sm:px-10 lg:px-16 h-16 flex items-center justify-between">
           <Link href="#hero" className="flex items-center space-x-2 text-2xl font-bold text-primary">
             <Rocket className="h-7 w-7" />
             <span>Prompt Pavilion</span>
@@ -51,7 +51,7 @@ export function Header() {
   
   return (
     <header className={headerClasses}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div className="w-full px-6 sm:px-10 lg:px-16 h-16 flex items-center justify-between">
         <Link href="#hero" className="flex items-center space-x-2 text-2xl font-bold text-primary hover:text-accent transition-colors">
           <Rocket className="h-7 w-7" />
           <span>Prompt Pavilion</span>

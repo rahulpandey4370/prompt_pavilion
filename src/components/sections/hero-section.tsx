@@ -49,7 +49,7 @@ export function HeroSection() {
         ))}
       </div>
       
-      <div className="relative z-10 container mx-auto">
+      <div className="relative z-10 w-full">
         <AnimatedTitle
           as="h1"
           className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold mb-6"
@@ -62,9 +62,9 @@ export function HeroSection() {
         <AnimatedTitle
           as="p"
           delay={300}
-          className="text-xl sm:text-2xl md:text-3xl text-foreground/80 mb-10 max-w-3xl mx-auto"
+          className="text-xl sm:text-2xl md:text-3xl text-foreground/80 mb-10 max-w-5xl mx-auto"
         >
-          Showcasing  AI  Engineering  Excellence
+          Where  AI  Magic  Meets  Prompt  Engineering
         </AnimatedTitle>
 
         <div className="animate-fadeInGrow" style={{animationDelay: '600ms', opacity: 0}}>

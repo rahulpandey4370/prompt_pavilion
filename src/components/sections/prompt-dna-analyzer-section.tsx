@@ -68,7 +68,7 @@ export function PromptDNAAnalyzerSection() {
       title="Prompt DNA Analyzer"
       subtitle="Paste any text prompt to see its 'genetic makeup'. Get an AI-powered breakdown of its components, clarity, strengths, and areas for improvement."
     >
-      <GlassCard className="max-w-4xl mx-auto">
+      <GlassCard className="w-full">
         <GlassCardHeader>
           <GlassCardTitle className="text-accent flex items-center">
             <Fingerprint className="mr-2" /> Analyze Your Prompt's DNA
