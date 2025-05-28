@@ -26,57 +26,79 @@ export function AnimatedTitle({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setTimeout(() => setIsVisible(true), delay);
+          // Set a timeout to ensure the initial state (hidden) is rendered before starting animation
+          const timer = setTimeout(() => setIsVisible(true), delay);
           observer.unobserve(entry.target);
+          return () => clearTimeout(timer); // Cleanup timeout if component unmounts
         }
       },
       { threshold: 0.1 }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current); // Use ref.current in cleanup
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [delay]); // Removed ref from dependencies as it's stable
 
-  // Split children into words for staggered animation
-  const words = typeof children === 'string' ? children.split(' ') : [];
+  // Split by sequences of whitespace, keeping the whitespace.
+  // Filter out empty strings that might result from split.
+  const parts = typeof children === 'string' 
+    ? children.split(/(\s+)/).filter(part => part.length > 0) 
+    : [];
 
-  const defaultStyle: CSSProperties = { wordSpacing: '0.2em' };
+  // If children is not a string, or parts array is empty (e.g. children was empty string),
+  // render children directly or nothing if parts is empty.
+  const shouldAnimateParts = typeof children === 'string' && parts.length > 0;
+
+  // Removed wordSpacing from defaultStyle as spaces are now explicit parts.
+  // User can still pass wordSpacing via the style prop if they have a specific need for it
+  // with non-string children or other advanced use cases.
+  const defaultStyle: CSSProperties = {}; 
   const combinedStyle = { ...defaultStyle, ...style };
 
   return (
     <Tag
       ref={ref}
       className={cn(
-        "transition-all duration-500 ease-out",
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5",
+        "transition-all duration-500 ease-out", // Base transition for the container itself
+        // The container's visibility is implicitly handled by children's animation
+        // Or, if you want the container to fade in first:
+        // isVisible && shouldAnimateParts ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5",
         className
       )}
       style={combinedStyle} // Apply combined style
       {...props}
     >
-      {typeof children === 'string' ? (
-        words.map((word, index) => (
+      {shouldAnimateParts ? (
+        parts.map((part, index) => (
           <span
             key={index}
-            className="inline-block transition-all duration-500 ease-out" // Removed conditional mr-1
+            className="inline-block transition-all duration-500 ease-out"
             style={{
-              transitionDelay: `${isVisible ? index * 100 + delay : 0}ms`,
+              whiteSpace: part.match(/^\s+$/) ? 'pre' : 'normal', // Preserve whitespace if the part is only spaces
+              // Add a slight delay for the overall container visibility to settle if needed,
+              // then stagger parts. Using index * 100 for stagger.
+              transitionDelay: `${isVisible ? index * 100 : 0}ms`,
               opacity: isVisible ? 1 : 0,
-              transform: isVisible ? 'translateY(0)' : 'translateY(10px)'
+              transform: isVisible ? 'translateY(0px)' : 'translateY(10px)',
             }}
           >
-            {word}{index < words.length - 1 ? ' ' : ''}
+            {part}
           </span>
         ))
       ) : (
-        children
+        // Fallback for non-string children or when parts are empty
+        // If !shouldAnimateParts and children is a string, it implies children was empty or only whitespace.
+        // In this case, rendering children (empty string) is fine.
+        // For non-string children, render them as is.
+        children 
       )}
     </Tag>
   );
