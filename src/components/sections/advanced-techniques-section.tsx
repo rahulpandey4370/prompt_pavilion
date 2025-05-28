@@ -30,16 +30,18 @@ export function AdvancedTechniquesSection() {
                 <p className="font-semibold text-primary">How it Works:</p>
                 <ul className="list-disc list-inside pl-4 space-y-1">
                   <li>Typically involves providing a few examples (few-shot learning) where the intermediate reasoning steps are explicitly shown.</li>
-                  <li>Prompts might include phrases like "Let's think step by step" or directly ask the AI to "Show your work."</li>
-                  <li>The AI generates these intermediate thoughts before arriving at the final answer.</li>
+                  <li>Prompts might include phrases like "Let's think step by step," "Show your work," or "Explain your reasoning before giving the final answer."</li>
+                  <li>The AI is guided to generate these intermediate thoughts or logical steps as part of its output, leading to the final answer.</li>
+                  <li>This process helps the model to break down complex problems into smaller, more manageable parts, improving its ability to reason through them.</li>
                 </ul>
               </AnimatedTitle>
               <AnimatedTitle as="div" delay={300} className="space-y-1">
                 <p className="font-semibold text-primary">Benefits:</p>
                 <ul className="list-disc list-inside pl-4 space-y-1">
-                  <li>Improves accuracy and reliability, especially for complex logical, arithmetic, or multi-step problems.</li>
-                  <li>Makes the AI's decision-making process more transparent and interpretable.</li>
-                  <li>Facilitates easier debugging of the AI's reasoning if errors occur.</li>
+                  <li>Significantly improves accuracy and reliability, especially for tasks requiring logical deduction, arithmetic calculations, or multi-step problem-solving.</li>
+                  <li>Makes the AI's decision-making process more transparent and interpretable, allowing users to understand *how* an answer was derived.</li>
+                  <li>Facilitates easier debugging and refinement of the AI's reasoning if errors or unexpected outputs occur.</li>
+                  <li>Can elicit more robust performance on tasks where the model might otherwise take shortcuts or make superficial judgments.</li>
                 </ul>
               </AnimatedTitle>
             </div>
@@ -66,15 +68,15 @@ export function AdvancedTechniquesSection() {
                   <li>User query triggers a retrieval step from a specified knowledge source (e.g., vector database of company documents, product manuals, recent news).</li>
                   <li>Relevant information snippets are retrieved based on semantic similarity or keyword matching.</li>
                   <li>This retrieved information is dynamically inserted as **additional context directly into the prompt** sent to the Large Language Model (LLM), along with the original user query.</li>
-                  <li>The LLM uses this augmented prompt to generate a more informed, contextually relevant, and factually grounded answer.</li>
+                  <li>The LLM uses this augmented prompt to generate a more informed, contextually relevant, and factually grounded answer, often citing sources.</li>
                 </ol>
               </AnimatedTitle>
               <AnimatedTitle as="div" delay={300} className="space-y-1">
                 <p className="font-semibold text-primary">Benefits:</p>
                 <ul className="list-disc list-inside pl-4 space-y-1">
-                  <li>Significantly reduces AI hallucinations by providing factual grounding.</li>
+                  <li>Significantly reduces AI hallucinations by providing factual grounding from reliable sources.</li>
                   <li>Overcomes knowledge cutoffs by incorporating up-to-date information.</li>
-                  <li>Enables the AI to use domain-specific or private data securely.</li>
+                  <li>Enables the AI to use domain-specific or private data securely without full model retraining.</li>
                   <li>Vital for applications like customer support bots, internal knowledge Q&A, and research assistants.</li>
                 </ul>
               </AnimatedTitle>
@@ -99,18 +101,19 @@ export function AdvancedTechniquesSection() {
               <AnimatedTitle as="div" delay={200} className="space-y-1">
                 <p className="font-semibold text-primary">How it Works:</p>
                 <ul className="list-disc list-inside pl-4 space-y-1">
-                  <li>The model generates several distinct "thoughts" or intermediate steps for a problem.</li>
-                  <li>Each thought can be evaluated (e.g., by the LLM itself via another prompt, or by programmed heuristics).</li>
-                  <li>The system can then strategically decide which paths to explore further, backtrack from less promising ones, or even combine insights from different branches.</li>
-                  <li>Prompts might guide this process by asking the AI to consider alternatives, assess confidence, or explain choices at each step.</li>
+                  <li>The model generates several distinct "thoughts" or intermediate steps (branches) for a problem.</li>
+                  <li>Each thought can be evaluated, either by the LLM itself (using another prompt to self-critique) or by programmed heuristics.</li>
+                  <li>The system can then strategically decide which paths to explore further, backtrack from less promising ones, or combine insights from different branches.</li>
+                  <li>Prompts might guide this by asking for alternatives, confidence scores, or choices at each step.</li>
                 </ul>
               </AnimatedTitle>
               <AnimatedTitle as="div" delay={300} className="space-y-1">
                 <p className="font-semibold text-primary">Benefits:</p>
                 <ul className="list-disc list-inside pl-4 space-y-1">
-                  <li>More effective for complex problem-solving where exploration, strategic lookahead, and self-correction are crucial.</li>
-                  <li>Mimics a more human-like deliberation and planning process.</li>
-                  <li>Useful for tasks requiring creative solutions, planning, or navigating ambiguous scenarios with multiple potential solutions.</li>
+                  <li>More effective for complex problem-solving where exploration, strategic lookahead, planning, and self-correction are crucial.</li>
+                  <li>Mimics a more human-like deliberation and planning process, allowing for more robust solutions.</li>
+                  <li>Useful for tasks requiring creative solutions, planning, or navigating ambiguous scenarios with multiple potential outcomes.</li>
+                  <li>Can lead to higher quality outputs by systematically exploring and pruning the solution space.</li>
                 </ul>
               </AnimatedTitle>
             </div>
