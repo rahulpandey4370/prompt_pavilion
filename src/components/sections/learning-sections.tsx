@@ -323,16 +323,16 @@ const PromptAnatomyLab = () => (
             </HoverCardTrigger>
             <HoverCardContent
               side="bottom"
-              align="center"
+              align="start" // Changed from "center" to "start"
               className={cn(
-                "w-full sm:w-[550px] md:w-[650px] lg:w-[750px] max-w-[calc(100vw-4rem)]", 
-                "bg-card text-card-foreground p-4 rounded-lg shadow-xl border", 
+                "w-auto max-w-3xl", // Changed width classes
+                "bg-card text-card-foreground p-4 rounded-lg shadow-lg border", // reduced shadow from xl to lg
                 part.borderColorClass, 
-                "max-h-[70vh] overflow-y-auto custom-scrollbar" // Max height and scroll for long content
+                "max-h-[70vh] overflow-y-auto custom-scrollbar" 
               )}
             >
               <h5 className={cn("text-lg font-semibold mb-3 sticky top-0 py-2 bg-card z-10", part.textColorClass)}>{part.name}</h5>
-              <div className="text-sm leading-relaxed"
+              <div className="text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none" // Added prose for better HTML rendering
                    dangerouslySetInnerHTML={{ __html: part.elaborateDescription }} />
             </HoverCardContent>
           </HoverCard>
@@ -611,3 +611,4 @@ export function LearningSections() {
     </SectionContainer>
   );
 }
+
