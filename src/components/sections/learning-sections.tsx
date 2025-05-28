@@ -5,7 +5,6 @@ import { SectionContainer } from "@/components/shared/section-container";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Microscope, BookOpen, Target, Loader2, Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Settings2, Lightbulb, HelpCircle, UtensilsCrossed } from "lucide-react";
-import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { improvePromptSuggestions, type ImprovePromptSuggestionsInput } from "@/ai/flows/improve-prompt-suggestions";
 import { liveAIResponseDemo, type LiveAIResponseDemoInput }  from "@/ai/flows/live-ai-response-demo";
 import { useMutation } from "@tanstack/react-query";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +24,7 @@ const anatomyParts = [
     icon: Settings2,
     colorClass: "bg-prompt-system",
     textColorClass: "text-purple-100",
+    borderColorClass: "border-purple-400",
   },
   {
     id: "user",
@@ -33,6 +33,7 @@ const anatomyParts = [
     icon: Puzzle,
     colorClass: "bg-prompt-user",
     textColorClass: "text-blue-100",
+    borderColorClass: "border-blue-400",
   },
   {
     id: "rag",
@@ -41,6 +42,7 @@ const anatomyParts = [
     icon: ListChecks,
     colorClass: "bg-prompt-rag",
     textColorClass: "text-green-100",
+    borderColorClass: "border-green-400",
   },
   {
     id: "examples",
@@ -49,6 +51,7 @@ const anatomyParts = [
     icon: Eye,
     colorClass: "bg-prompt-examples",
     textColorClass: "text-teal-100",
+    borderColorClass: "border-teal-400",
   },
   {
     id: "constraints",
@@ -57,6 +60,7 @@ const anatomyParts = [
     icon: SlidersHorizontal,
     colorClass: "bg-prompt-constraints",
     textColorClass: "text-orange-100",
+    borderColorClass: "border-orange-400",
   },
   {
     id: "guardrails",
@@ -65,6 +69,7 @@ const anatomyParts = [
     icon: ShieldCheck,
     colorClass: "bg-prompt-guardrails",
     textColorClass: "text-red-100",
+    borderColorClass: "border-red-400",
   },
   {
     id: "tools",
@@ -73,14 +78,16 @@ const anatomyParts = [
     icon: Wrench,
     colorClass: "bg-prompt-tools",
     textColorClass: "text-yellow-100",
+    borderColorClass: "border-yellow-400",
   },
   {
     id: "output_format",
     name: "Output Format Indicator",
     description: "Specifies the desired structure of the AI's response, such as JSON, Markdown, or a numbered list. Example: 'Respond in JSON format with keys \"original\" and \"translated\".'",
     icon: Wand2,
-    colorClass: "bg-pink-500/80 border-pink-400", // Custom color, ensure it's in theme or add to globals/tailwind
+    colorClass: "bg-pink-500/80", 
     textColorClass: "text-pink-100",
+    borderColorClass: "border-pink-400",
   },
 ];
 
@@ -94,34 +101,23 @@ const PromptAnatomyLab = () => (
     </GlassCardHeader>
     <GlassCardContent>
       <p className="text-foreground/80 mb-6">
-        A well-crafted prompt is made of several key components. Hover over each block below to understand its role in guiding the AI.
+        A well-crafted prompt is made of several key components. Click on each block below to expand and understand its role in guiding the AI.
       </p>
-      <div className="space-y-3">
+      <Accordion type="multiple" className="w-full space-y-3">
         {anatomyParts.map((part) => (
-          <TooltipProvider key={part.id} delayDuration={100}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div
-                  className={cn(
-                    "p-4 rounded-lg shadow-md transition-all duration-150 ease-in-out hover:shadow-lg relative overflow-hidden border-2",
-                    part.colorClass,
-                    part.textColorClass,
-                    "cursor-help"
-                  )}
-                >
-                  <div className="flex items-center">
-                    <part.icon className="w-5 h-5 mr-3 shrink-0" />
-                    <h4 className="font-semibold text-md">{part.name}</h4>
-                  </div>
-                </div>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="max-w-xs bg-background border-primary text-foreground p-3">
-                <p>{part.description}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <AccordionItem value={part.id} key={part.id} className={cn("rounded-lg shadow-md border-2", part.colorClass, part.borderColorClass, part.textColorClass)}>
+            <AccordionTrigger className={cn("p-4 hover:no-underline data-[state=open]:border-b-2", part.borderColorClass)}>
+              <div className="flex items-center w-full">
+                <part.icon className="w-5 h-5 mr-3 shrink-0" />
+                <h4 className="font-semibold text-md">{part.name}</h4>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className={cn("p-4 text-sm bg-card/30 rounded-b-md", part.textColorClass, "opacity-90")}>
+              {part.description}
+            </AccordionContent>
+          </AccordionItem>
         ))}
-      </div>
+      </Accordion>
        <p className="text-foreground/70 mt-6 text-sm">
         Note: Not all components are needed for every prompt. The complexity and combination depend on the task.
       </p>
@@ -150,7 +146,7 @@ const playgroundScenarios = [
     name: "Code Explainer (Python)",
     basicPrompt: "What does this Python code do: `print('Hello')`?",
     engineeredPrompt: "System: You are an expert Python programming assistant. User: Explain the following Python code snippet line by line, including its purpose and expected output. Identify any potential improvements or common pitfalls related to this type of code. Code: \n```python\ndef greet(name):\n  return f\"Hello, {name}!\"\n\nmessage = greet(\"Alice\")\nprint(message)\n```\nRespond in Markdown.",
-    icon: Bot, // Or Code2 if available and preferred
+    icon: Bot, 
   },
 ];
 
@@ -170,7 +166,7 @@ const PromptEngineeringPlayground = () => {
     if (scenario) {
       setBasicPrompt(scenario.basicPrompt);
       setEngineeredPrompt(scenario.engineeredPrompt);
-      setBasicResponse(""); // Clear previous responses
+      setBasicResponse(""); 
       setEngineeredResponse("");
     }
   }, [selectedScenarioId]);
@@ -395,4 +391,3 @@ export function LearningSections() {
     </SectionContainer>
   );
 }
-
