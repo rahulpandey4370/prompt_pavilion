@@ -2,7 +2,7 @@ import { SectionContainer } from "@/components/shared/section-container";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Fingerprint, BarChartHorizontalBig, Upload } from "lucide-react";
+import { Fingerprint, BarChartHorizontalBig } from "lucide-react"; // Removed Upload icon
 import Image from "next/image";
 
 export function PromptDNAAnalyzerSection() {
@@ -10,7 +10,7 @@ export function PromptDNAAnalyzerSection() {
     <SectionContainer
       id="analyzer"
       title="Prompt DNA Analyzer"
-      subtitle="Upload any text prompt and see its 'genetic makeup'. Get suggestions for improvement with before/after previews."
+      subtitle="Paste any text prompt and see its 'genetic makeup'. Get suggestions for improvement."
     >
       <GlassCard className="max-w-3xl mx-auto">
         <GlassCardHeader>
@@ -20,17 +20,15 @@ export function PromptDNAAnalyzerSection() {
         </GlassCardHeader>
         <GlassCardContent>
           <Textarea 
-            placeholder="Paste your prompt here or upload a file..." 
+            placeholder="Paste your prompt here..." 
             rows={6}
             className="mb-4 bg-foreground/5 border-border focus:ring-accent"
           />
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <Button className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground">
-              <BarChartHorizontalBig className="mr-2 h-4 w-4" /> Analyze Prompt
+              <BarChartHorizontalBig className="mr-2 h-4 w-4" /> Analyze Prompt (Coming Soon)
             </Button>
-            <Button variant="outline" className="flex-1 border-accent text-accent hover:bg-accent hover:text-accent-foreground">
-              <Upload className="mr-2 h-4 w-4" /> Upload File (Coming Soon)
-            </Button>
+            {/* The "Upload File (Coming Soon)" button was removed from here */}
           </div>
           {/* Placeholder for analysis results */}
           <div className="mt-6 p-4 border border-dashed border-border rounded-md min-h-[200px] flex items-center justify-center">
