@@ -3,79 +3,63 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
+    --background: 275 60% 12%; /* Deep Dark Purple */
+    --foreground: 210 40% 98%; /* Cool White */
+
+    --card: 275 55% 16%; /* Slightly Lighter Purple for cards */
+    --card-foreground: 210 40% 96%;
+
+    --popover: 275 50% 14%; /* Darker Purple for popovers */
+    --popover-foreground: 210 40% 96%;
+
+    --primary: 181 100% 74%; /* Electric Blue */
+    --primary-foreground: 270 60% 15%; /* Dark Purple - for text on primary buttons */
+
+    --secondary: 275 50% 25%; /* Muted Purple */
+    --secondary-foreground: 181 80% 85%; /* Light Electric Blue - for text on secondary buttons */
+
+    --muted: 275 40% 30%; /* Very Muted Purple */
+    --muted-foreground: 275 20% 65%; /* Light Greyish Purple */
+
+    --accent: 110 100% 54%; /* Neon Green */
+    --accent-foreground: 275 100% 5%; /* Very Dark Purple/Black - for text on accent buttons */
+
+    --destructive: 0 70% 60%; /* Red */
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --border: 275 50% 28%; /* Subtle Purple Border */
+    --input: 275 50% 22%; /* Input Background */
+    --ring: 110 100% 60%; /* Neon Green - for focus rings */
+
+    --radius: 0.8rem; /* Slightly more rounded for a modern feel */
+
+    --chart-1: 181 100% 74%;
+    --chart-2: 110 100% 54%;
+    --chart-3: 275 50% 60%;
+    --chart-4: 30 80% 65%;
+    --chart-5: 200 85% 60%;
+
+    /* Specific prompt component colors */
+    --prompt-system: 270 60% 50%; /* Purple */
+    --prompt-user: 210 70% 55%; /* Blue */
+    --prompt-rag: 130 60% 45%; /* Green */
+    --prompt-constraints: 30 80% 60%; /* Orange */
+    --prompt-guardrails: 0 70% 55%; /* Red */
+    --prompt-tools: 50 90% 60%; /* Yellow */
+    --prompt-examples: 180 70% 50%; /* Teal */
   }
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
+
+  /* Remove .dark class specific overrides if dark is the only theme */
+  /* All variables are now in :root for a default dark theme */
 }
 
 @layer base {
@@ -84,5 +68,57 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden; /* Prevent horizontal scroll */
   }
+}
+
+/* For animated title */
+@keyframes fadeInGrow {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeInGrow {
+  animation: fadeInGrow 0.5s ease-out forwards;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* Glassmorphism base styles */
+.glass-card-content {
+  background: rgba(255, 255, 255, 0.05); /* More subtle white tint for dark theme */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); /* For Safari */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Lighter border for dark theme */
+  border-radius: var(--radius);
+}
+
+/* Custom scrollbar for a more modern look */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background) / 0.5);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--accent) / 0.7);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--accent));
 }

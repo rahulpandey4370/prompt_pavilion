@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 export default {
-    darkMode: ["class"],
+    darkMode: ["class"], // Keep this if shadcn components rely on it, even if dark is default
     content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -50,16 +50,24 @@ export default {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			},
-  			sidebar: {
-  				DEFAULT: 'hsl(var(--sidebar-background))',
-  				foreground: 'hsl(var(--sidebar-foreground))',
-  				primary: 'hsl(var(--sidebar-primary))',
-  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-  				accent: 'hsl(var(--sidebar-accent))',
-  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-  				border: 'hsl(var(--sidebar-border))',
-  				ring: 'hsl(var(--sidebar-ring))'
-  			}
+  			sidebar: { // Kept for potential future use with shadcn sidebar
+  				DEFAULT: 'hsl(var(--background))', // Adjusted to match main theme
+  				foreground: 'hsl(var(--foreground))',
+  				primary: 'hsl(var(--primary))',
+  				'primary-foreground': 'hsl(var(--primary-foreground))',
+  				accent: 'hsl(var(--accent))',
+  				'accent-foreground': 'hsl(var(--accent-foreground))',
+  				border: 'hsl(var(--border))',
+  				ring: 'hsl(var(--ring))'
+  			},
+          // Prompt component specific colors (can be used with bg-prompt-system etc.)
+        'prompt-system': 'hsl(var(--prompt-system))',
+        'prompt-user': 'hsl(var(--prompt-user))',
+        'prompt-rag': 'hsl(var(--prompt-rag))',
+        'prompt-constraints': 'hsl(var(--prompt-constraints))',
+        'prompt-guardrails': 'hsl(var(--prompt-guardrails))',
+        'prompt-tools': 'hsl(var(--prompt-tools))',
+        'prompt-examples': 'hsl(var(--prompt-examples))',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -82,12 +90,24 @@ export default {
   				to: {
   					height: '0'
   				}
-  			}
+  			},
+        'fadeInGrow': {
+          '0%': { opacity: '0', transform: 'scale(0.9)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        'shimmer': {
+          '100%': { transform: 'translateX(100%)' },
+        }
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
-  		}
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+        'fadeInGrow': 'fadeInGrow 0.5s ease-out forwards',
+  		},
+      fontFamily: {
+        sans: ['var(--font-geist-sans)'],
+        mono: ['var(--font-geist-mono)'],
+      }
   	}
   },
   plugins: [require("tailwindcss-animate")],
