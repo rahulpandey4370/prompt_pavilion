@@ -1,6 +1,8 @@
+
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
 import { GripVertical } from "lucide-react";
+import type { DragEvent } from 'react';
 
 export type PromptComponentType = 
   | "system" | "user" | "rag" | "constraints" 
@@ -12,16 +14,17 @@ interface PromptComponentCardProps {
   description: string;
   icon: LucideIcon;
   className?: string;
+  isDraggable?: boolean; // To control draggable attribute for cards in the drop zone
 }
 
 const typeColors: Record<PromptComponentType, string> = {
-  system: "bg-purple-500/80 border-purple-400", // System Prompt (purple)
-  user: "bg-blue-500/80 border-blue-400",       // User Input (blue)
-  rag: "bg-green-500/80 border-green-400",       // RAG Context (green)
-  constraints: "bg-orange-500/80 border-orange-400", // Constraints (orange)
-  guardrails: "bg-red-500/80 border-red-400",     // Guardrails (red)
-  tools: "bg-yellow-500/80 border-yellow-400",   // Tools/Functions (yellow)
-  examples: "bg-teal-500/80 border-teal-400",    // Examples (teal)
+  system: "bg-prompt-system/80 border-purple-400",
+  user: "bg-prompt-user/80 border-blue-400",
+  rag: "bg-prompt-rag/80 border-green-400",
+  constraints: "bg-prompt-constraints/80 border-orange-400",
+  guardrails: "bg-prompt-guardrails/80 border-red-400",
+  tools: "bg-prompt-tools/80 border-yellow-400",
+  examples: "bg-prompt-examples/80 border-teal-400",
 };
 
 const typeTextColors: Record<PromptComponentType, string> = {
@@ -35,14 +38,25 @@ const typeTextColors: Record<PromptComponentType, string> = {
 };
 
 
-export function PromptComponentCard({ type, title, description, icon: Icon, className }: PromptComponentCardProps) {
+export function PromptComponentCard({ type, title, description, icon: Icon, className, isDraggable = true }: PromptComponentCardProps) {
+  const handleDragStart = (event: DragEvent<HTMLDivElement>) => {
+    if (!isDraggable) return;
+    event.dataTransfer.setData("promptComponentType", type);
+    event.dataTransfer.setData("promptComponentTitle", title);
+    // You could also serialize the whole component data if needed
+    // event.dataTransfer.setData("application/json", JSON.stringify({ type, title, description, iconName: Icon.displayName }));
+  };
+
   return (
     <div
+      draggable={isDraggable}
+      onDragStart={isDraggable ? handleDragStart : undefined}
       className={cn(
-        "p-4 rounded-lg shadow-md cursor-grab active:cursor-grabbing transition-all duration-150 ease-in-out transform hover:scale-105 active:shadow-xl relative overflow-hidden min-w-[200px]",
+        "p-4 rounded-lg shadow-md transition-all duration-150 ease-in-out transform hover:scale-105 active:shadow-xl relative overflow-hidden min-w-[200px]",
         typeColors[type],
         typeTextColors[type],
         "border-2",
+        isDraggable ? "cursor-grab active:cursor-grabbing" : "cursor-default",
         className
       )}
     >
@@ -50,7 +64,7 @@ export function PromptComponentCard({ type, title, description, icon: Icon, clas
       <div className="flex items-center mb-2">
         <Icon className="w-5 h-5 mr-2 shrink-0" />
         <h3 className="font-semibold text-md">{title}</h3>
-        <GripVertical className="ml-auto w-5 h-5 text-white/50 cursor-grab" />
+        {isDraggable && <GripVertical className="ml-auto w-5 h-5 text-white/50 cursor-grab" />}
       </div>
       <p className="text-xs opacity-80">{description}</p>
     </div>
