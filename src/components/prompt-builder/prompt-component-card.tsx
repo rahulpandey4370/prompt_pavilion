@@ -11,11 +11,11 @@ export type PromptComponentType =
 interface PromptComponentCardProps {
   type: PromptComponentType;
   title: string;
-  description: string; // This is the full content for example components
+  description: string;
   icon: LucideIcon;
   className?: string;
   isDraggable?: boolean;
-  "data-component-id"?: string; // Added to pass the component ID for drag operation
+  "data-component-id"?: string;
 }
 
 const typeColors: Record<PromptComponentType, string> = {
@@ -42,7 +42,6 @@ const typeTextColors: Record<PromptComponentType, string> = {
 export function PromptComponentCard({ type, title, description, icon: Icon, className, isDraggable = true, "data-component-id": componentId }: PromptComponentCardProps) {
   const handleDragStart = (event: DragEvent<HTMLDivElement>) => {
     if (!isDraggable || !componentId) return;
-    // Transfer the unique component ID instead of just the type
     event.dataTransfer.setData("promptComponentId", componentId);
   };
 
@@ -50,31 +49,40 @@ export function PromptComponentCard({ type, title, description, icon: Icon, clas
     ? description.substring(0, 67) + "..." 
     : description;
 
+  const bgColorClass = typeColors[type].split(' ').find(cls => cls.startsWith('bg-')) || 'bg-card';
+
+
   return (
-    <div
+    <div // Outer div for border
       draggable={isDraggable}
       onDragStart={isDraggable ? handleDragStart : undefined}
       className={cn(
-        "p-4 rounded-lg shadow-md transition-all duration-150 ease-in-out transform hover:scale-105 active:shadow-xl relative overflow-hidden min-w-[200px]",
-        typeColors[type],
-        typeTextColors[type],
-        "border-2",
+        "card-neon-animated-border rounded-lg shadow-md transition-all duration-150 ease-in-out transform hover:scale-105 active:shadow-xl relative overflow-hidden min-w-[200px]",
         isDraggable ? "cursor-grab active:cursor-grabbing" : "cursor-default",
         className
       )}
-      title={description} 
-      data-component-id={componentId} // Ensure the ID is on the element for potential direct DOM access if needed elsewhere
+      title={description}
+      data-component-id={componentId}
+      style={{ padding: 'var(--neon-border-thickness)' }}
     >
-      <div className="absolute top-0 left-0 h-full w-1 bg-white/30"></div>
-      <div className="flex items-center mb-2">
-        <Icon className="w-5 h-5 mr-2 shrink-0" />
-        <h3 className="font-semibold text-md">{title}</h3>
-        {isDraggable && <GripVertical className="ml-auto w-5 h-5 text-white/50 cursor-grab" />}
+      <div // Inner div for actual content and background
+        className={cn(
+          "w-full h-full p-4", // Original padding
+          bgColorClass,
+          typeTextColors[type]
+        )}
+        style={{ borderRadius: `calc(var(--radius) - var(--neon-border-thickness))` }}
+      >
+        <div className="absolute top-0 left-0 h-full w-1 bg-white/30"></div>
+        <div className="flex items-center mb-2">
+          <Icon className="w-5 h-5 mr-2 shrink-0" />
+          <h3 className="font-semibold text-md">{title}</h3>
+          {isDraggable && <GripVertical className="ml-auto w-5 h-5 text-white/50 cursor-grab" />}
+        </div>
+        <p className={cn("text-xs opacity-80", isDraggable ? "max-h-10 overflow-hidden" : "")}>
+          {displayDescription}
+        </p>
       </div>
-      <p className={cn("text-xs opacity-80", isDraggable ? "max-h-10 overflow-hidden" : "")}>
-        {displayDescription}
-      </p>
     </div>
   );
 }
-

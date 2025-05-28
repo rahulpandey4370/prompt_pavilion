@@ -7,6 +7,7 @@ import { ArrowDown, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
+import { cn } from "@/lib/utils";
 
 interface ParticleStyle extends CSSProperties {}
 
@@ -17,34 +18,33 @@ export function HeroSection() {
   useEffect(() => {
     const generateStyles = (count: number, isAccent: boolean): ParticleStyle[] => {
       return Array.from({ length: count }, () => ({
-        width: `${Math.random() * (isAccent ? 3 : 4) + 1}px`, // Accent particles slightly smaller
+        width: `${Math.random() * (isAccent ? 3 : 4) + 1}px`, 
         height: `${Math.random() * (isAccent ? 3 : 4) + 1}px`,
         left: `${Math.random() * 100}%`,
         top: `${Math.random() * 100}%`,
-        animationDelay: `${Math.random() * (isAccent ? 4 : 5)}s`, // Stagger animation
-        animationDuration: `${Math.random() * (isAccent ? 6 : 7) + (isAccent ? 6 : 7)}s`, // Vary duration for more dynamic feel
+        animationDelay: `${Math.random() * (isAccent ? 4 : 5)}s`,
+        animationDuration: `${Math.random() * (isAccent ? 6 : 7) + (isAccent ? 6 : 7)}s`,
       }));
     };
 
-    // Generate more accent particles for a more "neon" feel
-    setAccentParticlesStyles(generateStyles(40, true)); // Increased count
-    setPrimaryParticlesStyles(generateStyles(25, false)); // Increased count
+    setAccentParticlesStyles(generateStyles(40, true));
+    setPrimaryParticlesStyles(generateStyles(25, false));
   }, []);
 
   return (
-    <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden p-4 bg-gradient-to-br from-background to-purple-900/50"> {/* Darker gradient end */}
-      <div className="absolute inset-0 z-0 opacity-30"> {/* Slightly increased opacity for particles */}
+    <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden p-4 bg-gradient-to-br from-background to-[hsl(var(--background-dark-start-raw))]">
+      <div className="absolute inset-0 z-0 opacity-30">
         {accentParticlesStyles.map((style, i) => (
           <div
             key={`accent-${i}`}
-            className="absolute bg-accent rounded-full animate-pulse" // Uses new neon accent color
+            className="absolute bg-accent rounded-full animate-pulse"
             style={style}
           />
         ))}
          {primaryParticlesStyles.map((style, i) => (
           <div
             key={`primary-${i}`}
-            className="absolute bg-primary rounded-full animate-pulse" // Uses new neon primary color
+            className="absolute bg-primary rounded-full animate-pulse"
             style={style}
           />
         ))}
@@ -55,7 +55,7 @@ export function HeroSection() {
           as="h1"
           className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold mb-6"
         >
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent"> {/* Gradient uses new neon primary & accent */}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
             Prompt Pavilion
           </span>
         </AnimatedTitle>
@@ -68,8 +68,16 @@ export function HeroSection() {
           Where  AI  Magic  Meets  Prompt  Engineering
         </AnimatedTitle>
 
-        <div className="animate-fadeInGrow" style={{animationDelay: '600ms', opacity: 0}}>
-          <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-6 text-lg group shadow-lg hover:shadow-accent/50 transition-all duration-300 transform hover:scale-105">
+        <div 
+          className="animate-fadeInGrow inline-block card-neon-animated-border rounded-md" 
+          style={{animationDelay: '600ms', opacity: 0, padding: 'var(--neon-border-thickness)'}}
+        >
+          <Button 
+            asChild 
+            size="lg" 
+            className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-6 text-lg group shadow-lg hover:shadow-accent/50 transition-all duration-300 transform hover:scale-105 w-full h-full"
+            style={{ borderRadius: `calc(var(--radius) - var(--neon-border-thickness))` }}
+          >
             <Link href="#intro">
               Explore Pavilion <Sparkles className="ml-2 h-5 w-5 group-hover:animate-ping" />
             </Link>

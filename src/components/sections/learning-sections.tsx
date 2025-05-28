@@ -323,16 +323,16 @@ const PromptAnatomyLab = () => (
             </HoverCardTrigger>
             <HoverCardContent
               side="bottom"
-              align="start" // Changed from "center" to "start"
+              align="start"
               className={cn(
-                "w-auto max-w-3xl", // Changed width classes
-                "bg-card text-card-foreground p-4 rounded-lg shadow-lg border", // reduced shadow from xl to lg
+                "w-auto max-w-3xl",
+                "bg-card text-card-foreground p-4 rounded-lg shadow-lg border",
                 part.borderColorClass, 
                 "max-h-[70vh] overflow-y-auto custom-scrollbar" 
               )}
             >
               <h5 className={cn("text-lg font-semibold mb-3 sticky top-0 py-2 bg-card z-10", part.textColorClass)}>{part.name}</h5>
-              <div className="text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none" // Added prose for better HTML rendering
+              <div className="text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none"
                    dangerouslySetInnerHTML={{ __html: part.elaborateDescription }} />
             </HoverCardContent>
           </HoverCard>
@@ -592,23 +592,30 @@ export function LearningSections() {
       title="Interactive Learning Hub"
       subtitle="Explore the fundamentals and practice your prompt engineering skills in our interactive labs."
     >
-      <Tabs defaultValue="anatomy" className="w-full">
-        <TabsList className="grid w-full grid-cols-1 md:grid-cols-3 mb-8 bg-background/30 backdrop-blur-sm">
-          <TabsTrigger value="anatomy" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base py-2.5"><Microscope className="mr-2 h-5 w-5" />Prompt Anatomy Lab</TabsTrigger>
-          <TabsTrigger value="playground" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base py-2.5"><BookOpen className="mr-2 h-5 w-5"/>Engineering Playground</TabsTrigger>
-          <TabsTrigger value="suggestions" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base py-2.5"><Target className="mr-2 h-5 w-5"/>Smart Suggestions</TabsTrigger>
-        </TabsList>
-        <TabsContent value="anatomy">
-          <PromptAnatomyLab />
-        </TabsContent>
-        <TabsContent value="playground">
-          <PromptEngineeringPlayground />
-        </TabsContent>
-        <TabsContent value="suggestions">
-          <SmartSuggestionsTool />
-        </TabsContent>
-      </Tabs>
+      <div 
+        className="card-neon-animated-border rounded-md mb-8" 
+        style={{ padding: 'var(--neon-border-thickness)' }}
+      >
+        <Tabs defaultValue="anatomy" className="w-full">
+          <TabsList 
+            className="grid w-full grid-cols-1 md:grid-cols-3 bg-card backdrop-blur-sm"
+            style={{ borderRadius: `calc(var(--radius) - var(--neon-border-thickness))` }}
+          >
+            <TabsTrigger value="anatomy" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base py-2.5"><Microscope className="mr-2 h-5 w-5" />Prompt Anatomy Lab</TabsTrigger>
+            <TabsTrigger value="playground" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base py-2.5"><BookOpen className="mr-2 h-5 w-5"/>Engineering Playground</TabsTrigger>
+            <TabsTrigger value="suggestions" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-base py-2.5"><Target className="mr-2 h-5 w-5"/>Smart Suggestions</TabsTrigger>
+          </TabsList>
+          <TabsContent value="anatomy">
+            <PromptAnatomyLab />
+          </TabsContent>
+          <TabsContent value="playground">
+            <PromptEngineeringPlayground />
+          </TabsContent>
+          <TabsContent value="suggestions">
+            <SmartSuggestionsTool />
+          </TabsContent>
+        </Tabs>
+      </div>
     </SectionContainer>
   );
 }
-
