@@ -17,33 +17,34 @@ export function HeroSection() {
   useEffect(() => {
     const generateStyles = (count: number, isAccent: boolean): ParticleStyle[] => {
       return Array.from({ length: count }, () => ({
-        width: `${Math.random() * (isAccent ? 3 : 4) + 1}px`,
+        width: `${Math.random() * (isAccent ? 3 : 4) + 1}px`, // Accent particles slightly smaller
         height: `${Math.random() * (isAccent ? 3 : 4) + 1}px`,
         left: `${Math.random() * 100}%`,
         top: `${Math.random() * 100}%`,
-        animationDelay: `${Math.random() * (isAccent ? 5 : 6)}s`,
-        animationDuration: `${Math.random() * (isAccent ? 5 : 6) + (isAccent ? 5 : 6)}s`,
+        animationDelay: `${Math.random() * (isAccent ? 4 : 5)}s`, // Stagger animation
+        animationDuration: `${Math.random() * (isAccent ? 6 : 7) + (isAccent ? 6 : 7)}s`, // Vary duration for more dynamic feel
       }));
     };
 
-    setAccentParticlesStyles(generateStyles(30, true));
-    setPrimaryParticlesStyles(generateStyles(20, false));
+    // Generate more accent particles for a more "neon" feel
+    setAccentParticlesStyles(generateStyles(40, true)); // Increased count
+    setPrimaryParticlesStyles(generateStyles(25, false)); // Increased count
   }, []);
 
   return (
-    <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden p-4 bg-gradient-to-br from-background to-purple-900/30">
-      <div className="absolute inset-0 z-0 opacity-20">
+    <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden p-4 bg-gradient-to-br from-background to-purple-900/50"> {/* Darker gradient end */}
+      <div className="absolute inset-0 z-0 opacity-30"> {/* Slightly increased opacity for particles */}
         {accentParticlesStyles.map((style, i) => (
           <div
             key={`accent-${i}`}
-            className="absolute bg-accent rounded-full animate-pulse"
+            className="absolute bg-accent rounded-full animate-pulse" // Uses new neon accent color
             style={style}
           />
         ))}
          {primaryParticlesStyles.map((style, i) => (
           <div
             key={`primary-${i}`}
-            className="absolute bg-primary rounded-full animate-pulse"
+            className="absolute bg-primary rounded-full animate-pulse" // Uses new neon primary color
             style={style}
           />
         ))}
@@ -54,7 +55,7 @@ export function HeroSection() {
           as="h1"
           className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold mb-6"
         >
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent"> {/* Gradient uses new neon primary & accent */}
             Prompt Pavilion
           </span>
         </AnimatedTitle>

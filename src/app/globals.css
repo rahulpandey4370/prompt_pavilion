@@ -12,53 +12,52 @@ html {
 
 @layer base {
   :root {
-    --background: 275 60% 12%; /* Deep Dark Purple */
+    --background: 270 60% 8%; /* Very Deep Dark Purple */
     --foreground: 210 40% 98%; /* Cool White */
 
-    --card: 275 55% 16%; /* Slightly Lighter Purple for cards */
+    --card: 270 55% 12%; /* Slightly Lighter Deep Purple for cards */
     --card-foreground: 210 40% 96%;
 
-    --popover: 275 50% 14%; /* Darker Purple for popovers */
+    --popover: 270 50% 10%; /* Darker Purple for popovers */
     --popover-foreground: 210 40% 96%;
 
-    --primary: 181 100% 74%; /* Electric Blue */
-    --primary-foreground: 270 60% 15%; /* Dark Purple - for text on primary buttons */
+    --primary: 195 100% 50%; /* Electric Blue / Cyan */
+    --primary-foreground: 270 60% 10%; /* Dark Purple - for text on primary buttons */
 
-    --secondary: 275 50% 25%; /* Muted Purple */
-    --secondary-foreground: 181 80% 85%; /* Light Electric Blue - for text on secondary buttons */
+    --secondary: 270 50% 20%; /* Muted Deep Purple */
+    --secondary-foreground: 195 80% 85%; /* Light Electric Blue - for text on secondary buttons */
 
-    --muted: 275 40% 30%; /* Very Muted Purple */
-    --muted-foreground: 275 20% 65%; /* Light Greyish Purple */
+    --muted: 270 40% 25%; /* Very Muted Deep Purple */
+    --muted-foreground: 270 20% 65%; /* Light Greyish Purple */
 
-    --accent: 110 100% 54%; /* Neon Green */
-    --accent-foreground: 275 100% 5%; /* Very Dark Purple/Black - for text on accent buttons */
+    --accent: 130 100% 50%; /* Neon Green / Lime */
+    --accent-foreground: 270 100% 8%; /* Very Dark Purple/Black - for text on accent buttons */
 
-    --destructive: 0 70% 60%; /* Red */
+    --destructive: 0 70% 55%; /* Vivid Red */
     --destructive-foreground: 0 0% 98%;
 
-    --border: 275 50% 28%; /* Subtle Purple Border */
-    --input: 275 50% 22%; /* Input Background */
-    --ring: 110 100% 60%; /* Neon Green - for focus rings */
+    --border: 270 50% 22%; /* Subtle Deep Purple Border */
+    --input: 270 50% 18%; /* Input Background - Darker Purple */
+    --ring: 130 100% 55%; /* Neon Green - for focus rings */
 
     --radius: 0.8rem; /* Slightly more rounded for a modern feel */
 
-    --chart-1: 181 100% 74%;
-    --chart-2: 110 100% 54%;
-    --chart-3: 275 50% 60%;
-    --chart-4: 30 80% 65%;
-    --chart-5: 200 85% 60%;
+    --chart-1: 195 100% 60%; /* Brighter Electric Blue */
+    --chart-2: 130 100% 60%; /* Brighter Neon Green */
+    --chart-3: 270 50% 55%; /* Vivid Purple */
+    --chart-4: 30 90% 60%; /* Bright Orange */
+    --chart-5: 300 100% 65%; /* Bright Pink/Magenta */
 
-    /* Specific prompt component colors */
+    /* Specific prompt component colors - Retained for semantic meaning */
     --prompt-system: 270 60% 50%; /* Purple */
     --prompt-user: 210 70% 55%; /* Blue */
-    --prompt-rag: 130 60% 45%; /* Green */
+    --prompt-rag: 130 60% 45%; /* Green (adjusted for potential conflict with neon accent) */
     --prompt-constraints: 30 80% 60%; /* Orange */
     --prompt-guardrails: 0 70% 55%; /* Red */
     --prompt-tools: 50 90% 60%; /* Yellow */
     --prompt-examples: 180 70% 50%; /* Teal */
   }
 
-  /* Remove .dark class specific overrides if dark is the only theme */
   /* All variables are now in :root for a default dark theme */
 }
 
@@ -99,10 +98,10 @@ html {
 
 /* Glassmorphism base styles */
 .glass-card-content {
-  background: rgba(255, 255, 255, 0.05); /* More subtle white tint for dark theme */
+  background: hsla(var(--foreground) / 0.03); /* More subtle white tint for dark theme */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px); /* For Safari */
-  border: 1px solid rgba(255, 255, 255, 0.1); /* Lighter border for dark theme */
+  border: 1px solid hsla(var(--foreground) / 0.08); /* Lighter border for dark theme */
   border-radius: var(--radius);
 }
 
