@@ -5,7 +5,7 @@ import { SectionContainer } from "@/components/shared/section-container";
 import { PromptComponentCard, type PromptComponentType } from "@/components/prompt-builder/prompt-component-card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
-import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles } from "lucide-react";
+import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles, BarChartHorizontalBig } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState, type DragEvent } from "react";
@@ -17,6 +17,11 @@ import {
   generateFromAssembledPrompt,
   type GenerateFromAssembledPromptInput,
 } from '@/ai/flows/generate-from-assembled-prompt';
+import {
+  ratePromptQuality,
+  type RatePromptQualityInput,
+  type RatePromptQualityOutput,
+} from '@/ai/flows/rate-prompt-quality';
 
 
 interface AvailableComponent {
@@ -81,6 +86,7 @@ export function PromptBuilderSection() {
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
   const [draggedOver, setDraggedOver] = useState(false);
   const [aiResponse, setAiResponse] = useState<string | null>(null);
+  const [promptAnalysis, setPromptAnalysis] = useState<RatePromptQualityOutput | null>(null);
   const { toast } = useToast();
 
   const livePreviewText = droppedItems.length > 0
@@ -105,6 +111,32 @@ export function PromptBuilderSection() {
       toast({ variant: "destructive", title: "Generation Error", description: error.message });
     }
   });
+
+  const ratePromptMutation = useMutation({
+    mutationFn: (input: RatePromptQualityInput) => ratePromptQuality(input),
+    onSuccess: (data) => {
+      if (data && data.rating && data.feedback && data.overallAssessment) {
+        setPromptAnalysis(data);
+        toast({ title: "Prompt Analysis Complete!", description: "Rating and feedback are now available." });
+      } else {
+        setPromptAnalysis({
+          rating: "N/A",
+          feedback: ["AI did not return valid analysis or all fields were not populated."],
+          overallAssessment: "Analysis unavailable."
+        });
+        toast({ variant: "destructive", title: "Analysis Error", description: "Could not get complete prompt rating and feedback." });
+      }
+    },
+    onError: (error: Error) => {
+      setPromptAnalysis({
+          rating: "Error",
+          feedback: [`Analysis Error: ${error.message}`],
+          overallAssessment: "Analysis failed."
+      });
+      toast({ variant: "destructive", title: "Analysis Error", description: error.message });
+    }
+  });
+
 
   const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -143,7 +175,12 @@ export function PromptBuilderSection() {
       return;
     }
     setAiResponse(null); 
+    setPromptAnalysis(null);
+
+    toast({ title: "Processing...", description: "Generating AI response and analyzing prompt quality..." });
+    
     generateResponseMutation.mutate({ assembledPrompt: livePreviewText });
+    ratePromptMutation.mutate({ assembledPrompt: livePreviewText });
   };
 
   return (
@@ -245,9 +282,9 @@ export function PromptBuilderSection() {
           size="lg" 
           className="mt-8 border-accent text-accent hover:bg-accent hover:text-accent-foreground"
           onClick={handleTestPrompt}
-          disabled={generateResponseMutation.isPending || droppedItems.length === 0}
+          disabled={generateResponseMutation.isPending || ratePromptMutation.isPending || droppedItems.length === 0}
         >
-          {generateResponseMutation.isPending ? (
+          { (generateResponseMutation.isPending || ratePromptMutation.isPending) ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (
             <Bot className="mr-2 h-4 w-4" />
@@ -278,6 +315,48 @@ export function PromptBuilderSection() {
             )}
             </GlassCardContent>
         </GlassCard>
+        )}
+
+        {/* Prompt Quality Analysis Card */}
+        { (ratePromptMutation.isPending || promptAnalysis) && (
+          <GlassCard className="mt-8">
+            <GlassCardHeader>
+              <GlassCardTitle className="text-primary flex items-center">
+                <BarChartHorizontalBig className="mr-2 h-5 w-5" /> Prompt Quality Analysis
+              </GlassCardTitle>
+            </GlassCardHeader>
+            <GlassCardContent>
+              {ratePromptMutation.isPending && !promptAnalysis ? (
+                <div className="flex items-center justify-center p-8">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  <p className="ml-3 text-foreground/80">Analyzing prompt quality...</p>
+                </div>
+              ) : promptAnalysis ? (
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-accent">Overall Assessment:</h4>
+                    <p className="text-foreground/80">{promptAnalysis.overallAssessment}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-accent">Quality Rating:</h4>
+                    <p className="text-2xl font-bold text-primary">{typeof promptAnalysis.rating === 'number' ? `${promptAnalysis.rating}/10` : promptAnalysis.rating}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-accent">Feedback & Missing Things:</h4>
+                    {promptAnalysis.feedback && promptAnalysis.feedback.length > 0 ? (
+                      <ul className="list-disc list-inside space-y-1 text-foreground/80 pl-4">
+                        {promptAnalysis.feedback.map((item, index) => (
+                          <li key={index}>{item}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-foreground/80">No specific feedback items provided.</p>
+                    )}
+                  </div>
+                </div>
+              ) : null}
+            </GlassCardContent>
+          </GlassCard>
         )}
     </SectionContainer>
   );
