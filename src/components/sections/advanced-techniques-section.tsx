@@ -17,7 +17,7 @@ export function AdvancedTechniquesSection() {
           </GlassCardHeader>
           <GlassCardContent>
             <p className="text-foreground/80 mb-4">Visualize how AI reasons step-by-step. (Animated flowchart demo pending)</p>
-            <Image src="https://placehold.co/600x400.png" alt="Chain of Thought Visualization" width={600} height={400} className="rounded-md" data-ai-hint="flowchart diagram" />
+            <Image src="https://images.unsplash.com/photo-1605841561924-926295c558fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxmbG93Y2hhcnQlMjBkaWFncmFtfGVufDB8fHx8MTc0ODQyMzU2N3ww&ixlib=rb-4.1.0&q=80&w=1080" alt="Chain of Thought Visualization" width={600} height={400} className="rounded-md aspect-video object-cover" />
           </GlassCardContent>
         </GlassCard>
         <GlassCard>
@@ -26,7 +26,7 @@ export function AdvancedTechniquesSection() {
           </GlassCardHeader>
           <GlassCardContent>
             <p className="text-foreground/80 mb-4">See how Retrieval Augmented Generation enhances AI knowledge. (Visual demo pending)</p>
-            <Image src="https://placehold.co/600x400.png" alt="RAG Integration Demo" width={600} height={400} className="rounded-md" data-ai-hint="database network" />
+            <Image src="https://images.unsplash.com/photo-1631864032976-cef7f00fea43?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxkYXRhYmFzZSUyMG5ldHdvcmt8ZW58MHx8fHwxNzQ4NDIzNTY3fDA&ixlib=rb-4.1.0&q=80&w=1080" alt="RAG Integration Demo" width={600} height={400} className="rounded-md aspect-video object-cover" />
           </GlassCardContent>
         </GlassCard>
         <GlassCard>
@@ -35,7 +35,7 @@ export function AdvancedTechniquesSection() {
           </GlassCardHeader>
           <GlassCardContent>
             <p className="text-foreground/80 mb-4">Workshop on multi-step task completion and tool selection. (Interactive tool pending)</p>
-            <Image src="https://placehold.co/600x400.png" alt="Agentic AI Workshop" width={600} height={400} className="rounded-md" data-ai-hint="gears process" />
+            <Image src="https://images.unsplash.com/photo-1553007837-057e28298e01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxnZWFycyUyMHByb2Nlc3N8ZW58MHx8fHwxNzQ4NDIzNTY3fDA&ixlib=rb-4.1.0&q=80&w=1080" alt="Agentic AI Workshop" width={600} height={400} className="rounded-md aspect-video object-cover" />
           </GlassCardContent>
         </GlassCard>
       </div>
