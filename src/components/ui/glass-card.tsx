@@ -6,16 +6,17 @@ import type { HTMLAttributes } from "react";
 import { motion } from "framer-motion";
 
 interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
-  index?: number; 
+  index?: number;
 }
 
 // Inner component to hold the actual card content, sits inside the animated border
 const GlassCardInnerContent = ({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) => {
   return (
-    <div 
+    <div
       className={cn(
         "bg-card text-card-foreground w-full h-full", // Actual card background and text color
         "p-5 md:p-6", // Content padding
+        "relative z-10", // Explicitly set position and z-index
         className
       )}
       // This ensures the inner content is rounded less than the outer border area
@@ -60,7 +61,7 @@ export function GlassCardHeader({ className, children, ...props }: HTMLAttribute
 
 export function GlassCardTitle({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
-    <h3 className={cn("text-lg font-semibold text-foreground", className)} {...props}> 
+    <h3 className={cn("text-lg font-semibold text-foreground", className)} {...props}>
       {children}
     </h3>
   );

@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -27,7 +28,7 @@ html {
     --card-raw: 258 80% 6%; /* Dark purple/indigo, slightly lighter than deep bg */
     --card-foreground-raw: 0 0% 95%; /* Off-white for card text */
 
-    --popover-raw: 258 70% 8%; 
+    --popover-raw: 258 70% 8%;
     --popover-foreground-raw: 0 0% 90%;
 
     /* Primary Neons (Mapped to theme variables) */
@@ -35,7 +36,7 @@ html {
     --neon-magenta-raw: 328 100% 54%;     /* Hot Magenta */
     --neon-lime-raw: 130 100% 50%;        /* Laser Lime (#39FF14 is existing accent) */
     --neon-orange-raw: 16 100% 50%;       /* Nuclear Orange */
-    
+
     /* Secondary Glows (Can be used for borders, highlights if primary is too much) */
     --neon-deep-purple-raw: 271 76% 53%;  /* Deep Purple */
     --neon-electric-blue-raw: 217 100% 56%;/* Electric Blue */
@@ -45,7 +46,7 @@ html {
     /* Theme Variable Assignments (using the new Neon Palette) */
     --background: var(--background-raw);
     --foreground: var(--foreground-raw);
-    
+
     --card: var(--card-raw);
     --card-foreground: var(--card-foreground-raw);
 
@@ -69,7 +70,7 @@ html {
 
     --border-raw: 258 60% 12%; /* Darker, subtly glowing border */
     --border: var(--border-raw);
-    --input: var(--border-raw); 
+    --input: var(--border-raw);
     --ring: var(--neon-cyan-raw); /* Ring color matches primary */
 
     --radius: 0.8rem;
@@ -82,12 +83,12 @@ html {
     --chart-5: var(--neon-plasma-pink-raw);
 
     /* Specific prompt component colors - Retained for semantic meaning */
-    --prompt-system: 270 60% 50%; 
-    --prompt-user: 210 70% 55%; 
-    --prompt-rag: 130 60% 45%; 
-    --prompt-constraints: 30 80% 60%; 
-    --prompt-guardrails: 0 70% 55%; 
-    --prompt-tools: 50 90% 60%; 
+    --prompt-system: 270 60% 50%;
+    --prompt-user: 210 70% 55%;
+    --prompt-rag: 130 60% 45%;
+    --prompt-constraints: 30 80% 60%;
+    --prompt-guardrails: 0 70% 55%;
+    --prompt-tools: 50 90% 60%;
     --prompt-examples: 180 70% 50%;
 
     /* Icon chip background colors from "WHY CHOOSE SUBSCRIPTION" example */
@@ -100,6 +101,9 @@ html {
     /* Neon Animated Border Variables */
     --neon-border-thickness: 3px;
     --neon-border-angle: 0deg;
+
+    /* Background for the large container card in "WHY CHOOSE SUBSCRIPTION?" section */
+    --background-card-container-raw: 258 85% 4%; /* Slightly lighter than main bg, still very dark */
   }
 
   /* Default dark theme is now the only theme */
@@ -160,31 +164,31 @@ html {
 
 .card-neon-animated-border {
   position: relative;
-  z-index: 0; 
-  border-radius: var(--radius); 
-  padding: var(--neon-border-thickness); 
-  overflow: hidden; 
+  z-index: 0;
+  border-radius: var(--radius);
+  padding: var(--neon-border-thickness);
+  overflow: hidden;
 }
 
 .card-neon-animated-border::before {
   content: '';
   position: absolute;
-  z-index: -1; 
-  width: 200%; 
+  z-index: -1; /* Behind the inner content */
+  width: 200%; /* Larger to allow for rotation without gaps */
   height: 200%;
-  top: -50%; 
+  top: -50%; /* Center the oversized pseudo-element */
   left: -50%;
-  
+
   background: conic-gradient(
     from var(--neon-border-angle),
-    hsl(var(--neon-cyan-raw)), 
-    hsl(var(--neon-magenta-raw)), 
-    hsl(var(--accent-raw)), 
-    hsl(var(--neon-orange-raw)), 
+    hsl(var(--neon-cyan-raw)),
+    hsl(var(--neon-magenta-raw)),
+    hsl(var(--accent-raw)), /* Using accent as laser lime */
+    hsl(var(--neon-orange-raw)),
     hsl(var(--neon-deep-purple-raw)),
     hsl(var(--neon-electric-blue-raw)),
-    hsl(var(--neon-cyan-raw)) 
+    hsl(var(--neon-cyan-raw)) /* Loop back to start for smooth animation */
   );
-  
+
   animation: rotate-neon-glow-animation 8s linear infinite;
 }
