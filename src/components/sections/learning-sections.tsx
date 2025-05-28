@@ -1,9 +1,10 @@
+
 "use client"; // This directive should be at the top
 
 import { SectionContainer } from "@/components/shared/section-container";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Microscope, BookOpen, Target, Loader2, Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Settings2, Lightbulb, HelpCircle, UtensilsCrossed } from "lucide-react"; // Added UtensilsCrossed
+import { Microscope, BookOpen, Target, Loader2, Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Settings2, Lightbulb, HelpCircle, UtensilsCrossed } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -114,7 +115,7 @@ const PromptAnatomyLab = () => (
                   </div>
                 </div>
               </TooltipTrigger>
-              <TooltipContent side="right" className="max-w-xs bg-background border-primary text-foreground p-3">
+              <TooltipContent side="bottom" className="max-w-xs bg-background border-primary text-foreground p-3">
                 <p>{part.description}</p>
               </TooltipContent>
             </Tooltip>
@@ -297,17 +298,14 @@ const PromptEngineeringPlayground = () => {
 
 const SmartSuggestionsTool = () => {
   const [prompt, setPrompt] = useState("");
-  // const [suggestions, setSuggestions] = useState<string[]>([]); // remove if using mutation.data directly
   const { toast } = useToast();
   
   const mutation = useMutation({
     mutationFn: (input: ImprovePromptSuggestionsInput) => improvePromptSuggestions(input),
     onSuccess: (data) => {
       if (data && data.suggestions && data.suggestions.length > 0) {
-        // setSuggestions(data.suggestions); // Not needed if directly using data.suggestions
         toast({ title: "Suggestions Ready!", description: "AI has provided feedback on your prompt." });
       } else {
-        // setSuggestions([]); 
         toast({ title: "Suggestions Processed", description: "No specific suggestions were returned, or the format was as expected and needs no improvement." });
       }
     },
@@ -397,3 +395,4 @@ export function LearningSections() {
     </SectionContainer>
   );
 }
+
