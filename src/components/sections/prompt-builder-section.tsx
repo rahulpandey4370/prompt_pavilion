@@ -7,7 +7,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles, BookHeart, MessagesSquare, UtensilsCrossed, FileText, Users, Brain } from "lucide-react"; // Added missing icons
+import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles, BookHeart, MessagesSquare, UtensilsCrossed, FileText, Users, Brain, Settings2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState, type DragEvent, useEffect } from "react";
@@ -32,22 +32,22 @@ interface AvailableComponent {
 interface Scenario {
   id: string;
   name: string;
-  icon: LucideIcon; // Added icon property for the scenario itself
+  icon: LucideIcon;
   availableComponents: AvailableComponent[];
 }
 
 const scenarios: Scenario[] = [
   {
     id: "creative-writing-sf",
-    name: "Creative Writing: Sci-Fi",
-    icon: BookHeart, // Assigned icon for the scenario
+    name: "Creative Writing: Sci-Fi (Generic)",
+    icon: BookHeart,
     availableComponents: [
       {
         id: "sf-system",
         type: "system",
         title: "System: AI Sci-Fi World Builder",
         description: "You are 'CosmoChronicler', an AI specializing in generating vivid science fiction settings, alien species, and futuristic technologies. Your tone is imaginative and detailed, inspiring authors with unique concepts. You excel at creating plausible yet fantastical elements. When asked for multiple items, provide them as a numbered list using Markdown.",
-        icon: Settings2 // Changed from BookHeart to avoid confusion with scenario icon
+        icon: Settings2
       },
       {
         id: "sf-user",
@@ -95,124 +95,122 @@ const scenarios: Scenario[] = [
   },
   {
     id: "customer-support-ecommerce",
-    name: "Customer Support: E-commerce",
-    icon: MessagesSquare, // Assigned icon for the scenario
+    name: "Customer Support: E-commerce (Business)",
+    icon: MessagesSquare,
     availableComponents: [
       {
         id: "cs-system",
         type: "system",
-        title: "System: AI E-commerce Assistant",
-        description: "You are 'AssistBot', a friendly and efficient AI customer support agent for 'UrbanThreads.com', an online fashion retailer. Your primary goal is to resolve customer queries regarding orders, returns, and product information. Maintain a polite, empathetic, and helpful tone. Always thank the customer for their patience or for reaching out.",
-        icon: Settings2 // Changed from MessagesSquare
+        title: "System: AI E-commerce Assistant 'AssistBot'",
+        description: "You are 'AssistBot', a friendly and efficient AI customer support agent for 'UrbanThreads.com', an online fashion retailer. Your primary goal is to resolve customer queries regarding orders, returns, and product information. Maintain a polite, empathetic, and helpful tone. Always thank the customer for their patience or for reaching out. Refer to specific policy details if applicable.",
+        icon: Settings2
       },
       {
         id: "cs-user",
         type: "user",
-        title: "User: Inquiry about Return Policy",
-        description: "Hi, I received my order #ORD123456 yesterday, but the jacket (SKU: JT007-M) doesn't fit. I'd like to know how I can return it and if I can get a refund or an exchange for a different size.",
+        title: "User: Inquiry about Return Policy & Defective Item",
+        description: "Hi, I received my order #ORD123456 yesterday. The jacket (SKU: JT007-M) doesn't fit. Also, the t-shirt (SKU: TS002-S) arrived with a small tear on the sleeve. I'd like to know how I can return both, if I can get a refund for the t-shirt, and an exchange for the jacket for a size L.",
         icon: Puzzle
       },
       {
         id: "cs-rag",
         type: "rag",
-        title: "RAG: UrbanThreads Return Policy Snippet",
-        description: "Context: UrbanThreads Return Policy (Excerpt)\n- Returns accepted within 30 days of delivery.\n- Items must be unworn, unwashed, with original tags attached.\n- Refunds issued to original payment method within 5-7 business days after receiving return.\n- Exchanges processed upon availability; customer covers return shipping for exchanges, UrbanThreads covers shipping of new item.\n- Final sale items are non-refundable.\n- Full policy: [urbanthreads.com/returns](https://urbanthreads.com/returns)",
+        title: "RAG: UrbanThreads Policy (Returns & Defectives)",
+        description: "Context: UrbanThreads Policy Excerpts\n- Standard Returns: Accepted within 30 days of delivery. Items must be unworn, unwashed, with original tags. Refunds to original payment method (5-7 business days processing). Exchanges subject to availability; customer covers return shipping for exchanges, UrbanThreads covers new item shipping.\n- Defective Items: Report within 7 days of delivery with photo proof. Full refund or exchange (if available) offered. UrbanThreads covers all shipping for defective item returns/exchanges.\n- Final Sale: Non-refundable/exchangeable unless defective.\n- Order Lookup: Order #ORD123456 - Jacket JT007-M (not final sale), T-shirt TS002-S (not final sale). Purchased [Date].",
         icon: ListChecks
       },
       {
         id: "cs-constraints",
         type: "constraints",
-        title: "Constraints: Information & Action Limits",
-        description: "Output Constraints:\n1. Clearly state the return window and conditions.\n2. Explain options for refund and exchange.\n3. Provide a direct link to the full return policy page.\n4. Do not ask for sensitive personal information (e.g., credit card details) in the chat.\n5. If an item is final sale (check against order details if possible via tool), state that clearly and politely.",
+        title: "Constraints: Information Hierarchy & Action Limits",
+        description: "Output Constraints:\n1. Address both issues (fit and defect) clearly and separately.\n2. For the jacket: Explain return/exchange options per standard policy.\n3. For the t-shirt: Explain defective item policy, request photo if not implicitly provided, and outline resolution.\n4. Provide a direct link to the main return policy page and a contact for defective item claims (returns@urbanthreads.com).\n5. Do not ask for PII beyond order number confirmation.",
         icon: SlidersHorizontal
       },
       {
         id: "cs-guardrails",
         type: "guardrails",
-        title: "Guardrails: Tone & Scope",
-        description: "Guardrails:\n- Do not make promises outside of the stated policy.\n- Avoid accusatory language if a customer is frustrated.\n- Do not attempt to process the return/exchange directly; guide the user to the self-service portal or next steps.\n- Do not provide fashion advice unless explicitly asked and relevant.",
+        title: "Guardrails: Empathy & Policy Adherence",
+        description: "Guardrails:\n- Express empathy for the inconvenience, especially regarding the defective item.\n- Do not make promises outside of stated policy (e.g., instant refunds, free expedited exchange shipping for non-defective items).\n- Guide user to self-service portal for standard returns but offer direct assistance pathway for defectives.\n- Maintain professional and brand-aligned tone.",
         icon: ShieldCheck
       },
       {
         id: "cs-tools",
         type: "tools",
-        title: "Tools: Order & Policy Lookup",
-        description: "Tool Hint (for AI internal process):\n- `getOrderDetails(orderId: string)`: Returns items, purchase date, sale status.\n- `getPolicySection(topic: 'returns' | 'shipping' | 'payment')`: Fetches relevant policy text.\n- `checkStock(sku: string, size: string)`: For exchange availability.",
+        title: "Tools: Order Lookup & Stock Check",
+        description: "Tool Hint (for AI internal process):\n- `getOrderDetails(orderId: string)`: Returns items, purchase date, sale status, defect flags.\n- `checkStock(sku: string, size: string)`: For exchange availability of JT007-L.\n- `initiateDefectiveItemProcess(orderId: string, sku: string, issue_description: string, photo_urls_array?)`.",
         icon: Wrench
       },
       {
         id: "cs-examples",
         type: "examples",
-        title: "Examples: Return Inquiry Response",
-        description: "Example of Expected Output:\n\n\"Thank you for reaching out about order #ORD123456, and I'm sorry to hear the jacket didn't fit! You can certainly return it. Our policy allows returns within 30 days of delivery, provided the item is unworn, unwashed, and has original tags attached.\n\nFor jacket JT007-M, you have two options:\n1.  **Refund:** We can refund the purchase price to your original payment method once we receive the item back.\n2.  **Exchange:** If you'd like a different size, we can process an exchange, subject to availability. You would cover the return shipping, and we'd ship the new size to you at no extra shipping cost.\n\nYou can find more details and initiate a return via our portal here: [urbanthreads.com/returns](https://urbanthreads.com/returns). Please let me know if you have any other questions!\"",
+        title: "Examples: Handling Multi-Issue Inquiry",
+        description: "Example Snippet of Expected Output (addressing one issue for brevity):\n\n\"I'm truly sorry to hear about the tear on your t-shirt (TS002-S) – that's definitely not the quality we aim for! For defective items like this, we can offer you a full refund or an exchange for a new one, and we'll cover all associated shipping costs. To proceed, could you please reply with a photo of the damage? You can also email it directly to returns@urbanthreads.com with your order number.\"",
         icon: Eye
       },
     ]
   },
   {
-    id: "recipe-generator-healthy",
-    name: "Recipe Generator: Healthy Meals",
-    icon: UtensilsCrossed, // Assigned icon for the scenario
+    id: "erp-comm-plan",
+    name: "ERP System Update Communication (Business)",
+    icon: Users,
     availableComponents: [
       {
-        id: "rg-system",
+        id: "erp-comm-plan-system",
         type: "system",
-        title: "System: AI Nutritionist & Chef 'NutriChef'",
-        description: "You are 'NutriChef', an AI culinary expert specializing in generating healthy, delicious, and easy-to-follow recipes. You prioritize whole foods, balanced macronutrients, and clear instructions. Your tone is encouraging, informative, and creative. You adapt to dietary restrictions and preferences.",
-        icon: Settings2 // Changed from UtensilsCrossed
+        title: "System: AI ERP Change Management Communicator 'ERPUpdaterAI'",
+        description: "You are 'ERPUpdaterAI', an AI specializing in drafting comprehensive communication plans for ERP system updates at 'InnovateGlobal Corp'. Your plans must be clear, cover all stakeholder groups (End-Users, Department Heads, IT Support, Executives), and outline pre-update, during-update, and post-update communication strategies. Focus on minimizing disruption and maximizing adoption. All communications should be formally addressed.",
+        icon: Settings2
       },
       {
-        id: "rg-user",
+        id: "erp-comm-plan-user",
         type: "user",
-        title: "User: Request for Quick Vegan Dinner",
-        description: "I need a healthy vegan dinner recipe for two people. It should be low-carb and ready in under 30 minutes. I have bell peppers, tofu, and spinach on hand. I'm open to other common pantry staples. I'd prefer something savory.",
+        title: "User: Request for Comm Plan - New Finance Module Rollout",
+        description: "InnovateGlobal Corp is rolling out a new 'Advanced Financial Analytics' module in our ERP system. This is a major enhancement. The rollout is scheduled for six weeks from now. The module primarily impacts the Finance department (approx. 50 users), but Executives (approx. 10 users) will use its reporting features. IT Support (5 users) needs to be prepared. Draft a multi-stage communication plan covering all stakeholder groups. Key module benefits: Real-time P&L dashboards, predictive cash flow forecasting, and customizable compliance reports. Mandatory training sessions will be held for Finance staff.",
         icon: Puzzle
       },
       {
-        id: "rg-rag",
+        id: "erp-comm-plan-rag",
         type: "rag",
-        title: "RAG: Low-Carb Vegan Ingredients & Techniques",
-        description: "Contextual Data:\n- Low-Carb Vegan Proteins: Tofu, tempeh, seitan (check carb content), edamame, protein powders.\n- Low-Carb Vegetables: Leafy greens (spinach, kale), bell peppers, broccoli, cauliflower, zucchini, mushrooms, asparagus.\n- Healthy Fats: Avocado, nuts, seeds, olive oil, coconut oil.\n- Flavor Enhancers: Herbs, spices, nutritional yeast, tamari/soy sauce, lemon juice, garlic, onion.\n- Quick Cooking Methods: Stir-frying, pan-searing, quick roasting (thinly sliced veggies).",
+        title: "RAG: Company Comms Policy & ERP Module Details",
+        description: "Contextual Data:\n- InnovateGlobal Communications Policy: Major system changes require minimum 4-week notification to Department Heads via email, followed by Intranet announcements. All-staff emails for critical updates must be approved by IT Director. Training announcements require 2-week notice.\n- 'Advanced Financial Analytics' Module: Version 3.0. Key features: Real-time P&L, cash flow projection (12-month rolling), predictive sales forecasting (using historical data), customizable compliance report templates (SOX, IFRS). Integration points: General Ledger, Sales Orders, Procurement. Expected learning curve for Finance users: 2-3 days with training.\n- Target Go-Live Date: [Assume a specific future date, e.g., Monday, October 28th, 2024].",
         icon: ListChecks
       },
       {
-        id: "rg-constraints",
+        id: "erp-comm-plan-constraints",
         type: "constraints",
-        title: "Constraints: Recipe Format & Details",
-        description: "Output Constraints:\n1. Recipe title must be appealing.\n2. List ingredients clearly with quantities for 2 servings.\n3. Provide step-by-step instructions.\n4. Include estimated prep time and cook time (total under 30 mins).\n5. Optionally, provide a rough calorie/macro estimate per serving if calculable.\n6. Ensure the recipe uses the user-specified ingredients (bell peppers, tofu, spinach).",
+        title: "Constraints: Plan Structure, Channels, & Key Elements",
+        description: "Output Constraints:\n1. Structure the plan in distinct phases: Phase 1 (Initial Announcement & Awareness, 6-4 weeks out), Phase 2 (Detailed Info & Training Signup, 4-1 weeks out), Phase 3 (Go-Live Week Communications), Phase 4 (Post-Go-Live Support & Feedback, 1-4 weeks post-launch).\n2. For each phase, specify: Target Audience(s), Key Message(s) for each audience, Primary Communication Channel(s) (Email, Intranet, Meetings), Secondary Channel(s), Responsible Party (e.g., 'Project Team', 'IT Comms', 'Dept. Heads').\n3. Include at least one example subject line for a key email in each phase.\n4. The plan must detail how training will be communicated and managed.\n5. Address potential user concerns (e.g., impact on current workflows, data accuracy during transition).",
         icon: SlidersHorizontal
       },
       {
-        id: "rg-guardrails",
+        id: "erp-comm-plan-guardrails",
         type: "guardrails",
-        title: "Guardrails: Health & Safety",
-        description: "Guardrails:\n- Do not suggest ingredients known as common severe allergens without noting alternatives (e.g., peanuts, soy if user has specified allergy).\n- Avoid promoting extreme or fad diets; focus on balanced, sustainable healthy eating.\n- Ensure cooking instructions are safe (e.g., warnings about hot oil).\n- Do not make unsubstantiated health claims.",
+        title: "Guardrails: Tone, Scope, & Approvals",
+        description: "Guardrails:\n- Maintain a professional, confident, and supportive tone.\n- Avoid technical jargon in communications to non-technical audiences (Executives, general End-Users).\n- Explicitly mention the need for IT Director approval for all-staff emails.\n- Do not commit to specific training dates in the initial plan; state they will be 'announced separately' or 'coordinated with Department Heads'.\n- Do not over-promise on module benefits beyond what's stated and verifiable.",
         icon: ShieldCheck
       },
       {
-        id: "rg-tools",
+        id: "erp-comm-plan-tools",
         type: "tools",
-        title: "Tools: Nutritional Info & Substitutions",
-        description: "Tool Hint (for AI internal process):\n- `calculateNutritionalInfo(ingredient_list, serving_size)`: Provides calorie and macronutrient estimates.\n- `findIngredientSubstitute(original_ingredient, dietary_restriction, category='vegetable'|'protein')`.\n- `checkPantryStaples(ingredient_name)`: Verifies if an ingredient is a common pantry item.",
+        title: "Tools: Conceptual - Calendar, Stakeholder DB",
+        description: "Tool Hint (for AI internal process):\n- `getCompanyStakeholderList(department_array, role_array)`: To identify specific recipient groups.\n- `getProjectMilestoneDate(milestone_name: 'GoLive' | 'TrainingBlockStart')`: To fetch dynamic dates if available.\n- `generateCommunicationTemplate(type: 'email' | 'intranet_post', audience: string, key_message: string)`: Conceptual.",
         icon: Wrench
       },
       {
-        id: "rg-examples",
+        id: "erp-comm-plan-examples",
         type: "examples",
-        title: "Examples: Recipe Output Snippet",
-        description: "Example of Expected Output:\n\n**Quick Tofu & Bell Pepper Stir-fry with Spinach**\n\nServes: 2 | Prep time: 10 mins | Cook time: 15 mins\n\n**Ingredients:**\n*   1 block (14oz) firm tofu, pressed and cubed\n*   2 bell peppers (any color), sliced\n*   4 cups fresh spinach\n*   2 cloves garlic, minced\n*   1 tbsp soy sauce (or tamari for gluten-free)\n*   1 tsp sesame oil\n*   1 tbsp olive oil\n*   Optional: Red pepper flakes to taste, sesame seeds for garnish\n\n**Instructions:**\n1.  Heat olive oil in a large skillet or wok over medium-high heat.\n2.  Add tofu cubes and cook until golden brown on all sides (about 5-7 minutes). Remove and set aside.\n3.  Add bell peppers to the skillet, cook for 3-4 minutes until slightly tender-crisp.\n4.  Add minced garlic and cook for another minute until fragrant.\n5.  Return tofu to the skillet. Add spinach, soy sauce, and sesame oil. Stir until spinach is wilted (about 2-3 minutes).\n6.  Serve immediately, garnished with red pepper flakes and sesame seeds if desired.",
+        title: "Examples: Snippet of Phase 1 Email to Dept Heads",
+        description: "Example of a Phase 1 Email Subject Line for Department Heads:\nSubject: IMPORTANT: Upcoming ERP Enhancement - New Advanced Financial Analytics Module for Your Teams\n\nExample Key Message for Executives (Phase 1):\n'A new Advanced Financial Analytics module is being introduced to provide enhanced real-time financial insights and forecasting capabilities, supporting strategic decision-making.'",
         icon: Eye
       },
     ]
-  }
+  },
 ];
 
 
 interface DroppedItem extends AvailableComponent {}
 
 const PLACEHOLDER_PROMPT_TEXT = "Your assembled prompt will appear here... Drag components from the left to build it!";
-// Re-importing Settings2 as it might have been removed accidentally by a previous step
-import { Settings2 } from 'lucide-react';
 
 
 export function PromptBuilderSection() {
@@ -228,8 +226,8 @@ export function PromptBuilderSection() {
     const selectedScenario = scenarios.find(s => s.id === currentScenarioId);
     if (selectedScenario) {
       setCurrentAvailableComponents(selectedScenario.availableComponents);
-      setDroppedItems([]);
-      setAiResponse(null);
+      setDroppedItems([]); // Clear dropped items when scenario changes
+      setAiResponse(null); // Clear AI response when scenario changes
     }
   }, [currentScenarioId]);
 
@@ -274,7 +272,6 @@ export function PromptBuilderSection() {
     const originalComponent = currentAvailableComponents.find(c => c.id === componentIdToDrop);
 
     if (originalComponent) {
-      // Check if a component of the same type already exists if it's a singleton type
       const isSingletonType = originalComponent.type === 'system' || originalComponent.type === 'user';
       const alreadyExists = isSingletonType && droppedItems.some(item => item.type === originalComponent.type);
 
@@ -283,7 +280,6 @@ export function PromptBuilderSection() {
         return; 
       }
 
-      // Create a new unique ID for the dropped item to allow multiple instances of non-singleton types
       const newDroppedItemId = `${originalComponent.id}-${Date.now()}`;
       setDroppedItems(prev => [...prev, { ...originalComponent, id: newDroppedItemId }]);
     }
@@ -306,6 +302,9 @@ export function PromptBuilderSection() {
   const handleScenarioChange = (scenarioId: string) => {
     setCurrentScenarioId(scenarioId);
   };
+  
+  const currentScenarioForIcon = scenarios.find(s => s.id === currentScenarioId);
+
 
   return (
     <SectionContainer
@@ -314,9 +313,8 @@ export function PromptBuilderSection() {
       subtitle="Select a scenario, then assemble your AI prompts like building blocks. Drag pre-filled components from the left to the assembly area below."
     >
       <div className="bg-card p-0.5 yellow-glowing-box rounded-lg">
-        <div className="bg-card rounded-md p-6"> {/* Inner div for padding */}
+        <div className="bg-card rounded-md p-6">
           <div className="grid lg:grid-cols-3 gap-8 min-h-[70vh]">
-            {/* Component Library Sidebar */}
             <GlassCard className="lg:col-span-1 h-full flex flex-col !shadow-none !border-none !bg-transparent !p-0">
               <GlassCardHeader className="pb-3">
                 <div className="flex flex-col space-y-3">
@@ -334,7 +332,6 @@ export function PromptBuilderSection() {
                                 {scenarios.map(scenario => (
                                 <SelectItem key={scenario.id} value={scenario.id} className="focus:bg-neon-yellow/20">
                                     <div className="flex items-center">
-                                        {/* Check if scenario.icon exists before rendering */}
                                         {scenario.icon && <scenario.icon className="mr-2 h-4 w-4 text-muted-foreground"/>}
                                         {scenario.name}
                                     </div>
@@ -364,12 +361,11 @@ export function PromptBuilderSection() {
               </GlassCardContent>
             </GlassCard>
 
-            {/* Prompt Assembly Area & Preview */}
             <GlassCard className="lg:col-span-2 h-full flex flex-col !shadow-none !border-none !bg-transparent !p-0">
               <GlassCardHeader className="pb-3">
-                <GlassCardTitle className="text-neon-yellow">
-                  <Puzzle className="inline-block mr-2" />
-                  Your Engineered Prompt & Live Preview
+                <GlassCardTitle className="text-neon-yellow flex items-center">
+                  {currentScenarioForIcon?.icon && <currentScenarioForIcon.icon className="inline-block mr-2" />}
+                  Your Engineered Prompt: {currentScenarioForIcon?.name}
                 </GlassCardTitle>
               </GlassCardHeader>
               <GlassCardContent className="flex-grow grid grid-rows-2 gap-4 overflow-hidden">
@@ -386,7 +382,7 @@ export function PromptBuilderSection() {
                   {droppedItems.length === 0 ? (
                     <p className="text-muted-foreground text-center">Drag & Drop Prompt Components Here</p>
                   ) : (
-                    droppedItems.map((item) => ( // Removed index from key as item.id should be unique now
+                    droppedItems.map((item) => (
                       <div key={item.id} className="relative group"> 
                         <PromptComponentCard
                           type={item.type}
@@ -467,5 +463,3 @@ export function PromptBuilderSection() {
     </SectionContainer>
   );
 }
-
-    

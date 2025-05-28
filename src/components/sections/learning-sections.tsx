@@ -4,7 +4,7 @@
 import { SectionContainer } from "@/components/shared/section-container";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Microscope, BookOpen, Target, Loader2, Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Settings2, Lightbulb, HelpCircle, UtensilsCrossed } from "lucide-react";
+import { Microscope, BookOpen, Target, Loader2, Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Settings2, Lightbulb, HelpCircle, UtensilsCrossed, FileText } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,6 +15,9 @@ import { useMutation } from "@tanstack/react-query";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import type { LucideIcon } from "lucide-react";
+
 
 const anatomyParts = [
   {
@@ -294,51 +297,38 @@ Respond ONLY with a JSON object containing the keys "name", "email", and "phone"
 
 const PromptAnatomyLab = () => (
   <GlassCard className="h-full !p-0 !shadow-none !border-none !bg-transparent">
-    {/* Removed card-neon-animated-border from GlassCard here */}
     <GlassCardHeader className="pt-6 px-6">
-      <GlassCardTitle className="text-neon-yellow flex items-center"> {/* Use neon-yellow */}
+      <GlassCardTitle className="text-neon-yellow flex items-center">
         <Microscope className="inline-block mr-2" />
         The Prompt Anatomy Lab
       </GlassCardTitle>
     </GlassCardHeader>
     <GlassCardContent className="px-6 pb-6">
       <p className="text-foreground/80 mb-6">
-        A well-crafted prompt is made of several key components. Hover over each block below to explore its role in guiding the AI.
+        A well-crafted prompt is made of several key components. Click on each block below to explore its role in guiding the AI.
       </p>
-      <div className="space-y-3">
+      <Accordion type="multiple" className="w-full space-y-3">
         {anatomyParts.map((part) => (
-          <HoverCard key={part.id} openDelay={150} closeDelay={50}>
-            <HoverCardTrigger asChild>
-              <div
-                className={cn(
-                  "p-4 rounded-lg shadow-md cursor-pointer transition-all duration-150 ease-in-out transform hover:shadow-lg hover:ring-2 hover:ring-neon-yellow/70", // Use neon-yellow for ring
-                  part.colorClass,
-                  part.borderColorClass, 
-                  part.textColorClass,
-                  "border-2 flex items-center w-full text-left" 
-                )}
-              >
+          <AccordionItem value={part.id} key={part.id} className={cn("border-2 rounded-lg shadow-md transition-all duration-150 ease-in-out transform hover:shadow-lg hover:ring-2 hover:ring-neon-yellow/70", part.colorClass, part.borderColorClass, part.textColorClass )}>
+            <AccordionTrigger className={cn("p-4 hover:no-underline", part.textColorClass)}>
+              <div className="flex items-center w-full text-left">
                 <part.icon className="w-6 h-6 mr-3 shrink-0" />
                 <span className="font-semibold text-md">{part.name}</span>
               </div>
-            </HoverCardTrigger>
-            <HoverCardContent
-              side="bottom"
-              align="start"
+            </AccordionTrigger>
+            <AccordionContent
               className={cn(
-                "w-auto max-w-3xl z-50", // ensure high z-index
-                "bg-card text-card-foreground p-4 rounded-lg shadow-lg border",
-                part.borderColorClass, 
-                "max-h-[70vh] overflow-y-auto custom-scrollbar" 
+                "p-4 pt-0 text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none",
+                part.textColorClass, // Ensure content text color matches trigger
+                "bg-opacity-20 bg-black rounded-b-md" // Add slight dark background for content
               )}
             >
-              <h5 className={cn("text-lg font-semibold mb-3 sticky top-0 py-2 bg-card z-10", part.textColorClass)}>{part.name}</h5>
-              <div className="text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none"
+              <div className="max-h-[60vh] overflow-y-auto custom-scrollbar pr-2"
                    dangerouslySetInnerHTML={{ __html: part.elaborateDescription }} />
-            </HoverCardContent>
-          </HoverCard>
+            </AccordionContent>
+          </AccordionItem>
         ))}
-      </div>
+      </Accordion>
        <p className="text-foreground/70 mt-6 text-sm">
         Note: Not all components are needed for every prompt. The complexity and combination depend on the task.
       </p>
@@ -346,28 +336,53 @@ const PromptAnatomyLab = () => (
   </GlassCard>
 );
 
+interface PlaygroundScenario {
+  id: string;
+  name: string;
+  icon: LucideIcon;
+  basicPrompt: string;
+  engineeredPrompt: string;
+}
 
-const playgroundScenarios = [
+const playgroundScenarios: PlaygroundScenario[] = [
   {
     id: "restaurant-assistant",
-    name: "Restaurant Assistant",
+    name: "Restaurant Assistant (Generic)",
+    icon: UtensilsCrossed,
     basicPrompt: "Suggest a good Italian restaurant nearby.",
     engineeredPrompt: "System: You are a helpful local guide AI. User: I'm looking for a family-friendly Italian restaurant in downtown San Francisco that's open for dinner around 7 PM tonight, has vegetarian options, and an average rating of at least 4 stars. My budget is moderate ($$-$$$). Please provide 2-3 suggestions with a brief description, address, and why it fits my criteria. Format as a numbered list.",
-    icon: UtensilsCrossed,
   },
   {
     id: "study-buddy",
-    name: "Study Buddy (History)",
+    name: "Study Buddy - History (Generic)",
+    icon: BookOpen,
     basicPrompt: "Tell me about World War 2.",
     engineeredPrompt: "System: You are a history tutor AI. User: Explain the main causes of World War 2 for a high school student. Focus on the Treaty of Versailles, rise of fascism, and failure of the League of Nations. Keep the explanation concise (around 3-4 paragraphs) and easy to understand. Provide key dates for major events mentioned.",
-    icon: BookOpen,
   },
   {
     id: "code-explainer",
-    name: "Code Explainer (Python)",
+    name: "Code Explainer - Python (Generic)",
+    icon: Bot, 
     basicPrompt: "What does this Python code do: `print('Hello')`?",
     engineeredPrompt: "System: You are an expert Python programming assistant. User: Explain the following Python code snippet line by line, including its purpose and expected output. Identify any potential improvements or common pitfalls related to this type of code. Code: \n```python\ndef greet(name):\n  return f\"Hello, {name}!\"\n\nmessage = greet(\"Alice\")\nprint(message)\n```\nRespond in Markdown.",
-    icon: Bot, 
+  },
+  {
+    id: "erp-feature-explanation",
+    name: "ERP Module Feature Explanation (Business)",
+    icon: FileText,
+    basicPrompt: "Explain the inventory management module.",
+    engineeredPrompt: `System: You are an AI training assistant for 'InnovateERP', a comprehensive enterprise resource planning system. Your primary goal is to clearly explain ERP module features to new users who may not be familiar with ERP jargon. Use simple language and provide a tangible real-world benefit for each feature mentioned. Structure your response clearly.
+
+User: I'm a newly hired warehouse supervisor starting to use InnovateERP. Can you explain the core functionalities of the 'Inventory Management' module? Specifically, I need to understand:
+1. Real-time Stock Level Tracking.
+2. Automated Reorder Point (ROP) Calculations.
+3. Batch and Serial Number Traceability.
+4. Kitting and Assembly Management.
+
+For each functionality, please provide:
+- A brief (1-2 sentences) explanation of what it is.
+- Its primary benefit to me in managing the warehouse efficiently.
+Format your response using Markdown, with each functionality as an H3 heading.`
   },
 ];
 
@@ -376,8 +391,10 @@ const PromptEngineeringPlayground = () => {
   const { toast } = useToast();
   const [selectedScenarioId, setSelectedScenarioId] = useState<string>(playgroundScenarios[0].id);
   
-  const [basicPrompt, setBasicPrompt] = useState(playgroundScenarios[0].basicPrompt);
-  const [engineeredPrompt, setEngineeredPrompt] = useState(playgroundScenarios[0].engineeredPrompt);
+  const currentScenario = playgroundScenarios.find(s => s.id === selectedScenarioId) || playgroundScenarios[0];
+
+  const [basicPrompt, setBasicPrompt] = useState(currentScenario.basicPrompt);
+  const [engineeredPrompt, setEngineeredPrompt] = useState(currentScenario.engineeredPrompt);
   
   const [basicResponse, setBasicResponse] = useState("");
   const [engineeredResponse, setEngineeredResponse] = useState("");
@@ -390,6 +407,7 @@ const PromptEngineeringPlayground = () => {
       setBasicResponse(""); 
       setEngineeredResponse("");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedScenarioId]);
 
   const mutation = useMutation({
@@ -420,26 +438,25 @@ const PromptEngineeringPlayground = () => {
     mutation.mutate({ basicPrompt, engineeredPrompt });
   };
 
-  const currentScenarioIcon = playgroundScenarios.find(s => s.id === selectedScenarioId)?.icon || HelpCircle;
+  const currentDisplayIcon = currentScenario.icon || HelpCircle;
 
 
   return (
   <GlassCard className="h-full !p-0 !shadow-none !border-none !bg-transparent">
-    {/* Removed card-neon-animated-border from GlassCard here */}
     <GlassCardHeader className="pt-6 px-6">
-      <GlassCardTitle className="text-neon-yellow flex items-center"> {/* Use neon-yellow */}
-        <currentScenarioIcon className="inline-block mr-3 h-6 w-6" /> 
-        Prompt Engineering Playground: {playgroundScenarios.find(s => s.id === selectedScenarioId)?.name}
+      <GlassCardTitle className="text-neon-yellow flex items-center">
+        <currentDisplayIcon className="inline-block mr-3 h-6 w-6" /> 
+        Prompt Engineering Playground: {currentScenario.name}
       </GlassCardTitle>
     </GlassCardHeader>
     <GlassCardContent className="space-y-6 px-6 pb-6">
       <div>
-        <label htmlFor="scenario-select-playground" className="block text-sm font-medium text-neon-yellow mb-1">Select Scenario:</label> {/* Use neon-yellow */}
+        <label htmlFor="scenario-select-playground" className="block text-sm font-medium text-neon-yellow mb-1">Select Scenario:</label>
         <Select value={selectedScenarioId} onValueChange={setSelectedScenarioId}>
-          <SelectTrigger id="scenario-select-playground" className="w-full md:w-1/2 bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground"> {/* Adjusted styles */}
+          <SelectTrigger id="scenario-select-playground" className="w-full md:w-1/2 bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground">
             <SelectValue placeholder="Choose a scenario" />
           </SelectTrigger>
-          <SelectContent className="bg-card border-neon-yellow text-foreground"> {/* Adjusted styles */}
+          <SelectContent className="bg-card border-neon-yellow text-foreground">
             {playgroundScenarios.map(scenario => (
               <SelectItem key={scenario.id} value={scenario.id} className="focus:bg-neon-yellow/20">
                 <div className="flex items-center">
@@ -454,31 +471,31 @@ const PromptEngineeringPlayground = () => {
 
       <div className="grid md:grid-cols-2 gap-6">
         <div>
-          <label htmlFor="playgroundBasicPrompt" className="block text-sm font-medium text-neon-yellow mb-1">Basic Prompt</label> {/* Use neon-yellow */}
+          <label htmlFor="playgroundBasicPrompt" className="block text-sm font-medium text-neon-yellow mb-1">Basic Prompt</label>
           <Textarea
             id="playgroundBasicPrompt"
             value={basicPrompt}
             onChange={(e) => setBasicPrompt(e.target.value)}
             placeholder="Enter a basic prompt..."
             rows={8} 
-            className="bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90" /* Adjusted styles */
+            className="bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90"
           />
         </div>
         <div>
-          <label htmlFor="playgroundEngineeredPrompt" className="block text-sm font-medium text-neon-yellow mb-1">Engineered Prompt</label> {/* Use neon-yellow */}
+          <label htmlFor="playgroundEngineeredPrompt" className="block text-sm font-medium text-neon-yellow mb-1">Engineered Prompt</label>
           <Textarea
             id="playgroundEngineeredPrompt"
             value={engineeredPrompt}
             onChange={(e) => setEngineeredPrompt(e.target.value)}
             placeholder="Enter an engineered prompt..."
             rows={8} 
-            className="bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90" /* Adjusted styles */
+            className="bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90"
           />
         </div>
       </div>
 
       <div className="text-center">
-        <Button onClick={handleCompare} disabled={mutation.isPending} className="bg-neon-yellow hover:bg-neon-yellow/90 text-neon-yellow-foreground px-6 py-3 text-base"> {/* Use neon-yellow */}
+        <Button onClick={handleCompare} disabled={mutation.isPending} className="bg-neon-yellow hover:bg-neon-yellow/90 text-neon-yellow-foreground px-6 py-3 text-base">
           {mutation.isPending ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Lightbulb className="mr-2 h-5 w-5" />} Compare AI Responses
         </Button>
       </div>
@@ -544,9 +561,8 @@ const SmartSuggestionsTool = () => {
 
   return (
     <GlassCard className="h-full !p-0 !shadow-none !border-none !bg-transparent">
-      {/* Removed card-neon-animated-border from GlassCard here */}
       <GlassCardHeader className="pt-6 px-6">
-        <GlassCardTitle className="text-neon-yellow flex items-center"> {/* Use neon-yellow */}
+        <GlassCardTitle className="text-neon-yellow flex items-center">
           <Target className="inline-block mr-2 h-6 w-6" /> 
           Smart Prompt Suggestions
         </GlassCardTitle>
@@ -559,10 +575,10 @@ const SmartSuggestionsTool = () => {
           placeholder="Type your prompt here..." 
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          className="mb-4 bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90" /* Adjusted styles */
+          className="mb-4 bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90"
           rows={6} 
         />
-        <Button onClick={handleGetSuggestions} disabled={mutation.isPending} className="bg-neon-yellow hover:bg-neon-yellow/90 text-neon-yellow-foreground px-6 py-3 text-base"> {/* Use neon-yellow */}
+        <Button onClick={handleGetSuggestions} disabled={mutation.isPending} className="bg-neon-yellow hover:bg-neon-yellow/90 text-neon-yellow-foreground px-6 py-3 text-base">
           {mutation.isPending ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Lightbulb className="mr-2 h-5 w-5"/>} Get Suggestions
         </Button>
         
@@ -572,8 +588,8 @@ const SmartSuggestionsTool = () => {
 
         {suggestions.length > 0 && (
           <div className="mt-6">
-            <h4 className="font-semibold text-neon-yellow mb-2 text-lg">Suggestions:</h4> {/* Use neon-yellow */}
-            <ul className="list-disc list-inside space-y-2 text-foreground/90 bg-card/50 p-4 rounded-md border border-neon-yellow/30"> {/* Adjusted styles */}
+            <h4 className="font-semibold text-neon-yellow mb-2 text-lg">Suggestions:</h4>
+            <ul className="list-disc list-inside space-y-2 text-foreground/90 bg-card/50 p-4 rounded-md border border-neon-yellow/30">
               {suggestions.map((s, i) => <li key={i}>{s}</li>)}
             </ul>
           </div>
@@ -595,10 +611,10 @@ export function LearningSections() {
       title="Interactive Learning Hub"
       subtitle="Explore the fundamentals and practice your prompt engineering skills in our interactive labs."
     >
-      <div className="mb-8"> {/* Outer wrapper for Tabs and its border */}
+      <div className="mb-8">
         <Tabs defaultValue="anatomy" className="w-full">
           <TabsList 
-            className="grid w-full grid-cols-1 md:grid-cols-3 bg-transparent p-0 rounded-none mb-0" // Removed bg, padding, rounded for list
+            className="grid w-full grid-cols-1 md:grid-cols-3 bg-transparent p-0 rounded-none mb-0"
           >
             <TabsTrigger 
               value="anatomy" 
@@ -614,7 +630,7 @@ export function LearningSections() {
               className="data-[state=active]:bg-neon-yellow data-[state=active]:text-neon-yellow-foreground data-[state=active]:border-b-transparent 
                          text-slate-300 hover:text-neon-yellow 
                          border-2 border-neon-yellow/50 border-b-0 rounded-t-md rounded-b-none 
-                         py-3 text-base font-medium transition-all data-[state=inactive]:bg-card/50 md:mx-[-2px]" // mx for overlap
+                         py-3 text-base font-medium transition-all data-[state=inactive]:bg-card/50 md:mx-[-2px]"
             >
               <BookOpen className="mr-2 h-5 w-5"/>Engineering Playground
             </TabsTrigger>
@@ -628,9 +644,8 @@ export function LearningSections() {
               <Target className="mr-2 h-5 w-5"/>Smart Suggestions
             </TabsTrigger>
           </TabsList>
-          {/* Content Area with Glowing Border */}
           <div className="bg-card p-0.5 yellow-glowing-box rounded-b-lg md:rounded-tr-lg">
-            <div className="bg-card rounded-b-md md:rounded-tr-md"> {/* Inner div for actual content background */}
+            <div className="bg-card rounded-b-md md:rounded-tr-md">
               <TabsContent value="anatomy" className="mt-0">
                 <PromptAnatomyLab />
               </TabsContent>
