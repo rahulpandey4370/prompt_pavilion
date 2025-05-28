@@ -28,11 +28,10 @@ export function HeroSection() {
 
     setAccentParticlesStyles(generateStyles(30, true));
     setPrimaryParticlesStyles(generateStyles(20, false));
-  }, []); // Empty dependency array ensures this runs only on client-side after mount
+  }, []);
 
   return (
     <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden p-4 bg-gradient-to-br from-background to-purple-900/30">
-      {/* Particle-like background */}
       <div className="absolute inset-0 z-0 opacity-20">
         {accentParticlesStyles.map((style, i) => (
           <div
@@ -56,7 +55,7 @@ export function HeroSection() {
           className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold mb-6"
         >
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-            PromptCraft Studio
+            Prompt Pavilion
           </span>
         </AnimatedTitle>
 
@@ -65,13 +64,13 @@ export function HeroSection() {
           delay={300}
           className="text-xl sm:text-2xl md:text-3xl text-foreground/80 mb-10 max-w-3xl mx-auto"
         >
-          Where  AI  Magic  Meets  Prompt  Engineering
+          Showcasing  AI  Engineering  Excellence
         </AnimatedTitle>
 
         <div className="animate-fadeInGrow" style={{animationDelay: '600ms', opacity: 0}}>
           <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold px-8 py-6 text-lg group shadow-lg hover:shadow-accent/50 transition-all duration-300 transform hover:scale-105">
             <Link href="#intro">
-              Start Building <Sparkles className="ml-2 h-5 w-5 group-hover:animate-ping" />
+              Explore Pavilion <Sparkles className="ml-2 h-5 w-5 group-hover:animate-ping" />
             </Link>
           </Button>
         </div>

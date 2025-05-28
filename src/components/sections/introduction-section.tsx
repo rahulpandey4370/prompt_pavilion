@@ -1,7 +1,7 @@
+
 import { SectionContainer } from "@/components/shared/section-container";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle, GlassCardDescription } from "@/components/ui/glass-card";
-import { Lightbulb, Zap, BarChart } from "lucide-react";
-import Image from "next/image";
+import { Lightbulb, Zap, BarChart, Target, Brain } from "lucide-react"; // Added Target and Brain icons
 
 export function IntroductionSection() {
   return (
@@ -19,10 +19,14 @@ export function IntroductionSection() {
             </GlassCardTitle>
           </GlassCardHeader>
           <GlassCardContent>
-            <GlassCardDescription>
-              Prompt engineering is like giving an AI a perfect set of instructions. The better the instructions, the better the AI's performance and the more accurate and relevant its output.
+            <GlassCardDescription className="space-y-3 text-base leading-relaxed">
+              <p>
+                Prompt engineering is the art and science of designing effective inputs (prompts) to guide Large Language Models (LLMs) and other AI systems toward desired outputs. Think of it as giving an AI a perfectly clear and comprehensive set of instructions.
+              </p>
+              <p>
+                The better the instructions—the more specific, contextual, and well-structured—the better the AI's performance, leading to more accurate, relevant, and creative results. It's about communicating your intent to the AI with precision.
+              </p>
             </GlassCardDescription>
-            <Image src="https://placehold.co/600x400.png" alt="Abstract representation of an idea" width={600} height={400} className="mt-4 rounded-md" data-ai-hint="abstract idea" />
           </GlassCardContent>
         </GlassCard>
         <GlassCard data-ai-hint="technology impact">
@@ -33,24 +37,38 @@ export function IntroductionSection() {
             </GlassCardTitle>
           </GlassCardHeader>
           <GlassCardContent>
-            <GlassCardDescription>
-              Effective prompts can dramatically improve AI's creativity, problem-solving, and accuracy. It's the key to transforming AI from a tool into a powerful partner.
+            <GlassCardDescription className="space-y-3 text-base leading-relaxed">
+              <p>
+                In a world increasingly reliant on AI, the ability to communicate effectively with these systems is paramount. Well-engineered prompts can dramatically improve AI's creativity, problem-solving capabilities, and factual accuracy.
+              </p>
+              <p>
+                It transforms AI from a generic tool into a specialized, powerful partner capable of tackling complex tasks, generating nuanced content, and providing insightful analysis. Mastering prompt engineering unlocks new levels of productivity and innovation.
+              </p>
             </GlassCardDescription>
-             <Image src="https://placehold.co/600x400.png" alt="Visual of AI impact" width={600} height={400} className="mt-4 rounded-md" data-ai-hint="technology network" />
           </GlassCardContent>
         </GlassCard>
         <GlassCard data-ai-hint="data chart">
           <GlassCardHeader>
             <GlassCardTitle>
               <BarChart className="inline-block mr-2 text-accent" />
-              The Impact
+              The Tangible Impact
             </GlassCardTitle>
           </GlassCardHeader>
           <GlassCardContent>
-            <GlassCardDescription>
-              Studies show well-engineered prompts can boost AI task success rates by over 50%. This studio helps you learn how. (Placeholder for animated counter/chart)
+            <GlassCardDescription className="space-y-3 text-base leading-relaxed">
+              <p>
+                The difference between a basic prompt and a well-engineered one can be astounding. Studies and practical applications consistently show significant improvements:
+              </p>
+              <ul className="list-disc list-inside pl-2 space-y-1 text-foreground/90">
+                <li><strong className="text-primary">Increased Accuracy:</strong> Up to 50-70% improvement in task success rates.</li>
+                <li><strong className="text-primary">Enhanced Relevance:</strong> More focused and contextually appropriate outputs.</li>
+                <li><strong className="text-primary">Reduced Bias:</strong> Better control over guiding AI away from unwanted biases.</li>
+                <li><strong className="text-primary">Greater Efficiency:</strong> Fewer iterations needed to achieve the desired result.</li>
+              </ul>
+              <p>
+                This studio is designed to help you learn and apply these techniques to achieve similar results.
+              </p>
             </GlassCardDescription>
-             <Image src="https://placehold.co/600x400.png" alt="Chart showing improvement" width={600} height={400} className="mt-4 rounded-md" data-ai-hint="statistics graph" />
           </GlassCardContent>
         </GlassCard>
       </div>

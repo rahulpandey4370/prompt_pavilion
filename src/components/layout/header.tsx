@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from 'next/link';
@@ -41,7 +42,7 @@ export function Header() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link href="#hero" className="flex items-center space-x-2 text-2xl font-bold text-primary">
             <Rocket className="h-7 w-7" />
-            <span>PromptCraft</span>
+            <span>Prompt Pavilion</span>
           </Link>
         </div>
       </header>
@@ -53,7 +54,7 @@ export function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Link href="#hero" className="flex items-center space-x-2 text-2xl font-bold text-primary hover:text-accent transition-colors">
           <Rocket className="h-7 w-7" />
-          <span>PromptCraft</span>
+          <span>Prompt Pavilion</span>
         </Link>
 
         {isMobile ? (

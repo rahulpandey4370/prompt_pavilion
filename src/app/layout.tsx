@@ -1,31 +1,31 @@
 
 import type { Metadata } from 'next';
-import { Inter, Roboto_Mono, Orbitron } from 'next/font/google'; // Changed from GeistSans, GeistMono
+import { Inter, Roboto_Mono, Orbitron } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
 import { AppProviders } from './providers';
 
-const sansFont = Inter({ // Changed from GeistSans to Inter
-  variable: '--font-geist-sans', // Kept original CSS variable name
+const sansFont = Inter({
+  variable: '--font-geist-sans',
   subsets: ['latin'],
 });
 
-const monoFont = Roboto_Mono({ // Changed from GeistMono to Roboto_Mono
-  variable: '--font-geist-mono', // Kept original CSS variable name
+const monoFont = Roboto_Mono({
+  variable: '--font-geist-mono',
   subsets: ['latin'],
 });
 
 const titleFont = Orbitron({
   variable: '--font-orbitron',
   subsets: ['latin'],
-  weight: ['400', '700'], // Include weights you might need
+  weight: ['400', '700'],
 });
 
 export const metadata: Metadata = {
-  title: 'PromptCraft Studio',
-  description: 'Where AI Magic Meets Engineering Precision. Interactive AI Prompt Engineering Showcase.',
+  title: 'Prompt Pavilion: AI Engineering Showcase',
+  description: 'Discover the art of AI prompt engineering at our interactive Product Pavilion.',
 };
 
 export default function RootLayout({
