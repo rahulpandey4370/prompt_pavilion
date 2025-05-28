@@ -7,7 +7,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles, BookHeart, MessagesSquare, UtensilsCrossed } from "lucide-react";
+import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles, BookHeart, MessagesSquare, UtensilsCrossed, FileText, Users, Brain } from "lucide-react"; // Added missing icons
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState, type DragEvent, useEffect } from "react";
@@ -32,6 +32,7 @@ interface AvailableComponent {
 interface Scenario {
   id: string;
   name: string;
+  icon: LucideIcon; // Added icon property for the scenario itself
   availableComponents: AvailableComponent[];
 }
 
@@ -39,13 +40,14 @@ const scenarios: Scenario[] = [
   {
     id: "creative-writing-sf",
     name: "Creative Writing: Sci-Fi",
+    icon: BookHeart, // Assigned icon for the scenario
     availableComponents: [
       {
         id: "sf-system",
         type: "system",
         title: "System: AI Sci-Fi World Builder",
         description: "You are 'CosmoChronicler', an AI specializing in generating vivid science fiction settings, alien species, and futuristic technologies. Your tone is imaginative and detailed, inspiring authors with unique concepts. You excel at creating plausible yet fantastical elements. When asked for multiple items, provide them as a numbered list using Markdown.",
-        icon: BookHeart
+        icon: Settings2 // Changed from BookHeart to avoid confusion with scenario icon
       },
       {
         id: "sf-user",
@@ -94,13 +96,14 @@ const scenarios: Scenario[] = [
   {
     id: "customer-support-ecommerce",
     name: "Customer Support: E-commerce",
+    icon: MessagesSquare, // Assigned icon for the scenario
     availableComponents: [
       {
         id: "cs-system",
         type: "system",
         title: "System: AI E-commerce Assistant",
         description: "You are 'AssistBot', a friendly and efficient AI customer support agent for 'UrbanThreads.com', an online fashion retailer. Your primary goal is to resolve customer queries regarding orders, returns, and product information. Maintain a polite, empathetic, and helpful tone. Always thank the customer for their patience or for reaching out.",
-        icon: MessagesSquare
+        icon: Settings2 // Changed from MessagesSquare
       },
       {
         id: "cs-user",
@@ -141,7 +144,7 @@ const scenarios: Scenario[] = [
         id: "cs-examples",
         type: "examples",
         title: "Examples: Return Inquiry Response",
-        description: "Example of Expected Output:\n\n\"Thank you for reaching out about order #ORD123456, and I'm sorry to hear the jacket didn't fit! You can certainly return it. Our policy allows returns within 30 days of delivery, provided the item is unworn, unwashed, and has original tags.\n\nFor jacket JT007-M, you have two options:\n1.  **Refund:** We can refund the purchase price to your original payment method once we receive the item back.\n2.  **Exchange:** If you'd like a different size, we can process an exchange, subject to availability. You would cover the return shipping, and we'd ship the new size to you at no extra shipping cost.\n\nYou can find more details and initiate a return via our portal here: [urbanthreads.com/returns](https://urbanthreads.com/returns). Please let me know if you have any other questions!\"",
+        description: "Example of Expected Output:\n\n\"Thank you for reaching out about order #ORD123456, and I'm sorry to hear the jacket didn't fit! You can certainly return it. Our policy allows returns within 30 days of delivery, provided the item is unworn, unwashed, and has original tags attached.\n\nFor jacket JT007-M, you have two options:\n1.  **Refund:** We can refund the purchase price to your original payment method once we receive the item back.\n2.  **Exchange:** If you'd like a different size, we can process an exchange, subject to availability. You would cover the return shipping, and we'd ship the new size to you at no extra shipping cost.\n\nYou can find more details and initiate a return via our portal here: [urbanthreads.com/returns](https://urbanthreads.com/returns). Please let me know if you have any other questions!\"",
         icon: Eye
       },
     ]
@@ -149,13 +152,14 @@ const scenarios: Scenario[] = [
   {
     id: "recipe-generator-healthy",
     name: "Recipe Generator: Healthy Meals",
+    icon: UtensilsCrossed, // Assigned icon for the scenario
     availableComponents: [
       {
         id: "rg-system",
         type: "system",
         title: "System: AI Nutritionist & Chef 'NutriChef'",
         description: "You are 'NutriChef', an AI culinary expert specializing in generating healthy, delicious, and easy-to-follow recipes. You prioritize whole foods, balanced macronutrients, and clear instructions. Your tone is encouraging, informative, and creative. You adapt to dietary restrictions and preferences.",
-        icon: UtensilsCrossed
+        icon: Settings2 // Changed from UtensilsCrossed
       },
       {
         id: "rg-user",
@@ -207,6 +211,9 @@ const scenarios: Scenario[] = [
 interface DroppedItem extends AvailableComponent {}
 
 const PLACEHOLDER_PROMPT_TEXT = "Your assembled prompt will appear here... Drag components from the left to build it!";
+// Re-importing Settings2 as it might have been removed accidentally by a previous step
+import { Settings2 } from 'lucide-react';
+
 
 export function PromptBuilderSection() {
   const [currentScenarioId, setCurrentScenarioId] = useState<string>(scenarios[0].id);
@@ -237,7 +244,7 @@ export function PromptBuilderSection() {
         setAiResponse(data.response);
         toast({ title: "AI Response Received!", description: "The AI has responded to your assembled prompt." });
       } else {
-        const errorMessage = "AI did not return a valid response.";
+        const errorMessage = data?.response || "AI did not return a valid response.";
         setAiResponse(errorMessage);
         toast({ variant: "destructive", title: "Response Error", description: errorMessage });
       }
@@ -267,6 +274,7 @@ export function PromptBuilderSection() {
     const originalComponent = currentAvailableComponents.find(c => c.id === componentIdToDrop);
 
     if (originalComponent) {
+      // Check if a component of the same type already exists if it's a singleton type
       const isSingletonType = originalComponent.type === 'system' || originalComponent.type === 'user';
       const alreadyExists = isSingletonType && droppedItems.some(item => item.type === originalComponent.type);
 
@@ -274,7 +282,10 @@ export function PromptBuilderSection() {
         toast({ variant: "destructive", title: "Component Limit", description: `Component of type "${originalComponent.type}" can only be added once.`});
         return; 
       }
-      setDroppedItems(prev => [...prev, { ...originalComponent }]);
+
+      // Create a new unique ID for the dropped item to allow multiple instances of non-singleton types
+      const newDroppedItemId = `${originalComponent.id}-${Date.now()}`;
+      setDroppedItems(prev => [...prev, { ...originalComponent, id: newDroppedItemId }]);
     }
   };
 
@@ -302,109 +313,115 @@ export function PromptBuilderSection() {
       title="PromptCraft Workshop"
       subtitle="Select a scenario, then assemble your AI prompts like building blocks. Drag pre-filled components from the left to the assembly area below."
     >
-      <div className="bg-card p-6 yellow-glowing-box rounded-lg"> {/* Added yellow-glowing-box and bg-card */}
-        <div className="grid lg:grid-cols-3 gap-8 min-h-[60vh]"> {/* Reduced min-h slightly */}
-          {/* Component Library Sidebar */}
-          <GlassCard className="lg:col-span-1 h-full flex flex-col !shadow-none !border-none !bg-transparent !p-0"> {/* Removed card-neon-animated-border, shadow, border, padding */}
-            <GlassCardHeader className="pb-3">
-              <div className="flex flex-col space-y-3">
-                  <GlassCardTitle className="text-neon-yellow flex items-center">
-                  <Wand2 className="inline-block mr-2" />
-                  Prompt Component Examples
-                  </GlassCardTitle>
-                  <div>
-                      <Label htmlFor="scenario-select" className="text-sm font-medium text-neon-yellow mb-1">Select Scenario:</Label>
-                      <Select value={currentScenarioId} onValueChange={handleScenarioChange}>
-                          <SelectTrigger id="scenario-select" className="w-full bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground">
-                              <SelectValue placeholder="Select a scenario" />
-                          </SelectTrigger>
-                          <SelectContent className="bg-card border-neon-yellow text-foreground">
-                              {scenarios.map(scenario => (
-                              <SelectItem key={scenario.id} value={scenario.id} className="focus:bg-neon-yellow/20">
-                                  <div className="flex items-center"><scenario.icon className="mr-2 h-4 w-4 text-muted-foreground"/>{scenario.name}</div>
-                              </SelectItem>
-                              ))}
-                          </SelectContent>
-                      </Select>
-                  </div>
-              </div>
-            </GlassCardHeader>
-            <GlassCardContent className="flex-grow overflow-hidden pr-0">
-              <ScrollArea className="h-full pr-3"> {/* Added pr-3 back to ScrollArea for scrollbar spacing */}
-                <div className="space-y-3">
-                  {currentAvailableComponents.map((comp) => (
-                    <PromptComponentCard
-                      key={comp.id}
-                      type={comp.type}
-                      title={comp.title}
-                      description={comp.description}
-                      icon={comp.icon}
-                      data-component-id={comp.id} 
-                    />
-                  ))}
-                </div>
-                <ScrollBar orientation="vertical" />
-              </ScrollArea>
-            </GlassCardContent>
-          </GlassCard>
-
-          {/* Prompt Assembly Area & Preview */}
-          <GlassCard className="lg:col-span-2 h-full flex flex-col !shadow-none !border-none !bg-transparent !p-0"> {/* Removed card-neon-animated-border, shadow, border, padding */}
-            <GlassCardHeader className="pb-3">
-              <GlassCardTitle className="text-neon-yellow">
-                <Puzzle className="inline-block mr-2" />
-                Your Engineered Prompt & Live Preview
-              </GlassCardTitle>
-            </GlassCardHeader>
-            <GlassCardContent className="flex-grow grid grid-rows-2 gap-4 overflow-hidden">
-              <div 
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}
-                onDragLeave={handleDragLeave}
-                className={cn(
-                  "bg-background/30 p-4 rounded-md border-2 border-dashed border-neon-yellow/50 row-span-1 overflow-y-auto space-y-2 custom-scrollbar",
-                  draggedOver ? "border-neon-yellow ring-2 ring-neon-yellow" : "border-neon-yellow/50",
-                  droppedItems.length === 0 ? "flex items-center justify-center" : "block"
-                )}
-              >
-                {droppedItems.length === 0 ? (
-                  <p className="text-muted-foreground text-center">Drag & Drop Prompt Components Here</p>
-                ) : (
-                  droppedItems.map((item, index) => (
-                    <div key={`${item.id}-${index}`} className="relative group"> 
-                      <PromptComponentCard
-                        type={item.type}
-                        title={item.title}
-                        description={item.description}
-                        icon={item.icon}
-                        isDraggable={false} 
-                        className="opacity-95 group-hover:opacity-100 cursor-default"
-                      />
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="absolute top-1 right-1 h-7 w-7 text-red-500 hover:text-red-400 opacity-60 group-hover:opacity-100 z-10"
-                        onClick={() => handleRemoveItem(item.id)}
-                        aria-label="Remove component"
-                      >
-                        <Trash2 size={18} />
-                      </Button>
+      <div className="bg-card p-0.5 yellow-glowing-box rounded-lg">
+        <div className="bg-card rounded-md p-6"> {/* Inner div for padding */}
+          <div className="grid lg:grid-cols-3 gap-8 min-h-[70vh]">
+            {/* Component Library Sidebar */}
+            <GlassCard className="lg:col-span-1 h-full flex flex-col !shadow-none !border-none !bg-transparent !p-0">
+              <GlassCardHeader className="pb-3">
+                <div className="flex flex-col space-y-3">
+                    <GlassCardTitle className="text-neon-yellow flex items-center">
+                    <Wand2 className="inline-block mr-2" />
+                    Prompt Component Examples
+                    </GlassCardTitle>
+                    <div>
+                        <Label htmlFor="scenario-select" className="text-sm font-medium text-neon-yellow mb-1">Select Scenario:</Label>
+                        <Select value={currentScenarioId} onValueChange={handleScenarioChange}>
+                            <SelectTrigger id="scenario-select" className="w-full bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground">
+                                <SelectValue placeholder="Select a scenario" />
+                            </SelectTrigger>
+                            <SelectContent className="bg-card border-neon-yellow text-foreground">
+                                {scenarios.map(scenario => (
+                                <SelectItem key={scenario.id} value={scenario.id} className="focus:bg-neon-yellow/20">
+                                    <div className="flex items-center">
+                                        {/* Check if scenario.icon exists before rendering */}
+                                        {scenario.icon && <scenario.icon className="mr-2 h-4 w-4 text-muted-foreground"/>}
+                                        {scenario.name}
+                                    </div>
+                                </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
-                  ))
-                )}
-              </div>
-              
-              <div className="row-span-1 flex flex-col">
-                <h4 className="text-lg font-semibold text-neon-yellow mb-2">Live Prompt Preview (Raw Text):</h4>
-                <Textarea
-                  readOnly
-                  placeholder={PLACEHOLDER_PROMPT_TEXT}
-                  className="flex-grow bg-background/30 text-foreground/90 resize-none !p-3 !border-neon-yellow/50 custom-scrollbar" 
-                  value={livePreviewText}
-                />
-              </div>
-            </GlassCardContent>
-          </GlassCard>
+                </div>
+              </GlassCardHeader>
+              <GlassCardContent className="flex-grow overflow-hidden pr-0">
+                <ScrollArea className="h-full pr-3"> 
+                  <div className="space-y-3">
+                    {currentAvailableComponents.map((comp) => (
+                      <PromptComponentCard
+                        key={comp.id}
+                        type={comp.type}
+                        title={comp.title}
+                        description={comp.description}
+                        icon={comp.icon}
+                        data-component-id={comp.id} 
+                      />
+                    ))}
+                  </div>
+                  <ScrollBar orientation="vertical" />
+                </ScrollArea>
+              </GlassCardContent>
+            </GlassCard>
+
+            {/* Prompt Assembly Area & Preview */}
+            <GlassCard className="lg:col-span-2 h-full flex flex-col !shadow-none !border-none !bg-transparent !p-0">
+              <GlassCardHeader className="pb-3">
+                <GlassCardTitle className="text-neon-yellow">
+                  <Puzzle className="inline-block mr-2" />
+                  Your Engineered Prompt & Live Preview
+                </GlassCardTitle>
+              </GlassCardHeader>
+              <GlassCardContent className="flex-grow grid grid-rows-2 gap-4 overflow-hidden">
+                <div 
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                  onDragLeave={handleDragLeave}
+                  className={cn(
+                    "bg-background/30 p-4 rounded-md border-2 border-dashed border-neon-yellow/50 row-span-1 overflow-y-auto space-y-2 custom-scrollbar",
+                    draggedOver ? "border-neon-yellow ring-2 ring-neon-yellow" : "border-neon-yellow/50",
+                    droppedItems.length === 0 ? "flex items-center justify-center" : "block"
+                  )}
+                >
+                  {droppedItems.length === 0 ? (
+                    <p className="text-muted-foreground text-center">Drag & Drop Prompt Components Here</p>
+                  ) : (
+                    droppedItems.map((item) => ( // Removed index from key as item.id should be unique now
+                      <div key={item.id} className="relative group"> 
+                        <PromptComponentCard
+                          type={item.type}
+                          title={item.title}
+                          description={item.description}
+                          icon={item.icon}
+                          isDraggable={false} 
+                          className="opacity-95 group-hover:opacity-100 cursor-default"
+                        />
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="absolute top-1 right-1 h-7 w-7 text-red-500 hover:text-red-400 opacity-60 group-hover:opacity-100 z-10"
+                          onClick={() => handleRemoveItem(item.id)}
+                          aria-label="Remove component"
+                        >
+                          <Trash2 size={18} />
+                        </Button>
+                      </div>
+                    ))
+                  )}
+                </div>
+                
+                <div className="row-span-1 flex flex-col">
+                  <h4 className="text-lg font-semibold text-neon-yellow mb-2">Live Prompt Preview (Raw Text):</h4>
+                  <Textarea
+                    readOnly
+                    placeholder={PLACEHOLDER_PROMPT_TEXT}
+                    className="flex-grow bg-background/30 text-foreground/90 resize-none !p-3 !border-neon-yellow/50 custom-scrollbar" 
+                    value={livePreviewText}
+                  />
+                </div>
+              </GlassCardContent>
+            </GlassCard>
+          </div>
         </div>
       </div>
       <div className="w-full flex justify-center mt-8">
@@ -424,7 +441,7 @@ export function PromptBuilderSection() {
       </div>
 
         {(generateResponseMutation.isPending || aiResponse) && (
-        <GlassCard className="mt-8 w-full !shadow-none !border-none !bg-transparent !p-0"> {/* Removed card-neon-animated-border, shadow, border, padding */}
+        <GlassCard className="mt-8 w-full !shadow-none !border-none !bg-transparent !p-0">
             <GlassCardHeader className="pb-3">
             <GlassCardTitle className="text-neon-yellow flex items-center">
                 <Sparkles className="mr-2 h-5 w-5" /> AI Response
@@ -450,3 +467,5 @@ export function PromptBuilderSection() {
     </SectionContainer>
   );
 }
+
+    
