@@ -3,12 +3,12 @@
 
 import { SectionContainer } from "@/components/shared/section-container";
 import { GlassCard, GlassCardContent, GlassCardTitle, GlassCardDescription } from "@/components/ui/glass-card";
-import { Lightbulb, Zap, BarChartHorizontalBig } from "lucide-react"; // Original icons
+import { Lightbulb, Zap, BarChartHorizontalBig, Lock, Star, Scaling, Gift } from "lucide-react"; 
 import type { LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface ContentCardProps {
+interface FeatureCardProps {
   icon: LucideIcon;
   iconBgClass: string;
   title: string;
@@ -16,7 +16,7 @@ interface ContentCardProps {
   index: number;
 }
 
-const ContentCard = ({ icon: Icon, iconBgClass, title, description, index }: ContentCardProps) => {
+const FeatureCard = ({ icon: Icon, iconBgClass, title, description, index }: FeatureCardProps) => {
   return (
     <GlassCard index={index} className="flex flex-col text-center items-center md:text-left md:items-start !p-6 hover:scale-105">
       <motion.div
@@ -37,24 +37,24 @@ const ContentCard = ({ icon: Icon, iconBgClass, title, description, index }: Con
   );
 };
 
-const originalContent: Omit<ContentCardProps, 'index'>[] = [
+const originalContent: Omit<FeatureCardProps, 'index'>[] = [
   {
     icon: Lightbulb,
-    iconBgClass: "bg-[var(--icon-highest-quality-bg)]", // Using yellow/gold
+    iconBgClass: "bg-[var(--icon-highest-quality-bg)]",
     title: "The Core Idea",
-    description: "Prompt engineering is like giving an AI a perfect set of instructions. The better the instructions, the better the AI's performance and the more accurate and relevant its output."
+    description: "Prompt engineering is the art and science of designing effective inputs (prompts) to guide Large Language Models (LLMs) and other AI systems toward desired outputs. Think of it as giving an AI a perfectly clear and comprehensive set of instructions."
   },
   {
     icon: Zap,
-    iconBgClass: "bg-[var(--icon-fast-turnaround-bg)]", // Using vivid purple
+    iconBgClass: "bg-[var(--icon-fast-turnaround-bg)]",
     title: "Why It Matters",
-    description: "Effective prompts can dramatically improve AI's creativity, problem-solving, and accuracy. It's the key to transforming AI from a tool into a powerful partner."
+    description: "Effective prompts can dramatically improve an AI's creativity, problem-solving capabilities, and accuracy. It's the key to transforming AI from a tool into a powerful, reliable partner in various tasks."
   },
   {
     icon: BarChartHorizontalBig,
-    iconBgClass: "bg-[var(--icon-predictable-pricing-bg)]", // Using vivid blue
+    iconBgClass: "bg-[var(--icon-predictable-pricing-bg)]",
     title: "The Tangible Impact",
-    description: "Studies show well-engineered prompts can boost AI task success rates by over 50%. This studio helps you learn how. (Placeholder for animated counter/chart)"
+    description: "Studies and practical applications consistently show that well-engineered prompts can boost AI task success rates, sometimes by over 50-70%, leading to better outcomes and more efficient use of AI resources. This studio helps you learn and master how to achieve this."
   }
 ];
 
@@ -69,7 +69,7 @@ export function IntroductionSection() {
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full">
         {originalContent.map((contentItem, index) => (
-          <ContentCard
+          <FeatureCard
             key={contentItem.title}
             icon={contentItem.icon}
             iconBgClass={contentItem.iconBgClass}
@@ -82,3 +82,4 @@ export function IntroductionSection() {
     </SectionContainer>
   );
 }
+
