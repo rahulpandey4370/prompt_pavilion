@@ -362,7 +362,7 @@ export function PromptBuilderSection() {
       subtitle="Select a scenario, then assemble your AI prompts like building blocks. Drag pre-filled components from the left to the assembly area below."
       className="bg-background"
     >
-      <div className="grid lg:grid-cols-3 gap-8 min-h-[70vh] max-h-[800px]">
+      <div className="grid lg:grid-cols-3 gap-8 min-h-[70vh]">
         {/* Component Library Sidebar */}
         <GlassCard className="lg:col-span-1 h-full flex flex-col">
           <GlassCardHeader>

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -142,7 +143,7 @@ function LiveAIDemoClient() {
                     <BarChartBig className="mr-2"/> Response Quality Meter
                 </GlassCardTitle>
             </GlassCardHeader>
-            <GlassCardContent className="flex items-center justify-around p-6 space-x-4">
+            <GlassCardContent className="flex flex-col md:flex-row items-stretch md:items-center justify-center md:justify-around p-6 gap-6 md:gap-4">
                 <div className="text-center w-full">
                     <p className="text-sm text-muted-foreground mb-1">Basic Prompt</p>
                     <div className="w-full h-6 bg-destructive/30 rounded-lg overflow-hidden relative">
