@@ -4,6 +4,10 @@
 
 body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  /* Dark purple gradient background as seen in the reference image */
+  background-color: hsl(var(--background-dark-end)); /* Fallback */
+  background-image: linear-gradient(180deg, hsl(var(--background-dark-start)) 0%, hsl(var(--background-dark-end)) 100%);
+  color: hsl(var(--foreground)); /* Ensure text is readable */
 }
 
 html {
@@ -12,50 +16,69 @@ html {
 
 @layer base {
   :root {
-    --background: 270 60% 8%; /* Very Deep Dark Purple */
-    --foreground: 210 40% 98%; /* Cool White */
+    /* Reference Image Inspired Dark Theme */
+    --background-dark-start: 265 60% 10%; /* Darker Purple (Top of gradient) */
+    --background-dark-end: 270 70% 5%;   /* Very Dark Purple (Bottom of gradient) */
+    --background: 270 70% 5%; /* Fallback solid background */
+    --foreground: 220 20% 95%; /* Bright White/Off-white for text */
 
-    --card: 270 55% 12%; /* Slightly Lighter Deep Purple for cards */
-    --card-foreground: 210 40% 96%;
+    /* Main container card (for "Why Choose Subscription" section background) */
+    --background-card-container-raw: 270 65% 7%; /* Raw HSL for the large container card */
+    
+    /* Feature cards (smaller cards) */
+    --card-raw: 270 60% 9%; /* Raw HSL for feature cards, slightly lighter than main container */
+    --card: var(--card-raw); /* Applied as HSL */
+    --card-foreground: 220 20% 90%;
 
-    --popover: 270 50% 10%; /* Darker Purple for popovers */
+    --popover: 270 50% 10%; /* Darker Purple for popovers - kept from previous dark theme */
     --popover-foreground: 210 40% 96%;
 
+    /* Primary/Accent for CTAs or highlights - keeping existing ones for now, can be adjusted */
     --primary: 195 100% 50%; /* Electric Blue / Cyan */
-    --primary-foreground: 270 60% 10%; /* Dark Purple - for text on primary buttons */
+    --primary-foreground: 270 60% 10%; 
 
-    --secondary: 270 50% 20%; /* Muted Deep Purple */
-    --secondary-foreground: 195 80% 85%; /* Light Electric Blue - for text on secondary buttons */
+    --secondary: 270 50% 20%; 
+    --secondary-foreground: 195 80% 85%;
 
-    --muted: 270 40% 25%; /* Very Muted Deep Purple */
-    --muted-foreground: 270 20% 65%; /* Light Greyish Purple */
+    --muted: 270 40% 25%;
+    --muted-foreground: 270 20% 65%;
 
     --accent: 130 100% 50%; /* Neon Green / Lime */
-    --accent-foreground: 270 100% 8%; /* Very Dark Purple/Black - for text on accent buttons */
+    --accent-foreground: 270 100% 8%; 
 
-    --destructive: 0 70% 55%; /* Vivid Red */
+    --destructive: 0 70% 55%; 
     --destructive-foreground: 0 0% 98%;
 
-    --border: 270 50% 22%; /* Subtle Deep Purple Border */
-    --input: 270 50% 18%; /* Input Background - Darker Purple */
-    --ring: 130 100% 55%; /* Neon Green - for focus rings */
+    /* Subtle border for feature cards */
+    --border-raw: 270 50% 18%; /* Raw HSL for subtle border on dark cards */
+    --border: var(--border-raw); /* Applied as HSL */
+    --input: 270 50% 18%; 
+    --ring: 130 100% 55%; /* Neon Green - for focus rings, kept from previous */
 
-    --radius: 0.8rem; /* Slightly more rounded for a modern feel */
+    --radius: 0.8rem; /* Maintained from previous */
 
-    --chart-1: 195 100% 60%; /* Brighter Electric Blue */
-    --chart-2: 130 100% 60%; /* Brighter Neon Green */
-    --chart-3: 270 50% 55%; /* Vivid Purple */
-    --chart-4: 30 90% 60%; /* Bright Orange */
-    --chart-5: 300 100% 65%; /* Bright Pink/Magenta */
+    /* Chart colors - maintained */
+    --chart-1: 195 100% 60%;
+    --chart-2: 130 100% 60%;
+    --chart-3: 270 50% 55%;
+    --chart-4: 30 90% 60%;
+    --chart-5: 300 100% 65%;
 
-    /* Specific prompt component colors - Retained for semantic meaning */
-    --prompt-system: 270 60% 50%; /* Purple */
-    --prompt-user: 210 70% 55%; /* Blue */
-    --prompt-rag: 130 60% 45%; /* Green (adjusted for potential conflict with neon accent) */
-    --prompt-constraints: 30 80% 60%; /* Orange */
-    --prompt-guardrails: 0 70% 55%; /* Red */
-    --prompt-tools: 50 90% 60%; /* Yellow */
-    --prompt-examples: 180 70% 50%; /* Teal */
+    /* Specific prompt component colors - Retained for semantic meaning if used elsewhere */
+    --prompt-system: 270 60% 50%; 
+    --prompt-user: 210 70% 55%; 
+    --prompt-rag: 130 60% 45%; 
+    --prompt-constraints: 30 80% 60%; 
+    --prompt-guardrails: 0 70% 55%; 
+    --prompt-tools: 50 90% 60%; 
+    --prompt-examples: 180 70% 50%;
+
+    /* Icon chip background colors from the reference image */
+    --icon-predictable-pricing-bg: hsl(220, 90%, 60%); /* Vivid Blue */
+    --icon-fast-turnaround-bg: hsl(270, 75%, 65%);    /* Vivid Purple */
+    --icon-highest-quality-bg: hsl(45, 100%, 55%);    /* Bright Yellow/Gold */
+    --icon-scale-anytime-bg: hsl(330, 100%, 60%);     /* Hot Pink */
+    --icon-unique-yours-bg: hsl(35, 100%, 60%);      /* Bright Orange */
   }
 
   /* All variables are now in :root for a default dark theme */
@@ -71,7 +94,7 @@ html {
   }
 }
 
-/* For animated title */
+/* For animated title - kept from previous */
 @keyframes fadeInGrow {
   from {
     opacity: 0;
@@ -96,16 +119,9 @@ html {
   }
 }
 
-/* Glassmorphism base styles */
-.glass-card-content {
-  background: hsla(var(--foreground) / 0.03); /* More subtle white tint for dark theme */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px); /* For Safari */
-  border: 1px solid hsla(var(--foreground) / 0.08); /* Lighter border for dark theme */
-  border-radius: var(--radius);
-}
+/* Removed previous glass-card-content specific styles as GlassCard is changing */
 
-/* Custom scrollbar for a more modern look */
+/* Custom scrollbar - kept from previous */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

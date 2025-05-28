@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 export default {
-    darkMode: ["class"], // Keep this if shadcn components rely on it, even if dark is default
+    darkMode: ["class"], 
     content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,10 +10,11 @@ export default {
   theme: {
   	extend: {
   		colors: {
-  			background: 'hsl(var(--background))',
+  			background: 'hsl(var(--background))', // Main page background
+        'background-card-container': 'hsl(var(--background-card-container-raw))', // For the large container card
   			foreground: 'hsl(var(--foreground))',
   			card: {
-  				DEFAULT: 'hsl(var(--card))',
+  				DEFAULT: 'hsl(var(--card-raw))', // For the smaller feature cards
   				foreground: 'hsl(var(--card-foreground))'
   			},
   			popover: {
@@ -40,7 +41,7 @@ export default {
   				DEFAULT: 'hsl(var(--destructive))',
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
-  			border: 'hsl(var(--border))',
+  			border: 'hsl(var(--border-raw))', // For feature card borders
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
   			chart: {
@@ -50,8 +51,8 @@ export default {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			},
-  			sidebar: { // Kept for potential future use with shadcn sidebar
-  				DEFAULT: 'hsl(var(--background))', // Adjusted to match main theme
+  			sidebar: { 
+  				DEFAULT: 'hsl(var(--background))', 
   				foreground: 'hsl(var(--foreground))',
   				primary: 'hsl(var(--primary))',
   				'primary-foreground': 'hsl(var(--primary-foreground))',
@@ -60,7 +61,6 @@ export default {
   				border: 'hsl(var(--border))',
   				ring: 'hsl(var(--ring))'
   			},
-          // Prompt component specific colors (can be used with bg-prompt-system etc.)
         'prompt-system': 'hsl(var(--prompt-system))',
         'prompt-user': 'hsl(var(--prompt-user))',
         'prompt-rag': 'hsl(var(--prompt-rag))',
@@ -68,6 +68,13 @@ export default {
         'prompt-guardrails': 'hsl(var(--prompt-guardrails))',
         'prompt-tools': 'hsl(var(--prompt-tools))',
         'prompt-examples': 'hsl(var(--prompt-examples))',
+
+        // Icon chip background colors - making them available in Tailwind
+        'icon-predictable-pricing': 'var(--icon-predictable-pricing-bg)',
+        'icon-fast-turnaround': 'var(--icon-fast-turnaround-bg)',
+        'icon-highest-quality': 'var(--icon-highest-quality-bg)',
+        'icon-scale-anytime': 'var(--icon-scale-anytime-bg)',
+        'icon-unique-yours': 'var(--icon-unique-yours-bg)',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -107,7 +114,7 @@ export default {
       fontFamily: {
         sans: ['var(--font-geist-sans)'],
         mono: ['var(--font-geist-mono)'],
-        title: ['var(--font-orbitron)'], // Added title font
+        title: ['var(--font-orbitron)'], 
       }
   	}
   },
