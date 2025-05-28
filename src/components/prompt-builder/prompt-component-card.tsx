@@ -15,6 +15,7 @@ interface PromptComponentCardProps {
   icon: LucideIcon;
   className?: string;
   isDraggable?: boolean;
+  "data-component-id"?: string; // Added to pass the component ID for drag operation
 }
 
 const typeColors: Record<PromptComponentType, string> = {
@@ -38,15 +39,13 @@ const typeTextColors: Record<PromptComponentType, string> = {
 };
 
 
-export function PromptComponentCard({ type, title, description, icon: Icon, className, isDraggable = true }: PromptComponentCardProps) {
+export function PromptComponentCard({ type, title, description, icon: Icon, className, isDraggable = true, "data-component-id": componentId }: PromptComponentCardProps) {
   const handleDragStart = (event: DragEvent<HTMLDivElement>) => {
-    if (!isDraggable) return;
-    event.dataTransfer.setData("promptComponentType", type);
-    // We don't need to transfer title/description anymore as we look it up from availableComponents
-    // event.dataTransfer.setData("promptComponentTitle", title); 
+    if (!isDraggable || !componentId) return;
+    // Transfer the unique component ID instead of just the type
+    event.dataTransfer.setData("promptComponentId", componentId);
   };
 
-  // For display on the card, truncate the description if it's very long, especially for library cards
   const displayDescription = isDraggable && description.length > 70 
     ? description.substring(0, 67) + "..." 
     : description;
@@ -63,7 +62,8 @@ export function PromptComponentCard({ type, title, description, icon: Icon, clas
         isDraggable ? "cursor-grab active:cursor-grabbing" : "cursor-default",
         className
       )}
-      title={description} // Show full description on hover
+      title={description} 
+      data-component-id={componentId} // Ensure the ID is on the element for potential direct DOM access if needed elsewhere
     >
       <div className="absolute top-0 left-0 h-full w-1 bg-white/30"></div>
       <div className="flex items-center mb-2">
@@ -77,3 +77,4 @@ export function PromptComponentCard({ type, title, description, icon: Icon, clas
     </div>
   );
 }
+
