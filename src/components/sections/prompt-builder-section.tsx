@@ -7,7 +7,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles, BookHeart, MessagesSquare, UtensilsCrossed, FileText, Users, Brain, Settings2 } from "lucide-react";
+import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles, BookHeart, MessagesSquare, Users, Brain, Settings2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState, type DragEvent, useEffect } from "react";
@@ -37,6 +37,62 @@ interface Scenario {
 }
 
 const scenarios: Scenario[] = [
+  {
+    id: "erp-sales-summary", // Updated ID for default
+    name: "ERP: Monthly Sales Summary", // Renamed
+    icon: Brain,
+    availableComponents: [
+      {
+        id: "erp-sales-system",
+        type: "system",
+        title: "System: AI Business Analyst for ERP Data",
+        description: "You are 'AnalyticaAI', an expert AI business analyst specializing in interpreting and summarizing sales data from ERP systems. Your goal is to provide concise, actionable monthly sales performance summaries for sales managers. Focus on key trends, significant variances, and potential opportunities or concerns. Always use professional business language and structure your summary logically with clear headings for different sections (e.g., Overall Performance, Top Performing Products/Services, Regional Analysis, Key Variances, Strategic Recommendations). Ensure all monetary figures are presented with appropriate currency symbols if provided in context, otherwise use generic indicators.",
+        icon: Settings2
+      },
+      {
+        id: "erp-sales-user",
+        type: "user",
+        title: "User: Request for Monthly Sales Performance Report",
+        description: "Please generate the sales performance summary for the last completed month (e.g., May 2024 if today is in June 2024). Focus on comparing this month's performance against the previous month and the same month last year. Highlight any product categories, service lines, or regions that showed exceptional growth or decline (over +/- 15% variance). Identify key contributing factors if inferable from data. I need this summary for our upcoming quarterly business review meeting.",
+        icon: Puzzle
+      },
+      {
+        id: "erp-sales-rag",
+        type: "rag",
+        title: "RAG: Sample ERP Sales Data Extract (Last Month)",
+        description: "Context: Extracted ERP Sales Data (Example - May 2024)\n- Total Revenue (May 2024): 1.25M (vs. Apr 2024: 1.1M, vs. May 2023: 1.05M)\n- Gross Profit Margin (May 2024): 45% (vs. Apr 2024: 43%, vs. May 2023: 42%)\n- Top Product Category (May 2024): 'Enterprise Software Licenses' - 450K (Up 18% MoM, Up 25% YoY)\n- Lowest Performing Product Category (May 2024): 'Legacy System Maintenance' - 80K (Down 12% MoM, Down 8% YoY)\n- Regional Performance (South Asia): 600K (Up 10% MoM, Up 20% YoY - driven by new major client in India)\n- Regional Performance (Western Europe): 400K (Up 5% MoM, Stable YoY)\n- Regional Performance (North America): 250K (Down 5% MoM - attributed to increased competitor activity & delayed Q2 product launch)\n- Key Customer Segment (Manufacturing): 900K (Up 15% MoM)\n- Average Deal Size: 15,500 (vs. 14,000 in April)\n- New Customer Acquisition: 25 (vs. 22 in April; 40% from India)\n- Sales Cycle Length: 55 days (vs. 60 days in April)",
+        icon: ListChecks
+      },
+      {
+        id: "erp-sales-constraints",
+        type: "constraints",
+        title: "Constraints: Report Format & Content Depth",
+        description: "Output Constraints:\n1. The summary must be a maximum of 400 words.\n2. Start with an executive summary (3-4 sentences) covering overall performance and key takeaways.\n3. Use bullet points for specific metrics, comparisons, and recommendations.\n4. Include sections: Overall Performance (Total Revenue, GP Margin), Product/Service Category Highlights (Top & Lowest), Regional Analysis, Key Variances (vs. previous month & previous year with % change), and 3-4 Actionable Strategic Recommendations.\n5. Quantify changes using percentages and absolute values where provided in context.\n6. Do not include raw data tables in the summary; only the narrative, key figures, and insights.",
+        icon: SlidersHorizontal
+      },
+      {
+        id: "erp-sales-guardrails",
+        type: "guardrails",
+        title: "Guardrails: Professionalism & Data Interpretation",
+        description: "Guardrails:\n- Maintain an objective, data-driven, and professional tone suitable for executive review.\n- If information is missing to make a full assessment on a point, state it as a limitation or an area for further manual investigation.\n- Ensure all financial figures are presented clearly and consistently.\n- Avoid overly speculative language; base insights on provided data or clearly state assumptions if making extrapolations for recommendations.",
+        icon: ShieldCheck
+      },
+      {
+        id: "erp-sales-tools",
+        type: "tools",
+        title: "Tools: Conceptual - Data Query & Analysis",
+        description: "Tool Hint (for AI internal process):\n- `queryERPSales(period: 'YYYY-MM', dimensions: string[], metrics: string[])`: Simulates fetching structured data from ERP views or Business Activity Queries (BAQs).\n- `calculateVariance(current_value, previous_value, type: 'abs'|'perc')`: For MoM/YoY absolute and percentage changes.\n- `identifyTrends(data_series, period_description)`: To spot significant patterns or anomalies.",
+        icon: Wrench
+      },
+      {
+        id: "erp-sales-examples",
+        type: "examples",
+        title: "Examples: Snippet of Regional Analysis Section",
+        description: "Example Snippet (Regional Analysis Section):\n\n'**Regional Analysis:**\n*   *South Asia* emerged as the top-performing region, contributing 600K in revenue, an impressive 10% increase month-over-month (MoM) and a 20% rise year-over-year (YoY). This growth was significantly boosted by the acquisition of a major new client in India during the period.\n*   *Western Europe* showed steady growth with 400K in revenue, up 5% MoM and stable YoY, indicating consistent market penetration.\n*   *North America* experienced a slight downturn, with revenues of 250K, down 5% MoM. This is likely due to intensified competitor marketing campaigns and a minor delay in our Q2 product refresh for this market. Further analysis of competitor strategies in NA is recommended.'\n",
+        icon: Eye
+      },
+    ]
+  },
   {
     id: "creative-writing-sf",
     name: "Creative Writing: Sci-Fi (Generic)",
@@ -102,161 +158,49 @@ const scenarios: Scenario[] = [
         id: "cs-system",
         type: "system",
         title: "System: AI E-commerce Assistant 'AssistBot'",
-        description: "You are 'AssistBot', a friendly and efficient AI customer support agent for 'UrbanThreads.com', an online fashion retailer. Your primary goal is to resolve customer queries regarding orders, returns, and product information. Maintain a polite, empathetic, and helpful tone. Always thank the customer for their patience or for reaching out. Refer to specific policy details if applicable.",
+        description: "You are 'AssistBot', a friendly and efficient AI customer support agent for 'UrbanThreads.com', an online fashion retailer. Your primary goal is to resolve customer queries regarding orders, returns, and product information. Maintain a polite, empathetic, and helpful tone. Always thank the customer for their patience or for reaching out. Refer to specific policy details if applicable. If handling Indian customers, use appropriate salutations and be mindful of local customer service expectations.",
         icon: Settings2
       },
       {
         id: "cs-user",
         type: "user",
         title: "User: Inquiry about Return Policy & Defective Item",
-        description: "Hi, I received my order #ORD123456 yesterday. The jacket (SKU: JT007-M) doesn't fit. Also, the t-shirt (SKU: TS002-S) arrived with a small tear on the sleeve. I'd like to know how I can return both, if I can get a refund for the t-shirt, and an exchange for the jacket for a size L.",
+        description: "Hi, I received my order #ORD123456 yesterday. The jacket (SKU: JT007-M) doesn't fit. Also, the t-shirt (SKU: TS002-S) arrived with a small tear on the sleeve. I'd like to know how I can return both, if I can get a refund for the t-shirt, and an exchange for the jacket for a size L. I am based in Mumbai, India.",
         icon: Puzzle
       },
       {
         id: "cs-rag",
         type: "rag",
         title: "RAG: UrbanThreads Policy (Returns & Defectives)",
-        description: "Context: UrbanThreads Policy Excerpts\n- Standard Returns: Accepted within 30 days of delivery. Items must be unworn, unwashed, with original tags. Refunds to original payment method (5-7 business days processing). Exchanges subject to availability; customer covers return shipping for exchanges, UrbanThreads covers new item shipping.\n- Defective Items: Report within 7 days of delivery with photo proof. Full refund or exchange (if available) offered. UrbanThreads covers all shipping for defective item returns/exchanges.\n- Final Sale: Non-refundable/exchangeable unless defective.\n- Order Lookup: Order #ORD123456 - Jacket JT007-M (not final sale), T-shirt TS002-S (not final sale). Purchased [Date].",
+        description: "Context: UrbanThreads Policy Excerpts (Global, with India-specific notes if applicable)\n- Standard Returns: Accepted within 30 days of delivery. Items must be unworn, unwashed, with original tags. Refunds to original payment method (5-7 business days processing). Exchanges subject to availability; customer covers return shipping for exchanges, UrbanThreads covers new item shipping.\n- Defective Items: Report within 7 days of delivery with photo proof. Full refund or exchange (if available) offered. UrbanThreads covers all shipping for defective item returns/exchanges.\n- India Specifics: Returns from India may have an extended processing window of 7-10 business days due to local logistics. Pickup for returns can be arranged in major metro cities.\n- Order Lookup: Order #ORD123456 - Jacket JT007-M (not final sale), T-shirt TS002-S (not final sale). Purchased [Date]. Shipping address: Mumbai, India.",
         icon: ListChecks
       },
       {
         id: "cs-constraints",
         type: "constraints",
         title: "Constraints: Information Hierarchy & Action Limits",
-        description: "Output Constraints:\n1. Address both issues (fit and defect) clearly and separately.\n2. For the jacket: Explain return/exchange options per standard policy.\n3. For the t-shirt: Explain defective item policy, request photo if not implicitly provided, and outline resolution.\n4. Provide a direct link to the main return policy page and a contact for defective item claims (returns@urbanthreads.com).\n5. Do not ask for PII beyond order number confirmation.",
+        description: "Output Constraints:\n1. Address both issues (fit and defect) clearly and separately.\n2. For the jacket: Explain return/exchange options per standard policy, mentioning specific return shipping details if different for India.\n3. For the t-shirt: Explain defective item policy, request photo if not implicitly provided, and outline resolution (refund/exchange).\n4. Provide a direct link to the main return policy page and a contact for defective item claims (e.g., support.in@urbanthreads.com or a specific Indian support number if available from RAG).\n5. Do not ask for PII beyond order number confirmation, unless required for return pickup arrangement (e.g., confirm pickup address if different from delivery).",
         icon: SlidersHorizontal
       },
       {
         id: "cs-guardrails",
         type: "guardrails",
         title: "Guardrails: Empathy & Policy Adherence",
-        description: "Guardrails:\n- Express empathy for the inconvenience, especially regarding the defective item.\n- Do not make promises outside of stated policy (e.g., instant refunds, free expedited exchange shipping for non-defective items).\n- Guide user to self-service portal for standard returns but offer direct assistance pathway for defectives.\n- Maintain professional and brand-aligned tone.",
+        description: "Guardrails:\n- Express empathy for the inconvenience, especially regarding the defective item.\n- Do not make promises outside of stated policy (e.g., instant refunds, free expedited exchange shipping for non-defective items if not standard).\n- Guide user to self-service portal for standard returns but offer direct assistance pathway for defectives.\n- If providing contact details, ensure they are appropriate for the customer's region if specified (e.g., India-specific support if user mentions it and data is available).\n- Maintain professional and brand-aligned tone.",
         icon: ShieldCheck
       },
       {
         id: "cs-tools",
         type: "tools",
         title: "Tools: Order Lookup & Stock Check",
-        description: "Tool Hint (for AI internal process):\n- `getOrderDetails(orderId: string)`: Returns items, purchase date, sale status, defect flags.\n- `checkStock(sku: string, size: string)`: For exchange availability of JT007-L.\n- `initiateDefectiveItemProcess(orderId: string, sku: string, issue_description: string, photo_urls_array?)`.",
+        description: "Tool Hint (for AI internal process):\n- `getOrderDetails(orderId: string)`: Returns items, purchase date, sale status, defect flags, shipping region.\n- `checkStock(sku: string, size: string, region?: string)`: For exchange availability of JT007-L.\n- `initiateDefectiveItemProcess(orderId: string, sku: string, issue_description: string, photo_urls_array?, region?: string)`.\n- `getRegionalSupportInfo(region: string)`: To fetch region-specific contact details or return procedures.",
         icon: Wrench
       },
       {
         id: "cs-examples",
         type: "examples",
-        title: "Examples: Handling Multi-Issue Inquiry",
-        description: "Example Snippet of Expected Output (addressing one issue for brevity):\n\n\"I'm truly sorry to hear about the tear on your t-shirt (TS002-S) – that's definitely not the quality we aim for! For defective items like this, we can offer you a full refund or an exchange for a new one, and we'll cover all associated shipping costs. To proceed, could you please reply with a photo of the damage? You can also email it directly to returns@urbanthreads.com with your order number.\"",
-        icon: Eye
-      },
-    ]
-  },
-  {
-    id: "erp-comm-plan",
-    name: "ERP: System Update Communication (Business)",
-    icon: Users,
-    availableComponents: [
-      {
-        id: "erp-comm-plan-system",
-        type: "system",
-        title: "System: AI ERP Change Management Communicator 'ERPUpdaterAI'",
-        description: "You are 'ERPUpdaterAI', an AI specializing in drafting comprehensive communication plans for ERP system updates at 'InnovateGlobal Corp'. Your plans must be clear, cover all stakeholder groups (End-Users, Department Heads, IT Support, Executives), and outline pre-update, during-update, and post-update communication strategies. Focus on minimizing disruption and maximizing adoption. All communications should be formally addressed.",
-        icon: Settings2
-      },
-      {
-        id: "erp-comm-plan-user",
-        type: "user",
-        title: "User: Request for Comm Plan - New Finance Module Rollout",
-        description: "InnovateGlobal Corp is rolling out a new 'Advanced Financial Analytics' module in our ERP system. This is a major enhancement. The rollout is scheduled for six weeks from now. The module primarily impacts the Finance department (approx. 50 users), but Executives (approx. 10 users) will use its reporting features. IT Support (5 users) needs to be prepared. Draft a multi-stage communication plan covering all stakeholder groups. Key module benefits: Real-time P&L dashboards, predictive cash flow forecasting, and customizable compliance reports. Mandatory training sessions will be held for Finance staff.",
-        icon: Puzzle
-      },
-      {
-        id: "erp-comm-plan-rag",
-        type: "rag",
-        title: "RAG: Company Comms Policy & ERP Module Details",
-        description: "Contextual Data:\n- InnovateGlobal Communications Policy: Major system changes require minimum 4-week notification to Department Heads via email, followed by Intranet announcements. All-staff emails for critical updates must be approved by IT Director. Training announcements require 2-week notice.\n- 'Advanced Financial Analytics' Module: Version 3.0. Key features: Real-time P&L, cash flow projection (12-month rolling), predictive sales forecasting (using historical data), customizable compliance report templates (SOX, IFRS). Integration points: General Ledger, Sales Orders, Procurement. Expected learning curve for Finance users: 2-3 days with training.\n- Target Go-Live Date: [Assume a specific future date, e.g., Monday, October 28th, 2024].",
-        icon: ListChecks
-      },
-      {
-        id: "erp-comm-plan-constraints",
-        type: "constraints",
-        title: "Constraints: Plan Structure, Channels, & Key Elements",
-        description: "Output Constraints:\n1. Structure the plan in distinct phases: Phase 1 (Initial Announcement & Awareness, 6-4 weeks out), Phase 2 (Detailed Info & Training Signup, 4-1 weeks out), Phase 3 (Go-Live Week Communications), Phase 4 (Post-Go-Live Support & Feedback, 1-4 weeks post-launch).\n2. For each phase, specify: Target Audience(s), Key Message(s) for each audience, Primary Communication Channel(s) (Email, Intranet, Meetings), Secondary Channel(s), Responsible Party (e.g., 'Project Team', 'IT Comms', 'Dept. Heads').\n3. Include at least one example subject line for a key email in each phase.\n4. The plan must detail how training will be communicated and managed.\n5. Address potential user concerns (e.g., impact on current workflows, data accuracy during transition).",
-        icon: SlidersHorizontal
-      },
-      {
-        id: "erp-comm-plan-guardrails",
-        type: "guardrails",
-        title: "Guardrails: Tone, Scope, & Approvals",
-        description: "Guardrails:\n- Maintain a professional, confident, and supportive tone.\n- Avoid technical jargon in communications to non-technical audiences (Executives, general End-Users).\n- Explicitly mention the need for IT Director approval for all-staff emails.\n- Do not commit to specific training dates in the initial plan; state they will be 'announced separately' or 'coordinated with Department Heads'.\n- Do not over-promise on module benefits beyond what's stated and verifiable.",
-        icon: ShieldCheck
-      },
-      {
-        id: "erp-comm-plan-tools",
-        type: "tools",
-        title: "Tools: Conceptual - Calendar, Stakeholder DB",
-        description: "Tool Hint (for AI internal process):\n- `getCompanyStakeholderList(department_array, role_array)`: To identify specific recipient groups.\n- `getProjectMilestoneDate(milestone_name: 'GoLive' | 'TrainingBlockStart')`: To fetch dynamic dates if available.\n- `generateCommunicationTemplate(type: 'email' | 'intranet_post', audience: string, key_message: string)`: Conceptual.",
-        icon: Wrench
-      },
-      {
-        id: "erp-comm-plan-examples",
-        type: "examples",
-        title: "Examples: Snippet of Phase 1 Email to Dept Heads",
-        description: "Example of a Phase 1 Email Subject Line for Department Heads:\nSubject: IMPORTANT: Upcoming ERP Enhancement - New Advanced Financial Analytics Module for Your Teams\n\nExample Key Message for Executives (Phase 1):\n'A new Advanced Financial Analytics module is being introduced to provide enhanced real-time financial insights and forecasting capabilities, supporting strategic decision-making.'",
-        icon: Eye
-      },
-    ]
-  },
-  {
-    id: "erp-sales-summary-epicor",
-    name: "ERP: Monthly Sales Summary (Epicor-Focused)",
-    icon: Brain,
-    availableComponents: [
-      {
-        id: "epicor-sales-system",
-        type: "system",
-        title: "System: AI Business Analyst for Epicor ERP",
-        description: "You are 'AnalyticaAI', an expert AI business analyst specializing in interpreting and summarizing sales data from Epicor ERP systems. Your goal is to provide concise, actionable monthly sales performance summaries for sales managers. Focus on key trends, significant variances, and potential opportunities or concerns. Always use professional business language and structure your summary logically with clear headings for different sections (e.g., Overall Performance, Top Performing Products, Regional Analysis, Key Variances, Recommendations).",
-        icon: Settings2
-      },
-      {
-        id: "epicor-sales-user",
-        type: "user",
-        title: "User: Request for May Sales Summary",
-        description: "Please generate the sales performance summary for May 2024. Focus on comparing May's performance against April 2024 and May 2023. Highlight any product categories or regions that showed exceptional growth or decline. I need this for our upcoming sales strategy meeting.",
-        icon: Puzzle
-      },
-      {
-        id: "epicor-sales-rag",
-        type: "rag",
-        title: "RAG: Epicor Sales Data Extract (May 2024)",
-        description: "Context: Extracted Epicor Sales Data (May 2024)\n- Total Sales (May 2024): $1.25M (vs. Apr 2024: $1.1M, vs. May 2023: $1.05M)\n- Top Product Category (May 2024): 'Custom Machinery Parts' - $450K (Up 15% MoM, Up 20% YoY)\n- Lowest Product Category (May 2024): 'Standard Fittings' - $80K (Down 10% MoM, Down 5% YoY)\n- Regional Performance (North America): $600K (Up 8% MoM)\n- Regional Performance (Europe): $400K (Up 5% MoM)\n- Regional Performance (Asia-Pacific): $250K (Down 3% MoM - attributed to new competitor activity)\n- Key Customer Segment (Manufacturing): $900K (Up 12% MoM)\n- Average Deal Size: $15,500 (vs. $14,000 in April)\n- New Customer Acquisition: 25 (vs. 22 in April)",
-        icon: ListChecks
-      },
-      {
-        id: "epicor-sales-constraints",
-        type: "constraints",
-        title: "Constraints: Summary Format & Length",
-        description: "Output Constraints:\n1. The summary must be a maximum of 300 words.\n2. Start with an executive summary (2-3 sentences).\n3. Use bullet points for specific metrics and comparisons.\n4. Include sections: Overall Performance, Product Category Highlights, Regional Analysis, Key Variances (vs. previous month & previous year), and 2-3 Actionable Recommendations.\n5. Quantify changes using percentages where possible.\n6. Do not include raw data tables in the summary; only the narrative and key figures.",
-        icon: SlidersHorizontal
-      },
-      {
-        id: "epicor-sales-guardrails",
-        type: "guardrails",
-        title: "Guardrails: Professional Tone & Data Integrity",
-        description: "Guardrails:\n- Maintain an objective and data-driven tone.\n- Do not speculate beyond the provided data; if information is missing to make a full assessment, state it as a limitation or an area for further investigation.\n- Ensure all financial figures are presented clearly (e.g., using '$' and 'M' for millions, 'K' for thousands).\n- Avoid overly casual language or sales jargon not suitable for a management report.",
-        icon: ShieldCheck
-      },
-      {
-        id: "epicor-sales-tools",
-        type: "tools",
-        title: "Tools: Conceptual - Epicor Data Query & Charting",
-        description: "Tool Hint (for AI internal process):\n- `queryEpicorSalesData(period: 'YYYY-MM', dimensions: string[], metrics: string[])`: Simulates fetching data directly from Epicor views or BAQs.\n- `calculateVariance(currentValue, previousValue, period_description)`: For MoM/YoY percentage changes.\n- `generateTrendChartURL(data_series, time_period, chart_type: 'bar' | 'line')`: Conceptual tool to link to a visual chart if the platform supported it.",
-        icon: Wrench
-      },
-      {
-        id: "epicor-sales-examples",
-        type: "examples",
-        title: "Examples: Snippet of Sales Summary Section",
-        description: "Example Snippet (Product Category Highlights Section):\n\n'**Product Category Highlights:**\n*   *Custom Machinery Parts* continued its strong performance, with sales reaching $450K, a 15% increase month-over-month (MoM) and a 20% increase year-over-year (YoY), driven by strong demand in the OEM sector.\n*   Conversely, *Standard Fittings* saw a decline, with sales at $80K, down 10% MoM. This warrants further investigation into market factors or competitive pressures affecting this category.'\n",
+        title: "Examples: Handling Multi-Issue Inquiry (India context)",
+        description: "Example Snippet of Expected Output (addressing one issue for brevity, India context):\n\n\"I'm truly sorry to hear about the tear on your t-shirt (TS002-S) from your order #ORD123456 – that's definitely not the quality we aim for! For defective items like this, we can offer you a full refund or an exchange for a new one, and we'll cover all associated shipping costs. To proceed, could you please reply with a photo of the damage? You can also email it directly to support.in@urbanthreads.com with your order number. Since you are in Mumbai, we can also explore return pickup options once the defect is verified.\"",
         icon: Eye
       },
     ]
@@ -270,7 +214,7 @@ const PLACEHOLDER_PROMPT_TEXT = "Your assembled prompt will appear here... Drag 
 
 
 export function PromptBuilderSection() {
-  const [currentScenarioId, setCurrentScenarioId] = useState<string>(scenarios[0].id);
+  const [currentScenarioId, setCurrentScenarioId] = useState<string>(scenarios[0].id); // Default to the first scenario
   const [currentAvailableComponents, setCurrentAvailableComponents] = useState<AvailableComponent[]>(scenarios[0].availableComponents);
   
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
@@ -336,7 +280,7 @@ export function PromptBuilderSection() {
         return; 
       }
 
-      const newDroppedItemId = `${originalComponent.id}-${Date.now()}`;
+      const newDroppedItemId = `${originalComponent.id}-${Date.now()}`; // Ensure unique ID for dropped items
       setDroppedItems(prev => [...prev, { ...originalComponent, id: newDroppedItemId }]);
     }
   };
@@ -403,12 +347,12 @@ export function PromptBuilderSection() {
                   <div className="space-y-3">
                     {currentAvailableComponents.map((comp) => (
                       <PromptComponentCard
-                        key={comp.id}
+                        key={comp.id} // Use component's original ID for key in library
                         type={comp.type}
                         title={comp.title}
                         description={comp.description}
                         icon={comp.icon}
-                        data-component-id={comp.id} 
+                        data-component-id={comp.id} // This ID is used for drag-and-drop
                       />
                     ))}
                   </div>
@@ -420,7 +364,7 @@ export function PromptBuilderSection() {
             <GlassCard className="lg:col-span-2 h-full flex flex-col !shadow-none !border-none !bg-transparent !p-0">
               <GlassCardHeader className="pb-3">
                 <GlassCardTitle className="text-neon-yellow flex items-center">
-                  {currentScenarioForIcon?.icon && <currentScenarioForIcon.icon className="inline-block mr-2" />}
+                  {currentScenarioForIcon?.icon && <currentScenarioForIcon.icon className="inline-block mr-2 h-5 w-5" />} 
                   Your Engineered Prompt: {currentScenarioForIcon?.name}
                 </GlassCardTitle>
               </GlassCardHeader>
@@ -438,7 +382,7 @@ export function PromptBuilderSection() {
                   {droppedItems.length === 0 ? (
                     <p className="text-muted-foreground text-center">Drag & Drop Prompt Components Here</p>
                   ) : (
-                    droppedItems.map((item) => (
+                    droppedItems.map((item) => ( // item.id here is the unique ID for the dropped instance
                       <div key={item.id} className="relative group"> 
                         <PromptComponentCard
                           type={item.type}
@@ -519,4 +463,3 @@ export function PromptBuilderSection() {
     </SectionContainer>
   );
 }
-
