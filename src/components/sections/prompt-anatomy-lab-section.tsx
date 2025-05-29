@@ -2,11 +2,10 @@
 "use client";
 
 import { SectionContainer } from "@/components/shared/section-container";
-import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
-import { Microscope, Settings2, Puzzle, ListChecks, Eye, SlidersHorizontal, ShieldCheck, Wrench, Wand2 } from "lucide-react";
+import { Settings2, Puzzle, ListChecks, Eye, SlidersHorizontal, ShieldCheck, Wrench, Wand2 } from "lucide-react";
 
 const anatomyParts = [
   {
@@ -293,9 +292,18 @@ export function PromptAnatomyLabSection() {
     >
       <div className="bg-card p-0.5 yellow-glowing-box rounded-lg">
         <div className="bg-card rounded-md p-6">
-          <Accordion type="multiple" className="w-full space-y-3">
+          <Accordion type="multiple" className="w-full">
             {anatomyParts.map((part) => (
-              <AccordionItem value={part.id} key={part.id} className={cn("border-2 rounded-lg shadow-md transition-all duration-150 ease-in-out transform hover:shadow-lg hover:ring-2 hover:ring-neon-yellow/70", part.colorClass, part.borderColorClass, part.textColorClass )}>
+              <AccordionItem 
+                value={part.id} 
+                key={part.id} 
+                className={cn(
+                  "border-2 rounded-lg shadow-md transition-all duration-150 ease-in-out transform hover:shadow-lg hover:ring-2 hover:ring-neon-yellow/70 mt-3",
+                  part.colorClass, 
+                  part.borderColorClass, 
+                  part.textColorClass 
+                )}
+              >
                 <AccordionTrigger className={cn("p-4 hover:no-underline", part.textColorClass)}>
                   <div className="flex items-center w-full text-left">
                     <part.icon className="w-6 h-6 mr-3 shrink-0" />
@@ -323,3 +331,4 @@ export function PromptAnatomyLabSection() {
     </SectionContainer>
   );
 }
+
