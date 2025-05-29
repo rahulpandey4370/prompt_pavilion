@@ -1,7 +1,6 @@
 import { HeroSection } from "@/components/sections/hero-section";
 import { IntroductionSection } from "@/components/sections/introduction-section";
 import { PromptBuilderSection } from "@/components/sections/prompt-builder-section";
-import { LiveAIDemoSection } from "@/components/sections/live-ai-demo-section";
 import { LearningSections } from "@/components/sections/learning-sections";
 import { AdvancedTechniquesSection } from "@/components/sections/advanced-techniques-section";
 import { PromptDNAAnalyzerSection } from "@/components/sections/prompt-dna-analyzer-section";
@@ -15,7 +14,6 @@ export default function HomePage() {
       <HeroSection />
       <IntroductionSection />
       <PromptBuilderSection />
-      <LiveAIDemoSection />
       <LearningSections />
       <AdvancedTechniquesSection />
       <PromptDNAAnalyzerSection />

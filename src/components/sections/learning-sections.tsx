@@ -4,7 +4,7 @@
 import { SectionContainer } from "@/components/shared/section-container";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Microscope, BookOpen, Target, Loader2, Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Settings2, Lightbulb, HelpCircle, UtensilsCrossed, FileText } from "lucide-react";
+import { Microscope, BookOpen, Target, Loader2, Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Settings2, Lightbulb, HelpCircle, UtensilsCrossed, FileText, BarChartBig } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -440,6 +440,10 @@ const PromptEngineeringPlayground = () => {
 
   const CurrentDisplayIcon = currentScenario.icon || HelpCircle;
 
+  // Placeholder quality scores
+  const basicResponseQuality = mutation.data?.basicResponse ? (mutation.data.basicResponse.length / 1000) * 100 : 10;
+  const engineeredResponseQuality = mutation.data?.engineeredResponse ? (mutation.data.engineeredResponse.length / 1000) * 100 : 85;
+
 
   return (
   <GlassCard className="h-full !p-0 !shadow-none !border-none !bg-transparent">
@@ -500,7 +504,7 @@ const PromptEngineeringPlayground = () => {
         </Button>
       </div>
       
-      {(mutation.isSuccess || mutation.isError) && (
+      {(mutation.isSuccess || mutation.isError || basicResponse || engineeredResponse) && (
         <div className="grid md:grid-cols-2 gap-6 mt-4">
           <div>
             <label className="block text-sm font-medium text-muted-foreground mb-1">Basic Prompt Response</label>
@@ -522,8 +526,46 @@ const PromptEngineeringPlayground = () => {
           </div>
         </div>
       )}
+
+      {(mutation.isSuccess || mutation.isError || basicResponse || engineeredResponse) && (
+         <GlassCard className="mt-8">
+            <GlassCardHeader>
+                <GlassCardTitle className="text-neon-yellow flex items-center">
+                    <BarChartBig className="mr-2 h-5 w-5"/> Response Quality Meter
+                </GlassCardTitle>
+            </GlassCardHeader>
+            <GlassCardContent className="flex flex-col md:flex-row items-stretch md:items-center justify-center md:justify-around p-6 gap-6 md:gap-4">
+                <div className="text-center w-full">
+                    <p className="text-sm text-muted-foreground mb-1">Basic Prompt</p>
+                    <div className="w-full h-6 bg-destructive/30 rounded-lg overflow-hidden relative">
+                        <div 
+                            className="h-full bg-destructive transition-all duration-500 ease-out" 
+                            style={{ width: `${Math.max(5, Math.min(100, basicResponseQuality))}%` }}
+                        />
+                        <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-destructive-foreground">
+                            {`${Math.round(Math.max(5, Math.min(100, basicResponseQuality)))}%`}
+                        </span>
+                    </div>
+                    <p className="text-xs mt-1 text-destructive">Low Quality</p>
+                </div>
+                <div className="text-center w-full">
+                    <p className="text-sm text-muted-foreground mb-1">Engineered Prompt</p>
+                    <div className="w-full h-6 bg-[hsl(var(--neon-lime-raw))]/30 rounded-lg overflow-hidden relative">
+                        <div 
+                            className="h-full bg-[hsl(var(--neon-lime-raw))] transition-all duration-500 ease-out" 
+                            style={{ width: `${Math.max(5, Math.min(100, engineeredResponseQuality))}%` }}
+                        />
+                         <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
+                           {`${Math.round(Math.max(5, Math.min(100, engineeredResponseQuality)))}%`}
+                        </span>
+                    </div>
+                     <p className="text-xs mt-1 text-green-400">High Quality</p>
+                </div>
+            </GlassCardContent>
+        </GlassCard>
+      )}
       <p className="text-xs text-center text-muted-foreground mt-4">
-        (Gamified scoring and advanced features like response quality analysis are planned for future updates!)
+        (Gamified scoring and advanced features like detailed response quality analysis are planned for future updates!)
       </p>
     </GlassCardContent>
   </GlassCard>

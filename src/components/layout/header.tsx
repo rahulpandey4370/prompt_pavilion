@@ -12,8 +12,7 @@ const navLinks = [
   { href: '#hero', label: 'Home' },
   { href: '#intro', label: 'Introduction' },
   { href: '#workshop', label: 'Workshop' },
-  { href: '#live-ai-demo', label: 'Live Demo' },
-  { href: '#learning', label: 'Learn' },
+  { href: '#learning', label: 'Learn' }, // "Learn" now implicitly includes the live demo via Playground
   { href: '#advanced', label: 'Advanced' },
   { href: '#analyzer', label: 'Analyzer' },
 ];
