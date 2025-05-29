@@ -572,80 +572,6 @@ const PromptEngineeringPlayground = () => {
   );
 };
 
-
-const SmartSuggestionsTool = () => {
-  const [prompt, setPrompt] = useState("");
-  const { toast } = useToast();
-  
-  const mutation = useMutation({
-    mutationFn: (input: ImprovePromptSuggestionsInput) => improvePromptSuggestions(input),
-    onSuccess: (data) => {
-      if (data && data.suggestions && data.suggestions.length > 0) {
-        toast({ title: "Suggestions Ready!", description: "AI has provided feedback on your prompt." });
-      } else {
-        toast({ title: "Suggestions Processed", description: "No specific suggestions were returned, or the prompt is well-structured." });
-      }
-    },
-    onError: (error: Error) => {
-      toast({ variant: "destructive", title: "Error", description: error.message });
-    }
-  });
-
-  const handleGetSuggestions = () => {
-    if (!prompt.trim()) {
-      toast({ variant: "destructive", title: "Input Required", description: "Please enter a prompt to get suggestions." });
-      return;
-    }
-    mutation.mutate({ prompt });
-  };
-
-  const suggestions = mutation.data?.suggestions || [];
-
-  return (
-    <GlassCard className="h-full !p-0 !shadow-none !border-none !bg-transparent">
-      <GlassCardHeader className="pt-6 px-6">
-        <GlassCardTitle className="text-neon-yellow flex items-center">
-          <Target className="inline-block mr-2 h-6 w-6" /> 
-          Smart Prompt Suggestions
-        </GlassCardTitle>
-      </GlassCardHeader>
-      <GlassCardContent className="px-6 pb-6">
-        <p className="text-foreground/80 mb-4">
-          Enter your prompt below and get AI-powered suggestions for improvement.
-        </p>
-        <Textarea 
-          placeholder="Type your prompt here..." 
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          className="mb-4 bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90"
-          rows={6} 
-        />
-        <Button onClick={handleGetSuggestions} disabled={mutation.isPending} className="bg-neon-yellow hover:bg-neon-yellow/90 text-neon-yellow-foreground px-6 py-3 text-base">
-          {mutation.isPending ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Lightbulb className="mr-2 h-5 w-5"/>} Get Suggestions
-        </Button>
-        
-        {mutation.isSuccess && suggestions.length === 0 && !mutation.isPending && (
-             <p className="mt-4 text-foreground/80">No specific improvement suggestions. Your prompt might be well-structured or the AI found no critical areas to highlight.</p>
-        )}
-
-        {suggestions.length > 0 && (
-          <div className="mt-6">
-            <h4 className="font-semibold text-neon-yellow mb-2 text-lg">Suggestions:</h4>
-            <ul className="list-disc list-inside space-y-2 text-foreground/90 bg-card/50 p-4 rounded-md border border-neon-yellow/30">
-              {suggestions.map((s, i) => <li key={i}>{s}</li>)}
-            </ul>
-          </div>
-        )}
-
-        {mutation.isError && (
-           <p className="mt-4 text-destructive">Could not retrieve suggestions at this time.</p>
-        )}
-      </GlassCardContent>
-    </GlassCard>
-  );
-};
-
-
 export function LearningSections() {
   return (
     <SectionContainer
@@ -656,7 +582,7 @@ export function LearningSections() {
       <div className="mb-8">
         <Tabs defaultValue="anatomy" className="w-full">
           <TabsList 
-            className="grid w-full grid-cols-1 md:grid-cols-3 bg-transparent p-0 rounded-none mb-0"
+            className="grid w-full grid-cols-1 md:grid-cols-2 bg-transparent p-0 rounded-none mb-0"
           >
             <TabsTrigger 
               value="anatomy" 
@@ -676,26 +602,14 @@ export function LearningSections() {
             >
               <BookOpen className="mr-2 h-5 w-5"/>Engineering Playground
             </TabsTrigger>
-            <TabsTrigger 
-              value="suggestions" 
-              className="data-[state=active]:bg-neon-yellow data-[state=active]:text-neon-yellow-foreground data-[state=active]:border-b-transparent 
-                         text-slate-300 hover:text-neon-yellow 
-                         border-2 border-neon-yellow/50 border-b-0 rounded-t-md rounded-b-none 
-                         py-3 text-base font-medium transition-all data-[state=inactive]:bg-card/50"
-            >
-              <Target className="mr-2 h-5 w-5"/>Smart Suggestions
-            </TabsTrigger>
           </TabsList>
-          <div className="bg-card p-0.5 yellow-glowing-box rounded-b-lg md:rounded-tr-lg">
-            <div className="bg-card rounded-b-md md:rounded-tr-md">
+          <div className="bg-card p-0.5 yellow-glowing-box rounded-b-lg md:rounded-tr-lg md:rounded-tl-none">
+            <div className="bg-card rounded-b-md md:rounded-tr-md md:rounded-tl-none">
               <TabsContent value="anatomy" className="mt-0">
                 <PromptAnatomyLab />
               </TabsContent>
               <TabsContent value="playground" className="mt-0">
                 <PromptEngineeringPlayground />
-              </TabsContent>
-              <TabsContent value="suggestions" className="mt-0">
-                <SmartSuggestionsTool />
               </TabsContent>
             </div>
           </div>
@@ -704,5 +618,3 @@ export function LearningSections() {
     </SectionContainer>
   );
 }
-
-    
