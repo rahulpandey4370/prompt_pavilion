@@ -29,7 +29,7 @@ const anatomyParts = [
       <strong class='block mb-1 mt-3 text-primary'>Impact:</strong>
       <p class='mb-2'>A strong system prompt significantly improves response consistency and relevance. It can reduce the need for extensive per-turn corrections, making the AI more efficient.</p>
       <strong class='block mb-1 mt-3 text-primary'>Example:</strong>
-      <pre class='bg-foreground/10 p-2 rounded-md text-xs overflow-x-auto mt-1'><code class='text-sm'>You are 'CodeHelperBot', an expert Python programming assistant. Your goal is to help users understand and debug their Python code. Explain concepts clearly and concisely. Maintain a patient and encouraging tone.</code></pre>
+      <pre class='bg-foreground/10 p-2 rounded-md text-xs whitespace-pre-wrap overflow-x-auto mt-1'><code class='text-sm'>You are 'CodeHelperBot', an expert Python programming assistant. Your goal is to help users understand and debug their Python code. Explain concepts clearly and concisely. Maintain a patient and encouraging tone.</code></pre>
     `
   },
   {
@@ -53,7 +53,7 @@ const anatomyParts = [
       <strong class='block mb-1 mt-3 text-primary'>Impact:</strong>
       <p class='mb-2'>Well-defined user inputs directly correlate with the quality of the AI's output. The AI can only work with the information it's given; precise inputs lead to precise outputs.</p>
       <strong class='block mb-1 mt-3 text-primary'>Example:</strong>
-      <pre class='bg-foreground/10 p-2 rounded-md text-xs overflow-x-auto mt-1'><code class='text-sm'>User: I need a Python function that takes a list of integers and returns a new list containing only the even numbers, sorted in ascending order.</code></pre>
+      <pre class='bg-foreground/10 p-2 rounded-md text-xs whitespace-pre-wrap overflow-x-auto mt-1'><code class='text-sm'>User: I need a Python function that takes a list of integers and returns a new list containing only the even numbers, sorted in ascending order.</code></pre>
     `
   },
   {
@@ -81,7 +81,7 @@ const anatomyParts = [
         <li><strong>Enables Use of Proprietary Data:</strong> AI can answer questions based on private or domain-specific information.</li>
       </ul>
       <strong class='block mb-1 mt-3 text-primary'>Example (Conceptual Prompt Snippet):</strong>
-      <pre class='bg-foreground/10 p-2 rounded-md text-xs overflow-x-auto mt-1'><code class='text-sm'>User Query: What is the return policy for item X?
+      <pre class='bg-foreground/10 p-2 rounded-md text-xs whitespace-pre-wrap overflow-x-auto mt-1'><code class='text-sm'>User Query: What is the return policy for item X?
 
 Retrieved Context from Company Policy Document:
 "Returns for non-sale items are accepted within 30 days of purchase with a valid receipt. Item X is a non-sale item. Refunds are processed to the original payment method."
@@ -120,7 +120,7 @@ Please answer based on the provided context.</code></pre>
         <li><strong>Placement:</strong> Typically, examples are placed before the final user query that the AI needs to act upon.</li>
       </ul>
       <strong class='block mb-1 mt-3 text-primary'>Example (Sentiment Analysis):</strong>
-      <pre class='bg-foreground/10 p-2 rounded-md text-xs overflow-x-auto mt-1'><code class='text-sm'>Analyze the sentiment of the following sentences.
+      <pre class='bg-foreground/10 p-2 rounded-md text-xs whitespace-pre-wrap overflow-x-auto mt-1'><code class='text-sm'>Analyze the sentiment of the following sentences.
 
 Sentence: "I love this new phone, it's amazing!"
 Sentiment: Positive
@@ -162,7 +162,7 @@ Sentiment:</code></pre>
         <li><strong>Test and Iterate:</strong> The effectiveness of constraints often requires experimentation.</li>
       </ul>
       <strong class='block mb-1 mt-3 text-primary'>Example (Product Description):</strong>
-      <pre class='bg-foreground/10 p-2 rounded-md text-xs overflow-x-auto mt-1'><code class='text-sm'>User: Write a product description for a new smart-watch.
+      <pre class='bg-foreground/10 p-2 rounded-md text-xs whitespace-pre-wrap overflow-x-auto mt-1'><code class='text-sm'>User: Write a product description for a new smart-watch.
 Constraints:
 - Length: 50-75 words.
 - Include features: heart rate monitor, GPS, 7-day battery life.
@@ -193,7 +193,7 @@ Constraints:
       <strong class='block mb-1 mt-3 text-primary'>Implementation:</strong>
       <p class='mb-2'>Guardrails can be part of the system prompt or added as specific constraints. Some platforms also offer external safety filtering mechanisms.</p>
       <strong class='block mb-1 mt-3 text-primary'>Example (General Assistant):</strong>
-      <pre class='bg-foreground/10 p-2 rounded-md text-xs overflow-x-auto mt-1'><code class='text-sm'>System: You are a helpful AI assistant.
+      <pre class='bg-foreground/10 p-2 rounded-md text-xs whitespace-pre-wrap overflow-x-auto mt-1'><code class='text-sm'>System: You are a helpful AI assistant.
 Guardrails:
 - Do not generate responses that are hateful, violent, or sexually explicit.
 - Do not provide medical, legal, or financial advice. Stick to general information.
@@ -229,7 +229,7 @@ Guardrails:
         <li><strong>Enable Agent-like Behavior:</strong> Allows the LLM to take multi-step actions and interact with its environment.</li>
       </ul>
       <strong class='block mb-1 mt-3 text-primary'>Example (Tool Definition & Prompt Snippet):</strong>
-      <pre class='bg-foreground/10 p-2 rounded-md text-xs overflow-x-auto mt-1'><code class='text-sm'>// Tool Definition (conceptual, actual implementation varies by platform)
+      <pre class='bg-foreground/10 p-2 rounded-md text-xs whitespace-pre-wrap overflow-x-auto mt-1'><code class='text-sm'>// Tool Definition (conceptual, actual implementation varies by platform)
 {
   "name": "getCurrentWeather",
   "description": "Get the current weather for a given location.",
@@ -276,7 +276,7 @@ User: What's the weather like in London today?</code></pre>
         <li><strong>Combine with Examples:</strong> Showing an example of the desired output format is often the most effective way to guide the AI.</li>
       </ul>
       <strong class='block mb-1 mt-3 text-primary'>Example (Requesting JSON):</strong>
-      <pre class='bg-foreground/10 p-2 rounded-md text-xs overflow-x-auto mt-1'><code class='text-sm'>User: Extract the name, email, and phone number from the following text:
+      <pre class='bg-foreground/10 p-2 rounded-md text-xs whitespace-pre-wrap overflow-x-auto mt-1'><code class='text-sm'>User: Extract the name, email, and phone number from the following text:
 "Contact John Doe at john.doe@example.com or (555) 123-4567."
 Respond ONLY with a JSON object containing the keys "name", "email", and "phone". If a field is not found, use null as its value.</code></pre>
     `
@@ -312,7 +312,7 @@ export function PromptAnatomyLabSection() {
                 </AccordionTrigger>
                 <AccordionContent
                   className={cn(
-                    "p-4 pt-0 text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none",
+                    "p-4 pt-4 text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none", // Changed pt-0 to pt-4
                     part.textColorClass, 
                     "bg-opacity-20 bg-black rounded-b-md" 
                   )}
@@ -332,3 +332,4 @@ export function PromptAnatomyLabSection() {
   );
 }
 
+    
