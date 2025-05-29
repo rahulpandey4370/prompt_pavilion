@@ -151,7 +151,7 @@ const scenarios: Scenario[] = [
   },
   {
     id: "erp-comm-plan",
-    name: "ERP System Update Communication (Business)",
+    name: "ERP: System Update Communication (Business)",
     icon: Users,
     availableComponents: [
       {
@@ -205,6 +205,62 @@ const scenarios: Scenario[] = [
       },
     ]
   },
+  {
+    id: "erp-sales-summary-epicor",
+    name: "ERP: Monthly Sales Summary (Epicor-Focused)",
+    icon: Brain,
+    availableComponents: [
+      {
+        id: "epicor-sales-system",
+        type: "system",
+        title: "System: AI Business Analyst for Epicor ERP",
+        description: "You are 'AnalyticaAI', an expert AI business analyst specializing in interpreting and summarizing sales data from Epicor ERP systems. Your goal is to provide concise, actionable monthly sales performance summaries for sales managers. Focus on key trends, significant variances, and potential opportunities or concerns. Always use professional business language and structure your summary logically with clear headings for different sections (e.g., Overall Performance, Top Performing Products, Regional Analysis, Key Variances, Recommendations).",
+        icon: Settings2
+      },
+      {
+        id: "epicor-sales-user",
+        type: "user",
+        title: "User: Request for May Sales Summary",
+        description: "Please generate the sales performance summary for May 2024. Focus on comparing May's performance against April 2024 and May 2023. Highlight any product categories or regions that showed exceptional growth or decline. I need this for our upcoming sales strategy meeting.",
+        icon: Puzzle
+      },
+      {
+        id: "epicor-sales-rag",
+        type: "rag",
+        title: "RAG: Epicor Sales Data Extract (May 2024)",
+        description: "Context: Extracted Epicor Sales Data (May 2024)\n- Total Sales (May 2024): $1.25M (vs. Apr 2024: $1.1M, vs. May 2023: $1.05M)\n- Top Product Category (May 2024): 'Custom Machinery Parts' - $450K (Up 15% MoM, Up 20% YoY)\n- Lowest Product Category (May 2024): 'Standard Fittings' - $80K (Down 10% MoM, Down 5% YoY)\n- Regional Performance (North America): $600K (Up 8% MoM)\n- Regional Performance (Europe): $400K (Up 5% MoM)\n- Regional Performance (Asia-Pacific): $250K (Down 3% MoM - attributed to new competitor activity)\n- Key Customer Segment (Manufacturing): $900K (Up 12% MoM)\n- Average Deal Size: $15,500 (vs. $14,000 in April)\n- New Customer Acquisition: 25 (vs. 22 in April)",
+        icon: ListChecks
+      },
+      {
+        id: "epicor-sales-constraints",
+        type: "constraints",
+        title: "Constraints: Summary Format & Length",
+        description: "Output Constraints:\n1. The summary must be a maximum of 300 words.\n2. Start with an executive summary (2-3 sentences).\n3. Use bullet points for specific metrics and comparisons.\n4. Include sections: Overall Performance, Product Category Highlights, Regional Analysis, Key Variances (vs. previous month & previous year), and 2-3 Actionable Recommendations.\n5. Quantify changes using percentages where possible.\n6. Do not include raw data tables in the summary; only the narrative and key figures.",
+        icon: SlidersHorizontal
+      },
+      {
+        id: "epicor-sales-guardrails",
+        type: "guardrails",
+        title: "Guardrails: Professional Tone & Data Integrity",
+        description: "Guardrails:\n- Maintain an objective and data-driven tone.\n- Do not speculate beyond the provided data; if information is missing to make a full assessment, state it as a limitation or an area for further investigation.\n- Ensure all financial figures are presented clearly (e.g., using '$' and 'M' for millions, 'K' for thousands).\n- Avoid overly casual language or sales jargon not suitable for a management report.",
+        icon: ShieldCheck
+      },
+      {
+        id: "epicor-sales-tools",
+        type: "tools",
+        title: "Tools: Conceptual - Epicor Data Query & Charting",
+        description: "Tool Hint (for AI internal process):\n- `queryEpicorSalesData(period: 'YYYY-MM', dimensions: string[], metrics: string[])`: Simulates fetching data directly from Epicor views or BAQs.\n- `calculateVariance(currentValue, previousValue, period_description)`: For MoM/YoY percentage changes.\n- `generateTrendChartURL(data_series, time_period, chart_type: 'bar' | 'line')`: Conceptual tool to link to a visual chart if the platform supported it.",
+        icon: Wrench
+      },
+      {
+        id: "epicor-sales-examples",
+        type: "examples",
+        title: "Examples: Snippet of Sales Summary Section",
+        description: "Example Snippet (Product Category Highlights Section):\n\n'**Product Category Highlights:**\n*   *Custom Machinery Parts* continued its strong performance, with sales reaching $450K, a 15% increase month-over-month (MoM) and a 20% increase year-over-year (YoY), driven by strong demand in the OEM sector.\n*   Conversely, *Standard Fittings* saw a decline, with sales at $80K, down 10% MoM. This warrants further investigation into market factors or competitive pressures affecting this category.'\n",
+        icon: Eye
+      },
+    ]
+  },
 ];
 
 
@@ -226,8 +282,8 @@ export function PromptBuilderSection() {
     const selectedScenario = scenarios.find(s => s.id === currentScenarioId);
     if (selectedScenario) {
       setCurrentAvailableComponents(selectedScenario.availableComponents);
-      setDroppedItems([]); // Clear dropped items when scenario changes
-      setAiResponse(null); // Clear AI response when scenario changes
+      setDroppedItems([]); 
+      setAiResponse(null); 
     }
   }, [currentScenarioId]);
 
@@ -463,3 +519,4 @@ export function PromptBuilderSection() {
     </SectionContainer>
   );
 }
+
