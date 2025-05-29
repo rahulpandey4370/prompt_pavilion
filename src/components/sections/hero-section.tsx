@@ -54,7 +54,7 @@ export function HeroSection() {
         <AnimatedTitle
           as="h1"
           className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold mb-6"
-        >
+ className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold mb-6 font-title">
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
             Prompt Pavilion
           </span>
