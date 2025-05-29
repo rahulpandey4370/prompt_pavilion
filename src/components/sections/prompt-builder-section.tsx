@@ -309,7 +309,7 @@ export function PromptBuilderSection() {
   return (
     <SectionContainer
       id="workshop"
-      title="PromptCraft Workshop"
+      title="The Prompt Canvas"
       subtitle="Select a scenario, then assemble your AI prompts like building blocks. Drag pre-filled components from the left to the assembly area below."
     >
       <div className="bg-card p-0.5 yellow-glowing-box rounded-lg">

@@ -12,7 +12,7 @@ export function AdvancedTechniquesSection() {
       subtitle="Dive deeper into sophisticated prompt engineering methods that unlock new AI capabilities."
     >
       <div className="grid md:grid-cols-3 gap-8">
-        <GlassCard className="flex flex-col">
+        <GlassCard className="flex flex-col advanced-card-border">
           <GlassCardHeader>
             <GlassCardTitle className="text-accent flex items-center">
               <Lightbulb className="inline-block mr-2 h-6 w-6" />Chain-of-Thought (CoT)
@@ -48,7 +48,7 @@ export function AdvancedTechniquesSection() {
           </GlassCardContent>
         </GlassCard>
 
-        <GlassCard className="flex flex-col">
+        <GlassCard className="flex flex-col advanced-card-border">
           <GlassCardHeader>
             <GlassCardTitle className="text-accent flex items-center">
               <PackageSearch className="inline-block mr-2 h-6 w-6" />Retrieval Augmented Generation (RAG)
@@ -84,7 +84,7 @@ export function AdvancedTechniquesSection() {
           </GlassCardContent>
         </GlassCard>
 
-        <GlassCard className="flex flex-col">
+        <GlassCard className="flex flex-col advanced-card-border">
           <GlassCardHeader>
             <GlassCardTitle className="text-accent flex items-center">
               <GitFork className="inline-block mr-2 h-6 w-6" />Tree-of-Thought (ToT) Prompting

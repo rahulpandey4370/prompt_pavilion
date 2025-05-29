@@ -287,7 +287,7 @@ export function PromptAnatomyLabSection() {
   return (
     <SectionContainer
       id="anatomy"
-      title="The Prompt Anatomy Lab"
+      title="Anatomy of a Good Prompt"
       subtitle="A well-crafted prompt is made of several key components. Click on each block below to explore its role in guiding the AI."
     >
       <div className="bg-card p-0.5 yellow-glowing-box rounded-lg">

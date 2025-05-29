@@ -10,11 +10,11 @@ import { useEffect, useState } from 'react';
 
 const navLinks = [
   { href: '#hero', label: 'Home' },
-  { href: '#intro', label: 'Introduction' },
-  { href: '#anatomy', label: 'Anatomy Lab' },
-  { href: '#workshop', label: 'Workshop' },
-  { href: '#comparison', label: 'Comparison' },
-  { href: '#analyzer', label: 'Analyzer' },
+  { href: '#intro', label: 'What is PE?' },
+  { href: '#anatomy', label: 'Prompt Structure' },
+  { href: '#workshop', label: 'Prompt Builder' },
+  { href: '#comparison', label: 'Basic vs Engineered' },
+  { href: '#analyzer', label: 'Prompt Analyzer' },
   { href: '#advanced', label: 'Advanced' },
   { href: '#articles', label: 'Articles' },
 ];

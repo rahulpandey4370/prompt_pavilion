@@ -18,7 +18,7 @@ interface FeatureCardProps {
 
 const FeatureCard = ({ icon: Icon, iconBgClass, title, description, index }: FeatureCardProps) => {
   return (
-    <GlassCard index={index} className="flex flex-col text-center items-center md:text-left md:items-start !p-6 hover:scale-105">
+    <GlassCard index={index} className="flex flex-col text-center items-center md:text-left md:items-start !p-6 hover:scale-105 intro-card-border">
       <motion.div
         className={cn(
           "p-3 rounded-lg mb-4 w-12 h-12 flex items-center justify-center self-center md:self-start",
@@ -64,7 +64,6 @@ export function IntroductionSection() {
       id="intro"
       title="What is Prompt Engineering?"
       subtitle="Unlock the full potential of AI by mastering the art and science of crafting effective prompts."
-      isContainedCard={true} 
       className="!py-12 md:!py-16"
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full">

@@ -208,3 +208,61 @@ html {
   animation: pulse-yellow-glow 2.5s infinite ease-in-out;
 }
 
+/* Introduction Card Border */
+@keyframes intro-glow {
+  0%, 100% {
+    border-color: hsl(var(--primary)/0.6);
+    box-shadow: 0 0 5px hsl(var(--primary)/0.3);
+  }
+  50% {
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 15px hsl(var(--primary)/0.6);
+  }
+}
+
+.intro-card-border {
+  border: 2px solid;
+  border-color: hsl(var(--primary)/0.6);
+  animation: intro-glow 3s ease-in-out infinite;
+}
+
+/* Article Card Border */
+@keyframes article-glow {
+  0%, 100% {
+    border-color: hsl(270 70% 50% / 0.6); /* Purple */
+    box-shadow: 0 0 5px hsl(270 70% 50% / 0.3); /* Purple */
+  }
+  50% { 
+    border-color: hsl(270 70% 50%); /* Purple */
+    box-shadow: 0 0 15px hsl(270 70% 50% / 0.6); /* Purple */
+  }
+}
+
+.article-card-border {
+  border: 2px solid;
+  border-color: hsl(var(--secondary)/0.6);
+  animation: article-glow 3.5s ease-in-out infinite;
+}
+
+/* Advanced Card Border */
+@keyframes advanced-glow {
+  0%, 100% {
+    border-color: hsl(var(--primary)/0.6); /* Same as Intro */
+    box-shadow: 0 0 5px hsl(var(--primary)/0.3); /* Same as Intro */
+  }
+  50% { 
+    border-color: hsl(var(--primary)); /* Same as Intro */
+    box-shadow: 0 0 15px hsl(var(--primary)/0.6); /* Same as Intro */
+  }
+}
+
+.advanced-card-border {
+  border: 2px solid;
+  border-color: hsl(var(--accent)/0.6);
+  animation: advanced-glow 3s ease-in-out infinite alternate; /* Use alternate for a different feel */
+}
+
+/* Ensure GlassCard respects borders */
+.glass-card {
+  border-radius: var(--radius); /* Ensure border-radius matches the card */
+}
