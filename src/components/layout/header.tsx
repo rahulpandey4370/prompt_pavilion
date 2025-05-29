@@ -11,10 +11,12 @@ import { useEffect, useState } from 'react';
 const navLinks = [
   { href: '#hero', label: 'Home' },
   { href: '#intro', label: 'Introduction' },
+  { href: '#anatomy', label: 'Anatomy Lab' },
   { href: '#workshop', label: 'Workshop' },
-  { href: '#learning', label: 'Learn' }, // "Learn" now implicitly includes the live demo via Playground
-  { href: '#advanced', label: 'Advanced' },
+  { href: '#comparison', label: 'Comparison' },
   { href: '#analyzer', label: 'Analyzer' },
+  { href: '#advanced', label: 'Advanced' },
+  { href: '#articles', label: 'Articles' },
 ];
 
 export function Header() {
