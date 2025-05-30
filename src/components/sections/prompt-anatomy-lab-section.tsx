@@ -5,7 +5,7 @@ import { SectionContainer } from "@/components/shared/section-container";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
-import { Settings2, Puzzle, ListChecks, Eye, SlidersHorizontal, ShieldCheck, Wrench, Wand2 } from "lucide-react";
+import { Settings2, Puzzle, ListChecks, Eye, SlidersHorizontal, ShieldCheck, Wrench, Wand2, Info } from "lucide-react";
 
 interface AnatomyPart {
   id: string;
@@ -85,7 +85,7 @@ const anatomyParts: AnatomyPart[] = [
     id: "output_format",
     name: "Output Format Indicator",
     icon: Wand2,
-    colorClass: "bg-pink-500/80", 
+    colorClass: "bg-pink-500", 
     textColorClass: "text-pink-100",
     borderColorClass: "border-pink-500",
     conciseDescription: "Specifies the desired structure of the AI's response (e.g., JSON, Markdown, list). Crucial for machine-readable output. E.g., 'Format the output as a numbered list.'"
@@ -133,10 +133,14 @@ export function PromptAnatomyLabSection() {
                     "w-80 sm:w-96 p-4 rounded-md shadow-xl text-sm",
                     part.borderColorClass,
                     "border-2",
-                    "bg-popover text-popover-foreground"
+                    part.colorClass, // Use themed background
+                    part.textColorClass // Use themed text color
                   )}
                 >
-                  {part.conciseDescription}
+                  <div className="flex items-start">
+                    <Info className={cn("w-5 h-5 mr-2 shrink-0 mt-0.5", part.textColorClass === "text-yellow-100" ? "text-background" : "")} /> 
+                    <p className="flex-1">{part.conciseDescription}</p>
+                  </div>
                 </PopoverContent>
               </Popover>
             ))}
