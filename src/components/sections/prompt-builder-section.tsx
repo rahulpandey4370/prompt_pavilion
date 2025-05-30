@@ -7,7 +7,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles, Settings2, Gift, ChefHat, MapPin, TrendingUp } from "lucide-react";
+import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles, Settings2, Gift, ChefHat, MapPin, TrendingUp, Brain } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState, type DragEvent, useEffect } from "react";
@@ -26,7 +26,7 @@ interface AvailableComponent {
   title: string;
   description: string;
   icon: LucideIcon;
-  id: string; 
+  id: string;
 }
 
 interface Scenario {
@@ -39,84 +39,112 @@ interface Scenario {
 const scenarios: Scenario[] = [
   {
     id: "festival-greeting",
-    name: "Festival Greeting Card Message (India)",
+    name: "Festival Greeting Card Message",
     icon: Gift,
     availableComponents: [
       {
         id: "fest-greet-system",
         type: "system",
         title: "System: Friendly Greeting Helper",
-        description: "You are a friendly assistant helping to write short festival greetings.",
+        description: "You are a friendly assistant helping to write short, warm festival greetings.",
         icon: Settings2
       },
       {
         id: "fest-greet-user",
         type: "user",
-        title: "User: Diwali Greeting Request",
-        description: "Write a warm message for Diwali to send to friends and family.",
+        title: "User: Festival Greeting Request",
+        description: "Write a joyful message for Diwali to send to friends and family.",
         icon: Puzzle
       },
       {
-        id: "fest-greet-constraints",
-        type: "constraints",
-        title: "Constraints: Length and Tone",
-        description: "Keep the message under 30 words. Ensure the tone is joyful and respectful.",
-        icon: SlidersHorizontal
+        id: "fest-greet-rag",
+        type: "rag",
+        title: "RAG: Recipient Info (Optional)",
+        description: "Optional: Recipient is my close friend, Ananya. We share many childhood memories.",
+        icon: ListChecks
       },
       {
         id: "fest-greet-examples",
         type: "examples",
-        title: "Examples: Sample Greeting",
-        description: "Example: 'Wishing you and your loved ones a Diwali filled with light, laughter, and prosperity!'",
+        title: "Examples: Sample Greeting Style",
+        description: "Example Tone: 'Wishing you a sparkle-filled Diwali, dear Ananya! May it bring endless joy.'",
         icon: Eye
+      },
+      {
+        id: "fest-greet-constraints",
+        type: "constraints",
+        title: "Constraints: Brevity & Tone",
+        description: "Keep the message under 30 words. Ensure the tone is joyful and respectful.",
+        icon: SlidersHorizontal
+      },
+      {
+        id: "fest-greet-guardrails",
+        type: "guardrails",
+        title: "Guardrails: Universally Positive",
+        description: "Ensure the message is positive and suitable for all recipients.",
+        icon: ShieldCheck
       },
     ]
   },
   {
     id: "indian-snack-recipe",
-    name: "Quick Recipe - Indian Snack",
+    name: "Quick Recipe - Snack",
     icon: ChefHat,
     availableComponents: [
       {
         id: "recipe-system",
         type: "system",
         title: "System: Concise Recipe Assistant",
-        description: "You are a recipe assistant. Provide clear and concise recipes.",
+        description: "You are a recipe assistant. Provide clear, simple, and concise recipes for easy snacks.",
         icon: Settings2
       },
       {
         id: "recipe-user",
         type: "user",
-        title: "User: Vegetable Pakora Recipe",
-        description: "Give me a simple recipe for 'vegetable pakora'.",
+        title: "User: Quick Snack Recipe",
+        description: "Give me a very simple recipe for 'vegetable pakora' that a beginner can make quickly.",
         icon: Puzzle
       },
       {
         id: "recipe-rag",
         type: "rag",
         title: "RAG: Common Pakora Ingredients",
-        description: "Context: Common ingredients for pakora include gram flour (besan), onion, potato, spinach, green chilies, and basic Indian spices like turmeric, chili powder, and ajwain.",
+        description: "Context: Basic pakora ingredients usually include gram flour (besan), onion, potato, spinach, and common Indian spices.",
         icon: ListChecks
+      },
+      {
+        id: "recipe-examples",
+        type: "examples",
+        title: "Examples: Output Structure",
+        description: "Example Format: Ingredients:\n- Item 1 (qty)\n- Item 2 (qty)\nInstructions:\n1. Brief step 1.\n2. Brief step 2.",
+        icon: Eye
       },
       {
         id: "recipe-constraints",
         type: "constraints",
         title: "Constraints: Format and Brevity",
-        description: "List ingredients first, then provide step-by-step instructions. Keep the entire recipe short and easy to follow for a beginner.",
+        description: "List ingredients first, then provide step-by-step instructions. Max 5 steps. Keep it very short and simple.",
         icon: SlidersHorizontal
+      },
+      {
+        id: "recipe-guardrails",
+        type: "guardrails",
+        title: "Guardrails: Cooking Safety",
+        description: "If deep frying is involved, briefly mention 'Be careful with hot oil.'",
+        icon: ShieldCheck
       },
     ]
   },
   {
-    id: "weekend-getaway-india",
-    name: "Travel Itinerary Idea - Weekend (India)",
+    id: "weekend-getaway",
+    name: "Weekend Getaway Idea",
     icon: MapPin,
     availableComponents: [
       {
         id: "travel-system",
         type: "system",
-        title: "System: Weekend Trip Planner (India Focus)",
-        description: "You are a travel planner specializing in short weekend getaways from major Indian cities.",
+        title: "System: Weekend Trip Planner",
+        description: "You are a travel planner specializing in suggesting short weekend getaways from major cities.",
         icon: Settings2
       },
       {
@@ -127,25 +155,39 @@ const scenarios: Scenario[] = [
         icon: Puzzle
       },
       {
-        id: "travel-constraints",
-        type: "constraints",
-        title: "Constraints: Output Details",
-        description: "Suggest one main destination. Include 2-3 key activities or places to visit there. Mention estimated travel time from Bangalore.",
-        icon: SlidersHorizontal
+        id: "travel-rag",
+        type: "rag",
+        title: "RAG: User Preferences",
+        description: "Optional: User prefers less crowded places and enjoys local cuisine.",
+        icon: ListChecks
       },
       {
         id: "travel-examples",
         type: "examples",
         title: "Examples: Sample Itinerary Snippet",
-        description: "Example Output Structure:\n**Destination:** Mysore (Approx 3-4 hours from Bangalore)\n**Activities:**\n1. Visit Mysore Palace.\n2. Explore Brindavan Gardens.\n3. See Chamundeshwari Temple.",
+        description: "Example Output:\n**Destination:** Mysore\n**Activities:**\n1. Mysore Palace.\n2. Brindavan Gardens.",
         icon: Eye
+      },
+      {
+        id: "travel-constraints",
+        type: "constraints",
+        title: "Constraints: Output Details",
+        description: "Suggest one main destination. Include 2-3 key activities. Mention estimated travel time.",
+        icon: SlidersHorizontal
+      },
+      {
+        id: "travel-guardrails",
+        type: "guardrails",
+        title: "Guardrails: Feasibility",
+        description: "Ensure the suggested activities are generally feasible within a 2-day trip.",
+        icon: ShieldCheck
       },
     ]
   },
   {
     id: "erp-sales-analysis",
     name: "ERP: Sales Performance & Anomaly Report",
-    icon: TrendingUp, // Changed from Brain for more specificity
+    icon: TrendingUp,
     availableComponents: [
       {
         id: "erp-analysis-system",
@@ -207,9 +249,9 @@ const PLACEHOLDER_PROMPT_TEXT = "Your assembled prompt will appear here... Drag 
 
 
 export function PromptBuilderSection() {
-  const [currentScenarioId, setCurrentScenarioId] = useState<string>(scenarios[0].id); // Default to the first scenario
+  const [currentScenarioId, setCurrentScenarioId] = useState<string>(scenarios[0].id);
   const [currentAvailableComponents, setCurrentAvailableComponents] = useState<AvailableComponent[]>(scenarios[0].availableComponents);
-  
+
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
   const [draggedOver, setDraggedOver] = useState(false);
   const [aiResponse, setAiResponse] = useState<string | null>(null);
@@ -219,8 +261,8 @@ export function PromptBuilderSection() {
     const selectedScenario = scenarios.find(s => s.id === currentScenarioId);
     if (selectedScenario) {
       setCurrentAvailableComponents(selectedScenario.availableComponents);
-      setDroppedItems([]); 
-      setAiResponse(null); 
+      setDroppedItems([]);
+      setAiResponse(null);
     }
   }, [currentScenarioId]);
 
@@ -261,20 +303,19 @@ export function PromptBuilderSection() {
     event.preventDefault();
     setDraggedOver(false);
     const componentIdToDrop = event.dataTransfer.getData("promptComponentId");
-    
+
     const originalComponent = currentAvailableComponents.find(c => c.id === componentIdToDrop);
 
     if (originalComponent) {
-      // Check for singleton types (system, user)
       const isSingletonType = originalComponent.type === 'system' || originalComponent.type === 'user';
       const alreadyExists = isSingletonType && droppedItems.some(item => item.type === originalComponent.type);
 
       if (alreadyExists) {
          toast({ variant: "destructive", title: "Component Limit", description: `A component of type "${originalComponent.type.toUpperCase()}" already exists. Only one is allowed.`});
-        return; 
+        return;
       }
-      
-      const newDroppedItemId = `${originalComponent.id}-${Date.now()}-${Math.random()}`; 
+
+      const newDroppedItemId = `${originalComponent.id}-${Date.now()}-${Math.random()}`;
       setDroppedItems(prev => [...prev, { ...originalComponent, id: newDroppedItemId }]);
     }
   };
@@ -282,13 +323,13 @@ export function PromptBuilderSection() {
   const handleRemoveItem = (idToRemove: string) => {
      setDroppedItems(prevItems => prevItems.filter(item => item.id !== idToRemove));
   };
-  
+
   const handleTestPrompt = () => {
     if (droppedItems.length === 0 || livePreviewText === PLACEHOLDER_PROMPT_TEXT) {
       toast({ variant: "destructive", title: "Empty Prompt", description: "Please assemble a prompt before testing." });
       return;
     }
-    setAiResponse(null); 
+    setAiResponse(null);
     toast({ title: "Processing...", description: "Generating AI response..." });
     generateResponseMutation.mutate({ assembledPrompt: livePreviewText });
   };
@@ -296,7 +337,7 @@ export function PromptBuilderSection() {
   const handleScenarioChange = (scenarioId: string) => {
     setCurrentScenarioId(scenarioId);
   };
-  
+
   const currentScenarioForIcon = scenarios.find(s => s.id === currentScenarioId);
 
 
@@ -308,7 +349,7 @@ export function PromptBuilderSection() {
     >
       <div className="bg-card p-0.5 yellow-glowing-box rounded-lg">
         <div className="bg-card rounded-md p-6">
-          <div className="grid lg:grid-cols-3 gap-8 min-h-[70vh]"> {/* Removed max-h- for better responsiveness */}
+          <div className="grid lg:grid-cols-3 gap-8 min-h-[70vh]">
             <GlassCard className="lg:col-span-1 h-full flex flex-col !shadow-none !border-none !bg-transparent !p-0">
               <GlassCardHeader className="pb-3">
                 <div className="flex flex-col space-y-3">
@@ -337,16 +378,16 @@ export function PromptBuilderSection() {
                 </div>
               </GlassCardHeader>
               <GlassCardContent className="flex-grow overflow-hidden pr-0">
-                <ScrollArea className="h-full pr-3"> 
+                <ScrollArea className="h-full pr-3">
                   <div className="space-y-3">
                     {currentAvailableComponents.map((comp) => (
                       <PromptComponentCard
-                        key={comp.id} 
+                        key={comp.id}
                         type={comp.type}
                         title={comp.title}
                         description={comp.description}
                         icon={comp.icon}
-                        data-component-id={comp.id} 
+                        data-component-id={comp.id}
                       />
                     ))}
                   </div>
@@ -358,12 +399,12 @@ export function PromptBuilderSection() {
             <GlassCard className="lg:col-span-2 h-full flex flex-col !shadow-none !border-none !bg-transparent !p-0">
               <GlassCardHeader className="pb-3">
                 <GlassCardTitle className="text-neon-yellow flex items-center">
-                  {currentScenarioForIcon?.icon && <currentScenarioForIcon.icon className="inline-block mr-2 h-5 w-5" />} 
+                  {currentScenarioForIcon?.icon && <currentScenarioForIcon.icon className="inline-block mr-2 h-5 w-5" />}
                   Your Engineered Prompt: {currentScenarioForIcon?.name}
                 </GlassCardTitle>
               </GlassCardHeader>
               <GlassCardContent className="flex-grow grid grid-rows-2 gap-4 overflow-hidden">
-                <div 
+                <div
                   onDragOver={handleDragOver}
                   onDrop={handleDrop}
                   onDragLeave={handleDragLeave}
@@ -376,19 +417,19 @@ export function PromptBuilderSection() {
                   {droppedItems.length === 0 ? (
                     <p className="text-muted-foreground text-center">Drag & Drop Prompt Components Here</p>
                   ) : (
-                    droppedItems.map((item) => ( 
-                      <div key={item.id} className="relative group"> 
+                    droppedItems.map((item) => (
+                      <div key={item.id} className="relative group">
                         <PromptComponentCard
                           type={item.type}
                           title={item.title}
                           description={item.description}
                           icon={item.icon}
-                          isDraggable={false} 
+                          isDraggable={false}
                           className="opacity-95 group-hover:opacity-100 cursor-default"
                         />
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
+                        <Button
+                          variant="ghost"
+                          size="icon"
                           className="absolute top-1 right-1 h-7 w-7 text-red-500 hover:text-red-400 opacity-60 group-hover:opacity-100 z-10"
                           onClick={() => handleRemoveItem(item.id)}
                           aria-label="Remove component"
@@ -399,13 +440,13 @@ export function PromptBuilderSection() {
                     ))
                   )}
                 </div>
-                
+
                 <div className="row-span-1 flex flex-col">
                   <h4 className="text-lg font-semibold text-neon-yellow mb-2">Live Prompt Preview (Raw Text):</h4>
                   <Textarea
                     readOnly
                     placeholder={PLACEHOLDER_PROMPT_TEXT}
-                    className="flex-grow bg-background/30 text-foreground/90 resize-none !p-3 !border-neon-yellow/50 custom-scrollbar" 
+                    className="flex-grow bg-background/30 text-foreground/90 resize-none !p-3 !border-neon-yellow/50 custom-scrollbar"
                     value={livePreviewText}
                   />
                 </div>
@@ -415,8 +456,8 @@ export function PromptBuilderSection() {
         </div>
       </div>
       <div className="w-full flex justify-center mt-8">
-        <Button 
-            size="lg" 
+        <Button
+            size="lg"
             className="bg-neon-yellow hover:bg-neon-yellow/90 text-neon-yellow-foreground px-6 py-3 text-base"
             onClick={handleTestPrompt}
             disabled={generateResponseMutation.isPending || droppedItems.length === 0}
