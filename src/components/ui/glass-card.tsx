@@ -9,18 +9,18 @@ interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
   index?: number;
 }
 
-// Inner component to hold the actual card content, sits inside the animated border
+// Inner component to hold the actual card content
 const GlassCardInnerContent = ({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) => {
   return (
     <div
       className={cn(
-        "bg-card text-card-foreground w-full h-full", // Actual card background and text color
-        "p-5 md:p-6", // Content padding
-        "relative z-10", // Explicitly set position and z-index
+        "bg-card text-card-foreground w-full h-full",
+        "p-5 md:p-6",
+        "relative z-10", // Ensure content is above any pseudo-elements if used by border parent
         className
       )}
-      // This ensures the inner content is rounded less than the outer border area
-      style={{ borderRadius: `calc(var(--radius) - var(--neon-border-thickness))` }}
+      // Adjust inner radius if the parent has a border thickness applied via padding
+      style={{ borderRadius: `calc(var(--radius) - var(--neon-border-thickness, 0px))` }}
       {...props}
     >
       {children}
@@ -34,9 +34,10 @@ export function GlassCard({ className, children, index = 0, ...props }: GlassCar
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
+      // card-neon-animated-border is removed from default. Apply it specifically where needed.
       className={cn(
-        "card-neon-animated-border", // This class enables the animated border via globals.css
-        "shadow-xl hover:shadow-2xl", // Retaining shadow for depth
+        "shadow-xl hover:shadow-2xl rounded-lg", // Base rounding, border class will provide padding
+        "relative overflow-hidden", // Needed if a ::before pseudo-element is used for border
         className
       )}
       {...props}
@@ -47,9 +48,6 @@ export function GlassCard({ className, children, index = 0, ...props }: GlassCar
     </motion.div>
   );
 }
-
-// The rest of the GlassCard sub-components remain the same
-// as they are concerned with the structure *inside* GlassCardInnerContent.
 
 export function GlassCardHeader({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
@@ -68,10 +66,11 @@ export function GlassCardTitle({ className, children, ...props }: React.HTMLAttr
 }
 
 export function GlassCardDescription({ className, children, ...props }: HTMLAttributes<HTMLParagraphElement>) {
+  // Changed from div to p for semantic correctness and to avoid p-in-p issues directly
   return (
-    <div className={cn("text-sm text-muted-foreground", className)} {...props}>
+    <p className={cn("text-sm text-muted-foreground", className)} {...props}>
       {children}
-    </div>
+    </p>
   );
 }
 
