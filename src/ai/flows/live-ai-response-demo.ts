@@ -41,7 +41,7 @@ const azureClient = new AzureOpenAI({
   apiVersion: azureApiVersion,
 });
 
-// System prompt for the "Basic" AI call, aiming for a concise, direct answer.
+// System prompt for the "Basic" AI call, aiming for a general answer.
 const BASIC_SYSTEM_PROMPT = "You are a helpful chatbot. Please provide a general and informative answer, approximately 100-150 words. Avoid highly structured formatting like lists unless essential.";
 
 async function getAzureOpenAIResponse(
@@ -76,7 +76,7 @@ export async function liveAIResponseDemo(input: LiveAIResponseDemoInput): Promis
     // Configuration for the "Basic" AI call
     const basicModelConfig = {
       temperature: 0.1,
-      max_tokens: 200, // Adjusted for 100-150 words target
+      max_tokens: 200, // Allows for ~100-150 words
       top_p: 0.6,
       frequency_penalty: 0.3,
       presence_penalty: 0.2,
@@ -86,14 +86,12 @@ export async function liveAIResponseDemo(input: LiveAIResponseDemoInput): Promis
     // Uses the full engineered prompt which contains system instructions and user input.
     const engineeredModelConfig = {
       temperature: 0.7,
-      max_tokens: 200, // Kept at 200 to allow for detailed engineered output, implicitly guided by prompt structure.
+      max_tokens: 350, // Increased to allow for more elaborate responses
       top_p: 0.95,
       frequency_penalty: 0.0,
       presence_penalty: 0.0,
     };
     
-    // For the basic prompt, we use the hardcoded BASIC_SYSTEM_PROMPT.
-    // For the engineered prompt, the fullEngineeredPrompt from UI already contains system instructions.
     const [basicResponse, engineeredResponse] = await Promise.all([
       getAzureOpenAIResponse(BASIC_SYSTEM_PROMPT, input.basicUserInput, basicModelConfig),
       getAzureOpenAIResponse(null, input.fullEngineeredPrompt, engineeredModelConfig), // System prompt is null as it's part of fullEngineeredPrompt

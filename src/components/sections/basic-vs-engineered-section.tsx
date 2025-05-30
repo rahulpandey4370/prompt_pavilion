@@ -1,7 +1,7 @@
 
 "use client";
 
-import { SectionContainer } from "@/components/shared/section-container";
+import { SectionContainer as BasicVsEngineeredSectionContainer } from "@/components/shared/section-container";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -17,11 +17,23 @@ interface PlaygroundScenario {
   id: string;
   name: string;
   icon: LucideIcon;
-  userInput: string; 
-  engineeredSystemPrompt: string; 
+  userInput: string;
+  engineeredSystemPrompt: string;
 }
 
 const playgroundScenarios: PlaygroundScenario[] = [
+  {
+    id: "study-buddy",
+    name: "Study Buddy - History",
+    icon: BookOpen,
+    userInput: "Tell me about World War 2.",
+    engineeredSystemPrompt: `System: You are an expert history tutor AI for high school students. Your primary function is to provide structured summaries of historical events.
+When asked about a broad topic like 'World War 2', you MUST structure your response as follows:
+1.  **Overview (Paragraph):** A summary of the event, including start and end dates.
+2.  **Key Causes (Bulleted list, provide key points):** The primary reasons the event occurred.
+3.  **Major Theaters/Fronts (Bulleted list, provide key points):** Main geographical areas of conflict.
+4.  **Primary Outcome (Sentence):** The most important consequence.`,
+  },
   {
     id: "restaurant-assistant",
     name: "Restaurant Assistant",
@@ -30,18 +42,6 @@ const playgroundScenarios: PlaygroundScenario[] = [
     engineeredSystemPrompt: `System: You are 'LocalEats AI', a helpful guide for restaurant recommendations. Your primary goal is to provide specific, actionable, and highly relevant suggestions based on all stated criteria.
 If the user's request is too vague to provide concrete suggestions (missing critical details like exact current city/neighborhood, budget range, or specific occasion), your FIRST response MUST be to politely ask for these missing details.
 Once sufficient details are provided (either initially or after your clarifying questions), you must then provide 2-3 distinct restaurant suggestions. For each restaurant, include: Name, a brief description (1-2 sentences), and specifically how it meets the user's stated preferences (e.g., Cuisine, Location, Occasion, Time, Dietary Needs, Quality, Budget if provided by user). Present the suggestions in a numbered list.`
-  },
-  {
-    id: "study-buddy",
-    name: "Study Buddy - History",
-    icon: BookOpen,
-    userInput: "Tell me about World War 2.",
-    engineeredSystemPrompt: `System: You are an expert history tutor AI for high school students. Your primary function is to provide structured summaries of historical events.
-When asked about a broad topic like 'World War 2', you MUST structure your response as follows:
-1.  **Overview (1 concise paragraph):** A brief summary of the event, including start and end dates.
-2.  **Key Causes (Bulleted list, provide key points):** The primary reasons the event occurred.
-3.  **Major Theaters/Fronts (Bulleted list, provide key points):** Main geographical areas of conflict.
-4.  **Primary Outcome (1 concise sentence):** The most important consequence.`,
   },
   {
     id: "code-explainer",
@@ -53,7 +53,7 @@ For any code provided by the user, you MUST:
 1.  Analyze the code thoroughly.
 2.  Explain its overall purpose and what each significant line or block of code does.
 3.  State the expected output if the code were to be run.
-4.  Offer any relevant notes, alternative approaches, or best practices suitable for beginner to intermediate developers. Total explanation for 'Explanation' and 'Notes / Best Practices' sections combined must be under 100 words.
+4.  Offer any relevant notes, alternative approaches, or best practices suitable for beginner to intermediate developers.
 Use the following strict Markdown format for your response:
 ### Code Snippet
 \`\`\`python
@@ -92,7 +92,7 @@ When a user asks to "Explain the inventory management module", you MUST:
 export function BasicVsEngineeredSection() {
   const { toast } = useToast();
   const defaultScenario = playgroundScenarios.find(s => s.id === "study-buddy") || playgroundScenarios[0];
-  const [selectedScenarioId, setSelectedScenarioId] = useState<string>(defaultScenario.id); 
+  const [selectedScenarioId, setSelectedScenarioId] = useState<string>(defaultScenario.id);
 
   const currentScenario = playgroundScenarios.find(s => s.id === selectedScenarioId) || defaultScenario;
 
@@ -145,12 +145,12 @@ export function BasicVsEngineeredSection() {
 
   const CurrentDisplayIcon = currentScenario.icon || HelpCircle;
 
-  const basicResponseQuality = basicResponse ? Math.min(100, (basicResponse.length / 200) * 40 + 10) : 10; // conceptual
-  const engineeredResponseQuality = engineeredResponse ? Math.min(100, (engineeredResponse.length / 500) * 80 + 20) : 85; // conceptual
+  const basicResponseQuality = basicResponse ? Math.min(100, (basicResponse.length / 200) * 40 + 10) : 10;
+  const engineeredResponseQuality = engineeredResponse ? Math.min(100, (engineeredResponse.length / 500) * 80 + 20) : 85;
 
 
   return (
-    <SectionContainer
+    <BasicVsEngineeredSectionContainer
       id="comparison"
       title="Basic vs. Engineered: A Live Comparison"
       subtitle="See the difference! Compare AI responses from basic vs. engineered prompts in real-time."
@@ -281,8 +281,6 @@ export function BasicVsEngineeredSection() {
           </GlassCard>
         </div>
       </div>
-    </SectionContainer>
+    </BasicVsEngineeredSectionContainer>
   );
 }
-
-    
