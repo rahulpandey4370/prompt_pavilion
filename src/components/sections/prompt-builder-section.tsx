@@ -7,7 +7,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles, BookHeart, MessagesSquare, Users, Brain, Settings2 } from "lucide-react";
+import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles, Settings2, Gift, ChefHat, MapPin, TrendingUp } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState, type DragEvent, useEffect } from "react";
@@ -38,169 +38,162 @@ interface Scenario {
 
 const scenarios: Scenario[] = [
   {
-    id: "erp-sales-summary", // Updated ID for default
-    name: "ERP: Monthly Sales Summary", // Renamed
-    icon: Brain,
+    id: "festival-greeting",
+    name: "Festival Greeting Card Message (India)",
+    icon: Gift,
     availableComponents: [
       {
-        id: "erp-sales-system",
+        id: "fest-greet-system",
         type: "system",
-        title: "System: AI Business Analyst for ERP Data",
-        description: "You are 'AnalyticaAI', an expert AI business analyst specializing in interpreting and summarizing sales data from ERP systems. Your goal is to provide concise, actionable monthly sales performance summaries for sales managers. Focus on key trends, significant variances, and potential opportunities or concerns. Always use professional business language and structure your summary logically with clear headings for different sections (e.g., Overall Performance, Top Performing Products/Services, Regional Analysis, Key Variances, Strategic Recommendations). Ensure all monetary figures are presented with appropriate currency symbols if provided in context, otherwise use generic indicators.",
+        title: "System: Friendly Greeting Helper",
+        description: "You are a friendly assistant helping to write short festival greetings.",
         icon: Settings2
       },
       {
-        id: "erp-sales-user",
+        id: "fest-greet-user",
         type: "user",
-        title: "User: Request for Monthly Sales Performance Report",
-        description: "Please generate the sales performance summary for the last completed month (e.g., May 2024 if today is in June 2024). Focus on comparing this month's performance against the previous month and the same month last year. Highlight any product categories, service lines, or regions that showed exceptional growth or decline (over +/- 15% variance). Identify key contributing factors if inferable from data. I need this summary for our upcoming quarterly business review meeting.",
+        title: "User: Diwali Greeting Request",
+        description: "Write a warm message for Diwali to send to friends and family.",
         icon: Puzzle
       },
       {
-        id: "erp-sales-rag",
-        type: "rag",
-        title: "RAG: Sample ERP Sales Data Extract (Last Month)",
-        description: "Context: Extracted ERP Sales Data (Example - May 2024)\n- Total Revenue (May 2024): 1.25M (vs. Apr 2024: 1.1M, vs. May 2023: 1.05M)\n- Gross Profit Margin (May 2024): 45% (vs. Apr 2024: 43%, vs. May 2023: 42%)\n- Top Product Category (May 2024): 'Enterprise Software Licenses' - 450K (Up 18% MoM, Up 25% YoY)\n- Lowest Performing Product Category (May 2024): 'Legacy System Maintenance' - 80K (Down 12% MoM, Down 8% YoY)\n- Regional Performance (South Asia): 600K (Up 10% MoM, Up 20% YoY - driven by new major client in India)\n- Regional Performance (Western Europe): 400K (Up 5% MoM, Stable YoY)\n- Regional Performance (North America): 250K (Down 5% MoM - attributed to increased competitor activity & delayed Q2 product launch)\n- Key Customer Segment (Manufacturing): 900K (Up 15% MoM)\n- Average Deal Size: 15,500 (vs. 14,000 in April)\n- New Customer Acquisition: 25 (vs. 22 in April; 40% from India)\n- Sales Cycle Length: 55 days (vs. 60 days in April)",
-        icon: ListChecks
-      },
-      {
-        id: "erp-sales-constraints",
+        id: "fest-greet-constraints",
         type: "constraints",
-        title: "Constraints: Report Format & Content Depth",
-        description: "Output Constraints:\n1. The summary must be a maximum of 400 words.\n2. Start with an executive summary (3-4 sentences) covering overall performance and key takeaways.\n3. Use bullet points for specific metrics, comparisons, and recommendations.\n4. Include sections: Overall Performance (Total Revenue, GP Margin), Product/Service Category Highlights (Top & Lowest), Regional Analysis, Key Variances (vs. previous month & previous year with % change), and 3-4 Actionable Strategic Recommendations.\n5. Quantify changes using percentages and absolute values where provided in context.\n6. Do not include raw data tables in the summary; only the narrative, key figures, and insights.",
+        title: "Constraints: Length and Tone",
+        description: "Keep the message under 30 words. Ensure the tone is joyful and respectful.",
         icon: SlidersHorizontal
       },
       {
-        id: "erp-sales-guardrails",
-        type: "guardrails",
-        title: "Guardrails: Professionalism & Data Interpretation",
-        description: "Guardrails:\n- Maintain an objective, data-driven, and professional tone suitable for executive review.\n- If information is missing to make a full assessment on a point, state it as a limitation or an area for further manual investigation.\n- Ensure all financial figures are presented clearly and consistently.\n- Avoid overly speculative language; base insights on provided data or clearly state assumptions if making extrapolations for recommendations.",
-        icon: ShieldCheck
-      },
-      {
-        id: "erp-sales-tools",
-        type: "tools",
-        title: "Tools: Conceptual - Data Query & Analysis",
-        description: "Tool Hint (for AI internal process):\n- `queryERPSales(period: 'YYYY-MM', dimensions: string[], metrics: string[])`: Simulates fetching structured data from ERP views or Business Activity Queries (BAQs).\n- `calculateVariance(current_value, previous_value, type: 'abs'|'perc')`: For MoM/YoY absolute and percentage changes.\n- `identifyTrends(data_series, period_description)`: To spot significant patterns or anomalies.",
-        icon: Wrench
-      },
-      {
-        id: "erp-sales-examples",
+        id: "fest-greet-examples",
         type: "examples",
-        title: "Examples: Snippet of Regional Analysis Section",
-        description: "Example Snippet (Regional Analysis Section):\n\n'**Regional Analysis:**\n*   *South Asia* emerged as the top-performing region, contributing 600K in revenue, an impressive 10% increase month-over-month (MoM) and a 20% rise year-over-year (YoY). This growth was significantly boosted by the acquisition of a major new client in India during the period.\n*   *Western Europe* showed steady growth with 400K in revenue, up 5% MoM and stable YoY, indicating consistent market penetration.\n*   *North America* experienced a slight downturn, with revenues of 250K, down 5% MoM. This is likely due to intensified competitor marketing campaigns and a minor delay in our Q2 product refresh for this market. Further analysis of competitor strategies in NA is recommended.'\n",
+        title: "Examples: Sample Greeting",
+        description: "Example: 'Wishing you and your loved ones a Diwali filled with light, laughter, and prosperity!'",
         icon: Eye
       },
     ]
   },
   {
-    id: "creative-writing-sf",
-    name: "Creative Writing: Sci-Fi (Generic)",
-    icon: BookHeart,
+    id: "indian-snack-recipe",
+    name: "Quick Recipe - Indian Snack",
+    icon: ChefHat,
     availableComponents: [
       {
-        id: "sf-system",
+        id: "recipe-system",
         type: "system",
-        title: "System: AI Sci-Fi World Builder",
-        description: "You are 'CosmoChronicler', an AI specializing in generating vivid science fiction settings, alien species, and futuristic technologies. Your tone is imaginative and detailed, inspiring authors with unique concepts. You excel at creating plausible yet fantastical elements. When asked for multiple items, provide them as a numbered list using Markdown.",
+        title: "System: Concise Recipe Assistant",
+        description: "You are a recipe assistant. Provide clear and concise recipes.",
         icon: Settings2
       },
       {
-        id: "sf-user",
+        id: "recipe-user",
         type: "user",
-        title: "User: Request for Alien Planet Concepts",
-        description: "I'm writing a space opera and need three distinct concepts for habitable alien planets. Each concept should include: a unique environmental feature, the dominant sentient species' primary characteristic, and a hint of a societal conflict or mystery. Ensure the planet names are evocative and unique.",
+        title: "User: Vegetable Pakora Recipe",
+        description: "Give me a simple recipe for 'vegetable pakora'.",
         icon: Puzzle
       },
       {
-        id: "sf-rag",
+        id: "recipe-rag",
         type: "rag",
-        title: "RAG: Astro-Physics & Exobiology Notes",
-        description: "Contextual Data:\n- Common Habitable Zone (HZ) star types: G-type (like Sol), K-type, M-type (red dwarfs, often tidally locked planets).\n- Consider planets with unusual orbital mechanics (e.g., binary suns, rogue planets captured by stars).\n- Sentient Species Ideas: Silicon-based life, energy beings, hive minds, species that communicate via bioluminescence.\n- Societal Conflicts: Resource scarcity, ideological schisms, ancient precursor technology, external threats.",
+        title: "RAG: Common Pakora Ingredients",
+        description: "Context: Common ingredients for pakora include gram flour (besan), onion, potato, spinach, green chilies, and basic Indian spices like turmeric, chili powder, and ajwain.",
         icon: ListChecks
       },
       {
-        id: "sf-constraints",
+        id: "recipe-constraints",
         type: "constraints",
-        title: "Constraints: Originality & Format",
-        description: "Output Constraints:\n1. Each planet concept must be 2-3 paragraphs.\n2. Avoid common sci-fi tropes (e.g., desert planets exactly like Tatooine, warrior races exactly like Klingons) unless given a unique twist.\n3. Format the response in Markdown, using bold for planet names.\n4. Ensure species characteristics are biologically plausible for their described environment.",
+        title: "Constraints: Format and Brevity",
+        description: "List ingredients first, then provide step-by-step instructions. Keep the entire recipe short and easy to follow for a beginner.",
+        icon: SlidersHorizontal
+      },
+    ]
+  },
+  {
+    id: "weekend-getaway-india",
+    name: "Travel Itinerary Idea - Weekend (India)",
+    icon: MapPin,
+    availableComponents: [
+      {
+        id: "travel-system",
+        type: "system",
+        title: "System: Weekend Trip Planner (India Focus)",
+        description: "You are a travel planner specializing in short weekend getaways from major Indian cities.",
+        icon: Settings2
+      },
+      {
+        id: "travel-user",
+        type: "user",
+        title: "User: Trip Idea from Bangalore",
+        description: "Suggest a 2-day weekend trip from Bangalore for someone who enjoys nature and historical sites. Budget is moderate.",
+        icon: Puzzle
+      },
+      {
+        id: "travel-constraints",
+        type: "constraints",
+        title: "Constraints: Output Details",
+        description: "Suggest one main destination. Include 2-3 key activities or places to visit there. Mention estimated travel time from Bangalore.",
         icon: SlidersHorizontal
       },
       {
-        id: "sf-guardrails",
-        type: "guardrails",
-        title: "Guardrails: Thematic & Content Safety",
-        description: "Guardrails:\n- No depiction of gratuitous violence or suffering of sentient species.\n- Concepts should be suitable for a broad young adult to adult audience.\n- Avoid generating content that mirrors or critiques specific real-world cultures or political situations too directly.\n- The AI should not express personal preferences for any generated concept.",
-        icon: ShieldCheck
-      },
-      {
-        id: "sf-tools",
-        type: "tools",
-        title: "Tools: Conceptual (Internal)",
-        description: "Tool Hint (for AI internal process):\n- `generateUniqueName(category: 'planet' | 'species', seed_keywords_array)`: For creating evocative names.\n- `checkSciFiTropes(concept_details)`: To flag overuse of common tropes.\n- `verifyPlausibility(environment_details, species_characteristics)`: Cross-references RAG data for basic scientific consistency.",
-        icon: Wrench
-      },
-      {
-        id: "sf-examples",
+        id: "travel-examples",
         type: "examples",
-        title: "Examples: Planet Concept Snippet",
-        description: "Example of Expected Output for one Planet Concept:\n\n**Planet Xylos:**\nXylos is a world perpetually shrouded in a shimmering, aurora-like nebula that filters its parent star's radiation into a spectrum favoring silicon-based flora. Towering crystalline forests dominate its landscape, pulsing with a soft internal light. The dominant sentient species, the Silicates, are slow-moving, crystalline beings who communicate through complex light patterns emitted from their bodies. A societal mystery looms: ancient, perfectly spherical voids are appearing in the crystalline forests, and no Silicate will speak of their origin.",
+        title: "Examples: Sample Itinerary Snippet",
+        description: "Example Output Structure:\n**Destination:** Mysore (Approx 3-4 hours from Bangalore)\n**Activities:**\n1. Visit Mysore Palace.\n2. Explore Brindavan Gardens.\n3. See Chamundeshwari Temple.",
         icon: Eye
       },
     ]
   },
   {
-    id: "customer-support-ecommerce",
-    name: "Customer Support: E-commerce (Business)",
-    icon: MessagesSquare,
+    id: "erp-sales-analysis",
+    name: "ERP: Sales Performance & Anomaly Report",
+    icon: TrendingUp, // Changed from Brain for more specificity
     availableComponents: [
       {
-        id: "cs-system",
+        id: "erp-analysis-system",
         type: "system",
-        title: "System: AI E-commerce Assistant 'AssistBot'",
-        description: "You are 'AssistBot', a friendly and efficient AI customer support agent for 'UrbanThreads.com', an online fashion retailer. Your primary goal is to resolve customer queries regarding orders, returns, and product information. Maintain a polite, empathetic, and helpful tone. Always thank the customer for their patience or for reaching out. Refer to specific policy details if applicable. If handling Indian customers, use appropriate salutations and be mindful of local customer service expectations.",
+        title: "System: AI ERP Business Intelligence Analyst",
+        description: "You are 'AnalyticaPro', an advanced AI business intelligence analyst. Your primary function is to generate insightful reports on sales performance from ERP data, identify anomalies, and provide actionable recommendations for sales managers. Use precise business terminology and structure reports logically.",
         icon: Settings2
       },
       {
-        id: "cs-user",
+        id: "erp-analysis-user",
         type: "user",
-        title: "User: Inquiry about Return Policy & Defective Item",
-        description: "Hi, I received my order #ORD123456 yesterday. The jacket (SKU: JT007-M) doesn't fit. Also, the t-shirt (SKU: TS002-S) arrived with a small tear on the sleeve. I'd like to know how I can return both, if I can get a refund for the t-shirt, and an exchange for the jacket for a size L. I am based in Mumbai, India.",
+        title: "User: Quarterly Sales Analysis Request",
+        description: "Generate a sales performance report for the last completed quarter (e.g., Q3 2024) for the 'Engineered Products' division. Specifically, I need to understand:\n1. Overall revenue trend vs. previous quarter and vs. same quarter last year.\n2. Top 3 performing product lines and their growth drivers.\n3. Any significant sales anomalies (e.g., a product line with a >20% unexpected drop or surge in a specific region like 'APAC' or 'EMEA'). For each anomaly, suggest two potential causes.\n4. Three strategic recommendations based on this data for improving next quarter's sales.",
         icon: Puzzle
       },
       {
-        id: "cs-rag",
+        id: "erp-analysis-rag",
         type: "rag",
-        title: "RAG: UrbanThreads Policy (Returns & Defectives)",
-        description: "Context: UrbanThreads Policy Excerpts (Global, with India-specific notes if applicable)\n- Standard Returns: Accepted within 30 days of delivery. Items must be unworn, unwashed, with original tags. Refunds to original payment method (5-7 business days processing). Exchanges subject to availability; customer covers return shipping for exchanges, UrbanThreads covers new item shipping.\n- Defective Items: Report within 7 days of delivery with photo proof. Full refund or exchange (if available) offered. UrbanThreads covers all shipping for defective item returns/exchanges.\n- India Specifics: Returns from India may have an extended processing window of 7-10 business days due to local logistics. Pickup for returns can be arranged in major metro cities.\n- Order Lookup: Order #ORD123456 - Jacket JT007-M (not final sale), T-shirt TS002-S (not final sale). Purchased [Date]. Shipping address: Mumbai, India.",
+        title: "RAG: Sample ERP Sales Data Extract (Quarterly)",
+        description: "Context: ERP Q3 2024 Sales Data Extract (Engineered Products Division):\n- Total Revenue (Q3 2024): $2.75M (vs. Q2 2024: $2.5M, vs. Q3 2023: $2.3M)\n- Gross Profit Margin (Q3 2024): 38% (vs. Q2 2024: 39%)\n- Product Line 'Custom Turbines': $1.2M (Up 15% QoQ, driven by new contracts in EMEA)\n- Product Line 'Precision Gears': $0.8M (Stable QoQ)\n- Product Line 'Actuator Assemblies': $0.4M (Down 25% QoQ - APAC region showed a 50% drop, EMEA stable, NA up 5%)\n- Regional Performance (APAC - Actuators): $50K (vs $200K in Q2) - Note: New competitor launched aggressive pricing in APAC for similar actuators in August.\n- Key Customer Segment (Aerospace): $1.5M (Up 10% QoQ)",
         icon: ListChecks
       },
       {
-        id: "cs-constraints",
+        id: "erp-analysis-constraints",
         type: "constraints",
-        title: "Constraints: Information Hierarchy & Action Limits",
-        description: "Output Constraints:\n1. Address both issues (fit and defect) clearly and separately.\n2. For the jacket: Explain return/exchange options per standard policy, mentioning specific return shipping details if different for India.\n3. For the t-shirt: Explain defective item policy, request photo if not implicitly provided, and outline resolution (refund/exchange).\n4. Provide a direct link to the main return policy page and a contact for defective item claims (e.g., support.in@urbanthreads.com or a specific Indian support number if available from RAG).\n5. Do not ask for PII beyond order number confirmation, unless required for return pickup arrangement (e.g., confirm pickup address if different from delivery).",
+        title: "Constraints: Report Structure & Depth",
+        description: "Output a concise report (maximum 500 words). Use Markdown formatting. Start with an Executive Summary (3-4 sentences). Clearly label each requested section (Overall Trend, Top Products, Anomalies, Recommendations). For anomalies, explicitly state the data points and then list potential causes.",
         icon: SlidersHorizontal
       },
       {
-        id: "cs-guardrails",
+        id: "erp-analysis-guardrails",
         type: "guardrails",
-        title: "Guardrails: Empathy & Policy Adherence",
-        description: "Guardrails:\n- Express empathy for the inconvenience, especially regarding the defective item.\n- Do not make promises outside of stated policy (e.g., instant refunds, free expedited exchange shipping for non-defective items if not standard).\n- Guide user to self-service portal for standard returns but offer direct assistance pathway for defectives.\n- If providing contact details, ensure they are appropriate for the customer's region if specified (e.g., India-specific support if user mentions it and data is available).\n- Maintain professional and brand-aligned tone.",
+        title: "Guardrails: Scope and Professionalism",
+        description: "Focus only on the 'Engineered Products' division data provided. Do not speculate on causes for anomalies beyond what can be reasonably inferred from the context or what is typical in the manufacturing sector (e.g., supply chain issues, competitor actions, market demand shifts). Avoid making definitive financial investment advice.",
         icon: ShieldCheck
       },
       {
-        id: "cs-tools",
+        id: "erp-analysis-tools",
         type: "tools",
-        title: "Tools: Order Lookup & Stock Check",
-        description: "Tool Hint (for AI internal process):\n- `getOrderDetails(orderId: string)`: Returns items, purchase date, sale status, defect flags, shipping region.\n- `checkStock(sku: string, size: string, region?: string)`: For exchange availability of JT007-L.\n- `initiateDefectiveItemProcess(orderId: string, sku: string, issue_description: string, photo_urls_array?, region?: string)`.\n- `getRegionalSupportInfo(region: string)`: To fetch region-specific contact details or return procedures.",
+        title: "Tools: Conceptual - Data Query & Analysis Functions",
+        description: "Tool Hint (for AI internal conceptualization):\n- `queryERPSalesData(division, quarter_year, metrics_array)`\n- `calculateVariance(current_value, previous_value, type: 'abs'|'perc')`\n- `identifySalesAnomalies(dataset, threshold_percentage, dimensions_array)`",
         icon: Wrench
       },
       {
-        id: "cs-examples",
+        id: "erp-analysis-examples",
         type: "examples",
-        title: "Examples: Handling Multi-Issue Inquiry (India context)",
-        description: "Example Snippet of Expected Output (addressing one issue for brevity, India context):\n\n\"I'm truly sorry to hear about the tear on your t-shirt (TS002-S) from your order #ORD123456 – that's definitely not the quality we aim for! For defective items like this, we can offer you a full refund or an exchange for a new one, and we'll cover all associated shipping costs. To proceed, could you please reply with a photo of the damage? You can also email it directly to support.in@urbanthreads.com with your order number. Since you are in Mumbai, we can also explore return pickup options once the defect is verified.\"",
+        title: "Examples: Snippet of Anomaly Section Format",
+        description: "Example of Anomaly Section Format:\n\n**Sales Anomaly: Product Line 'X' - Region 'Y'**\n- Data: Q3 Sales $Value vs. Q2 Sales $Value (Percentage% decrease/increase).\n- Potential Causes:\n  1.  [Plausible Cause 1 based on context or general knowledge]\n  2.  [Plausible Cause 2 based on context or general knowledge]",
         icon: Eye
       },
     ]
@@ -272,15 +265,16 @@ export function PromptBuilderSection() {
     const originalComponent = currentAvailableComponents.find(c => c.id === componentIdToDrop);
 
     if (originalComponent) {
+      // Check for singleton types (system, user)
       const isSingletonType = originalComponent.type === 'system' || originalComponent.type === 'user';
       const alreadyExists = isSingletonType && droppedItems.some(item => item.type === originalComponent.type);
 
-      if (isSingletonType && alreadyExists) {
-        toast({ variant: "destructive", title: "Component Limit", description: `Component of type "${originalComponent.type}" can only be added once.`});
+      if (alreadyExists) {
+         toast({ variant: "destructive", title: "Component Limit", description: `A component of type "${originalComponent.type.toUpperCase()}" already exists. Only one is allowed.`});
         return; 
       }
-
-      const newDroppedItemId = `${originalComponent.id}-${Date.now()}`; // Ensure unique ID for dropped items
+      
+      const newDroppedItemId = `${originalComponent.id}-${Date.now()}-${Math.random()}`; 
       setDroppedItems(prev => [...prev, { ...originalComponent, id: newDroppedItemId }]);
     }
   };
@@ -314,7 +308,7 @@ export function PromptBuilderSection() {
     >
       <div className="bg-card p-0.5 yellow-glowing-box rounded-lg">
         <div className="bg-card rounded-md p-6">
-          <div className="grid lg:grid-cols-3 gap-8 min-h-[70vh]">
+          <div className="grid lg:grid-cols-3 gap-8 min-h-[70vh]"> {/* Removed max-h- for better responsiveness */}
             <GlassCard className="lg:col-span-1 h-full flex flex-col !shadow-none !border-none !bg-transparent !p-0">
               <GlassCardHeader className="pb-3">
                 <div className="flex flex-col space-y-3">
@@ -347,12 +341,12 @@ export function PromptBuilderSection() {
                   <div className="space-y-3">
                     {currentAvailableComponents.map((comp) => (
                       <PromptComponentCard
-                        key={comp.id} // Use component's original ID for key in library
+                        key={comp.id} 
                         type={comp.type}
                         title={comp.title}
                         description={comp.description}
                         icon={comp.icon}
-                        data-component-id={comp.id} // This ID is used for drag-and-drop
+                        data-component-id={comp.id} 
                       />
                     ))}
                   </div>
@@ -382,7 +376,7 @@ export function PromptBuilderSection() {
                   {droppedItems.length === 0 ? (
                     <p className="text-muted-foreground text-center">Drag & Drop Prompt Components Here</p>
                   ) : (
-                    droppedItems.map((item) => ( // item.id here is the unique ID for the dropped instance
+                    droppedItems.map((item) => ( 
                       <div key={item.id} className="relative group"> 
                         <PromptComponentCard
                           type={item.type}
@@ -423,14 +417,14 @@ export function PromptBuilderSection() {
       <div className="w-full flex justify-center mt-8">
         <Button 
             size="lg" 
-            className="bg-neon-yellow hover:bg-neon-yellow/90 text-neon-yellow-foreground"
+            className="bg-neon-yellow hover:bg-neon-yellow/90 text-neon-yellow-foreground px-6 py-3 text-base"
             onClick={handleTestPrompt}
             disabled={generateResponseMutation.isPending || droppedItems.length === 0}
           >
             {generateResponseMutation.isPending ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
             ) : (
-              <Bot className="mr-2 h-4 w-4" />
+              <Bot className="mr-2 h-5 w-5" />
             )}
             Test Assembled Prompt with AI
           </Button>
