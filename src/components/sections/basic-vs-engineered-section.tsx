@@ -17,8 +17,8 @@ interface PlaygroundScenario {
   id: string;
   name: string;
   icon: LucideIcon;
-  userInput: string; // The core user question, used for basic and as part of engineered.
-  engineeredSystemPrompt: string; // This is ONLY the system instructions part for the engineered prompt.
+  userInput: string; 
+  engineeredSystemPrompt: string; 
 }
 
 const playgroundScenarios: PlaygroundScenario[] = [
@@ -38,10 +38,10 @@ Once sufficient details are provided (either initially or after your clarifying 
     userInput: "Tell me about World War 2.",
     engineeredSystemPrompt: `System: You are an expert history tutor AI for high school students. Your primary function is to provide structured summaries of historical events.
 When asked about a broad topic like 'World War 2', you MUST structure your response as follows:
-1.  **Overview (1 concise paragraph, max 25 words):** A brief summary of the event, including start and end dates.
-2.  **Key Causes (Bulleted list, exactly 2 points, max 15 words each):** The primary reasons the event occurred.
-3.  **Major Theaters/Fronts (Bulleted list, exactly 2 points, max 10 words each):** Main geographical areas of conflict.
-4.  **Primary Outcome (1 concise sentence, max 20 words):** The most important consequence.`
+1.  **Overview (1 concise paragraph):** A brief summary of the event, including start and end dates.
+2.  **Key Causes (Bulleted list, provide key points):** The primary reasons the event occurred.
+3.  **Major Theaters/Fronts (Bulleted list, provide key points):** Main geographical areas of conflict.
+4.  **Primary Outcome (1 concise sentence):** The most important consequence.`,
   },
   {
     id: "code-explainer",
@@ -91,9 +91,10 @@ When a user asks to "Explain the inventory management module", you MUST:
 
 export function BasicVsEngineeredSection() {
   const { toast } = useToast();
-  const [selectedScenarioId, setSelectedScenarioId] = useState<string>(playgroundScenarios[1].id); 
+  const defaultScenario = playgroundScenarios.find(s => s.id === "study-buddy") || playgroundScenarios[0];
+  const [selectedScenarioId, setSelectedScenarioId] = useState<string>(defaultScenario.id); 
 
-  const currentScenario = playgroundScenarios.find(s => s.id === selectedScenarioId) || playgroundScenarios[1];
+  const currentScenario = playgroundScenarios.find(s => s.id === selectedScenarioId) || defaultScenario;
 
   const [basicPromptText, setBasicPromptText] = useState(currentScenario.userInput);
   const [fullEngineeredPromptText, setFullEngineeredPromptText] = useState(
@@ -144,8 +145,8 @@ export function BasicVsEngineeredSection() {
 
   const CurrentDisplayIcon = currentScenario.icon || HelpCircle;
 
-  const basicResponseQuality = basicResponse ? Math.min(100, (basicResponse.length / 200) * 40 + 10) : 10;
-  const engineeredResponseQuality = engineeredResponse ? Math.min(100, (engineeredResponse.length / 500) * 80 + 20) : 85;
+  const basicResponseQuality = basicResponse ? Math.min(100, (basicResponse.length / 200) * 40 + 10) : 10; // conceptual
+  const engineeredResponseQuality = engineeredResponse ? Math.min(100, (engineeredResponse.length / 500) * 80 + 20) : 85; // conceptual
 
 
   return (
@@ -283,3 +284,5 @@ export function BasicVsEngineeredSection() {
     </SectionContainer>
   );
 }
+
+    
