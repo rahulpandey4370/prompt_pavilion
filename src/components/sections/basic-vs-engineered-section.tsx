@@ -88,9 +88,9 @@ User: Explain the inventory management module.`,
 
 export function BasicVsEngineeredSection() {
   const { toast } = useToast();
-  const [selectedScenarioId, setSelectedScenarioId] = useState<string>(playgroundScenarios[0].id);
+  const [selectedScenarioId, setSelectedScenarioId] = useState<string>(playgroundScenarios[1].id); // Default to "Study Buddy - History"
   
-  const currentScenario = playgroundScenarios.find(s => s.id === selectedScenarioId) || playgroundScenarios[0];
+  const currentScenario = playgroundScenarios.find(s => s.id === selectedScenarioId) || playgroundScenarios[1];
 
   const [basicPrompt, setBasicPrompt] = useState(currentScenario.basicPrompt);
   const [engineeredPrompt, setEngineeredPrompt] = useState(currentScenario.engineeredPrompt);
@@ -188,7 +188,7 @@ export function BasicVsEngineeredSection() {
                     value={basicPrompt}
                     onChange={(e) => setBasicPrompt(e.target.value)}
                     placeholder="Enter a basic prompt..."
-                    rows={12} 
+                    rows={18} 
                     className="bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90 custom-scrollbar"
                   />
                 </div>
@@ -199,7 +199,7 @@ export function BasicVsEngineeredSection() {
                     value={engineeredPrompt}
                     onChange={(e) => setEngineeredPrompt(e.target.value)}
                     placeholder="Enter an engineered prompt..."
-                    rows={12} 
+                    rows={18} 
                     className="bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90 custom-scrollbar"
                   />
                 </div>
