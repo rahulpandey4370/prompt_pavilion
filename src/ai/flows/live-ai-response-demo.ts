@@ -15,7 +15,7 @@ import { config } from 'dotenv';
 config();
 
 const LiveAIResponseDemoInputSchema = z.object({
-  basicUserInput: z.string().describe("The user input for the basic prompt."),
+  basicUserInput: z.string().describe("The user input for the basic prompt configuration."),
   fullEngineeredPrompt: z.string().describe("The complete text of the engineered prompt, including system instructions and user input."),
 });
 export type LiveAIResponseDemoInput = z.infer<typeof LiveAIResponseDemoInputSchema>;
@@ -41,10 +41,11 @@ const azureClient = new AzureOpenAI({
   apiVersion: azureApiVersion,
 });
 
-const BASIC_SYSTEM_PROMPT = "You are a helpful chatbot. Please provide a very concise and direct answer, typically 1-2 sentences and under 80 words. Avoid lists or detailed formatting.";
+// System prompt for the "Basic" AI call, aiming for a concise, direct answer.
+const BASIC_SYSTEM_PROMPT = "You are a helpful chatbot. Please provide a general and informative answer, approximately 100-150 words. Avoid highly structured formatting like lists unless essential.";
 
 async function getAzureOpenAIResponse(
-  systemPrompt: string | null, // System prompt can be null for engineered if all instructions are in user content
+  systemPrompt: string | null,
   userPrompt: string,
   modelConfig: Record<string, any>
 ): Promise<string> {
@@ -72,27 +73,30 @@ export async function liveAIResponseDemo(input: LiveAIResponseDemoInput): Promis
   try {
     LiveAIResponseDemoInputSchema.parse(input);
 
+    // Configuration for the "Basic" AI call
     const basicModelConfig = {
       temperature: 0.1,
-      max_tokens: 100,
+      max_tokens: 200, // Adjusted for 100-150 words target
       top_p: 0.6,
       frequency_penalty: 0.3,
       presence_penalty: 0.2,
     };
 
+    // Configuration for the "Engineered" AI call
+    // Uses the full engineered prompt which contains system instructions and user input.
     const engineeredModelConfig = {
       temperature: 0.7,
-      max_tokens: 400,
+      max_tokens: 200, // Kept at 200 to allow for detailed engineered output, implicitly guided by prompt structure.
       top_p: 0.95,
       frequency_penalty: 0.0,
       presence_penalty: 0.0,
     };
-
-    // For the engineered prompt, the entire text is passed as user content.
-    // The system prompt is minimal or null, as instructions are embedded.
+    
+    // For the basic prompt, we use the hardcoded BASIC_SYSTEM_PROMPT.
+    // For the engineered prompt, the fullEngineeredPrompt from UI already contains system instructions.
     const [basicResponse, engineeredResponse] = await Promise.all([
       getAzureOpenAIResponse(BASIC_SYSTEM_PROMPT, input.basicUserInput, basicModelConfig),
-      getAzureOpenAIResponse(null, input.fullEngineeredPrompt, engineeredModelConfig), 
+      getAzureOpenAIResponse(null, input.fullEngineeredPrompt, engineeredModelConfig), // System prompt is null as it's part of fullEngineeredPrompt
     ]);
 
     return { basicResponse, engineeredResponse };

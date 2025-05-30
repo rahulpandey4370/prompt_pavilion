@@ -17,7 +17,7 @@ interface PlaygroundScenario {
   id: string;
   name: string;
   icon: LucideIcon;
-  userInput: string; // This is the core user question, used for basic and as part of engineered.
+  userInput: string; // The core user question, used for basic and as part of engineered.
   engineeredSystemPrompt: string; // This is ONLY the system instructions part for the engineered prompt.
 }
 
@@ -29,7 +29,7 @@ const playgroundScenarios: PlaygroundScenario[] = [
     userInput: "Suggest a good Italian restaurant nearby.",
     engineeredSystemPrompt: `System: You are 'LocalEats AI', a helpful guide for restaurant recommendations. Your primary goal is to provide specific, actionable, and highly relevant suggestions based on all stated criteria.
 If the user's request is too vague to provide concrete suggestions (missing critical details like exact current city/neighborhood, budget range, or specific occasion), your FIRST response MUST be to politely ask for these missing details.
-Once sufficient details are provided (either initially or after your clarifying questions), you must then provide 2-3 distinct restaurant suggestions. For each restaurant, include: Name, a brief description (1-2 sentences), and specifically how it meets the user's stated preferences (e.g., Cuisine, Location, Occasion, Time, Dietary Needs, Quality, Budget if provided by user). Present the suggestions in a numbered list.`,
+Once sufficient details are provided (either initially or after your clarifying questions), you must then provide 2-3 distinct restaurant suggestions. For each restaurant, include: Name, a brief description (1-2 sentences), and specifically how it meets the user's stated preferences (e.g., Cuisine, Location, Occasion, Time, Dietary Needs, Quality, Budget if provided by user). Present the suggestions in a numbered list.`
   },
   {
     id: "study-buddy",
@@ -41,8 +41,7 @@ When asked about a broad topic like 'World War 2', you MUST structure your respo
 1.  **Overview (1 concise paragraph, max 25 words):** A brief summary of the event, including start and end dates.
 2.  **Key Causes (Bulleted list, exactly 2 points, max 15 words each):** The primary reasons the event occurred.
 3.  **Major Theaters/Fronts (Bulleted list, exactly 2 points, max 10 words each):** Main geographical areas of conflict.
-4.  **Primary Outcome (1 concise sentence, max 20 words):** The most important consequence.
-Do not ask clarifying questions for this general topic query. Provide the information directly. Your total response should be approximately 100-150 words.`,
+4.  **Primary Outcome (1 concise sentence, max 20 words):** The most important consequence.`
   },
   {
     id: "code-explainer",
@@ -68,7 +67,7 @@ Use the following strict Markdown format for your response:
 # [Exact output if run]
 \`\`\`
 ### Notes / Best Practices
-- [Relevant notes, alternatives, or best practices]`,
+- [Relevant notes, alternatives, or best practices]`
   },
   {
     id: "erp-feature-explanation",
@@ -86,7 +85,7 @@ When a user asks to "Explain the inventory management module", you MUST:
 3.  For each of these four functionalities, clearly state:
     i.  What it is (1-2 sentences).
     ii. Its primary benefit for warehouse operations or business efficiency.
-4.  Structure your entire response using Markdown, with each of the four functionalities under its own H3 heading. Do not ask clarifying questions for this specific request; proceed with the detailed explanation of these four features.`,
+4.  Structure your entire response using Markdown, with each of the four functionalities under its own H3 heading. Do not ask clarifying questions for this specific request; proceed with the detailed explanation of these four features.`
   },
 ];
 
