@@ -27,8 +27,14 @@ const playgroundScenarios: PlaygroundScenario[] = [
     name: "Restaurant Assistant",
     icon: UtensilsCrossed,
     basicPrompt: "Suggest a good Italian restaurant nearby.",
-    engineeredPrompt: `System: You are a helpful local guide AI. Your goal is to provide specific, actionable, and highly relevant restaurant recommendations.
-Please consider the following user criteria:
+    engineeredPrompt: `System: You are a helpful local guide AI. Your primary goal is to provide specific, actionable, and highly relevant restaurant recommendations.
+When processing a user's query, meticulously consider all details provided in the 'User Query' and any 'Additional Context & Instructions for this request'.
+Your output MUST be a numbered list of 2-3 distinct suggestions.
+For each restaurant, provide: Name, full address, and a clear explanation of how it meets EACH of the specified criteria.
+
+User: Suggest a good Italian restaurant nearby.
+
+Additional Context & Instructions for this request:
 - Cuisine: Italian
 - Location: Downtown San Francisco
 - Occasion: Family-friendly dinner
@@ -36,35 +42,35 @@ Please consider the following user criteria:
 - Dietary Needs: Vegetarian options absolutely essential
 - Quality: Average rating of at least 4 stars
 - Budget: Moderate ($$-$$$)
-
-Your output should be a numbered list of 2-3 distinct suggestions. For each restaurant, provide:
-1. Name and a brief (1-2 sentences) description.
-2. Full Address.
-3. Clearly state how it meets EACH of the specified criteria (Cuisine, Location, Occasion, Time, Dietary, Quality, Budget).
-
-User: Suggest a good Italian restaurant nearby.`,
+- For each suggestion, explicitly state how it meets each of the above criteria.`,
   },
   {
     id: "study-buddy",
     name: "Study Buddy - History",
     icon: BookOpen,
     basicPrompt: "Tell me about World War 2.",
-    engineeredPrompt: `System: You are an expert history tutor AI, skilled at explaining complex events to high school students clearly and engagingly.
-Please focus on these areas for the explanation:
+    engineeredPrompt: `System: You are an expert history tutor AI. Your role is to explain complex historical events to high school students in a clear, engaging, and structured manner.
+When responding to a user's query, focus on the 'Key Areas of Explanation' provided.
+Your output should be approximately 3-4 paragraphs, using language appropriate for a high school student, and ensure a logical flow.
+
+User: Tell me about World War 2.
+
+Key Areas of Explanation for this request:
 1. The main causes of World War 2.
 2. Specifically elaborate on: The Treaty of Versailles and its impact, the rise of fascism in Europe (Germany, Italy), and the failure of the League of Nations.
-3. Include key dates for major events.
-
-Output should be approximately 3-4 paragraphs, in clear language for a high school student, and logically structured.
-
-User: Tell me about World War 2.`,
+3. Include key dates for major events.`,
   },
   {
     id: "code-explainer",
     name: "Code Explainer - Python",
     icon: Bot, 
     basicPrompt: "What does this Python code do: `print('Hello')`?",
-    engineeredPrompt: `System: You are an expert Python programming assistant AI. Provide clear, line-by-line explanations for Python code snippets, detailing purpose, output, and best practices for beginner/intermediate developers.
+    engineeredPrompt: `System: You are an expert Python programming assistant AI. Your main function is to provide clear, line-by-line explanations for Python code snippets.
+When a user provides a code snippet, you MUST:
+1.  Analyze the code.
+2.  Explain its purpose and what each significant line or block does.
+3.  State the expected output if the code were run.
+4.  Offer any relevant notes, alternatives, or best practices for beginner/intermediate developers.
 Use the following strict Markdown format for your response:
 ### Code Snippet
 \`\`\`python
@@ -80,26 +86,34 @@ Use the following strict Markdown format for your response:
 ### Notes / Best Practices
 - [Relevant notes, alternatives, or best practices]
 
-User: What does this Python code do: \`print('Hello')\`?`,
+User: What does this Python code do: \`print('Hello')\`?
+`,
   },
   {
     id: "erp-feature-explanation",
     name: "ERP Module Feature Explanation",
     icon: FileText,
     basicPrompt: "Explain the inventory management module.",
-    engineeredPrompt: `System: You are 'InnovateERP Helper', an AI training assistant. Your role is to explain ERP module features to new users clearly, using simple language, and providing tangible benefits for each feature.
-Specifically for a newly hired warehouse supervisor, explain these 'Inventory Management' module features:
-1. Real-time Stock Level Tracking.
-2. Automated Reorder Point (ROP) Calculations.
-3. Batch and Serial Number Traceability.
-4. Kitting and Assembly Management.
+    engineeredPrompt: `System: You are 'InnovateERP Helper', an AI training assistant for a comprehensive ERP system. Your role is to explain ERP module features to new users who may not be familiar with ERP jargon.
+Use simple language and provide a tangible real-world benefit for each feature mentioned. Structure your response clearly.
+Address the explanation to the specific role mentioned in the 'User Role Context'.
 
-For each feature, provide:
-a. A brief (1-2 sentences) explanation.
-b. Its primary benefit to a warehouse supervisor.
-Format your response using Markdown, with each functionality as an H3 heading.
+User: Explain the inventory management module.
 
-User: Explain the inventory management module.`,
+User Role Context & Specific Features for this request:
+- User Role: Newly hired warehouse supervisor.
+- Module: Inventory Management
+- Features to explain:
+    1. Real-time Stock Level Tracking.
+    2. Automated Reorder Point (ROP) Calculations.
+    3. Batch and Serial Number Traceability.
+    4. Kitting and Assembly Management.
+
+Output Requirements:
+- For each feature, provide:
+    a. A brief (1-2 sentences) explanation of what it is.
+    b. Its primary benefit to a warehouse supervisor in managing the warehouse efficiently.
+- Format your response using Markdown, with each functionality as an H3 heading.`,
   },
 ];
 
@@ -295,3 +309,5 @@ export function BasicVsEngineeredSection() {
     </SectionContainer>
   );
 }
+
+    
