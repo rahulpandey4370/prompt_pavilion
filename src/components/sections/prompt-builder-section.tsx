@@ -46,48 +46,48 @@ const scenarios: Scenario[] = [
         id: "fest-greet-system",
         type: "system",
         title: "System: Friendly Greeting Helper",
-        description: "You are a friendly assistant helping to write short, warm festival greetings.",
+        description: "You are a friendly AI assistant for writing short, warm festival greetings (e.g., for Diwali, Eid, Christmas).",
         icon: Settings2
       },
       {
         id: "fest-greet-user",
         type: "user",
         title: "User: Festival Greeting Request",
-        description: "Write a joyful message for Diwali to send to friends and family.",
+        description: "Write a joyful message for Diwali to send to my friend, Priya.",
         icon: Puzzle
       },
       {
         id: "fest-greet-rag",
         type: "rag",
-        title: "RAG: Recipient Info (Optional)",
-        description: "Optional: Recipient is my close friend, Ananya. We share many childhood memories.",
+        title: "RAG: Recipient Details (Optional)",
+        description: "Context: Priya and I share many childhood memories and a love for traditional sweets.",
         icon: ListChecks
       },
       {
         id: "fest-greet-examples",
         type: "examples",
         title: "Examples: Sample Greeting Style",
-        description: "Example Tone: 'Wishing you a sparkle-filled Diwali, dear Ananya! May it bring endless joy.'",
+        description: "Example Style: 'Wishing you a Diwali filled with light and laughter, dear Priya! Hope it's as sweet as our favorite jalebis!'",
         icon: Eye
       },
       {
         id: "fest-greet-constraints",
         type: "constraints",
         title: "Constraints: Brevity & Tone",
-        description: "Keep the message under 30 words. Ensure the tone is joyful and respectful.",
+        description: "Keep the message under 40 words. Ensure the tone is warm, personal, and respectful of the festival.",
         icon: SlidersHorizontal
       },
       {
         id: "fest-greet-guardrails",
         type: "guardrails",
-        title: "Guardrails: Universally Positive",
-        description: "Ensure the message is positive and suitable for all recipients.",
+        title: "Guardrails: Cultural Sensitivity",
+        description: "Ensure the message is culturally appropriate and universally positive.",
         icon: ShieldCheck
       },
     ]
   },
   {
-    id: "indian-snack-recipe",
+    id: "quick-snack-recipe",
     name: "Quick Recipe - Snack",
     icon: ChefHat,
     availableComponents: [
@@ -101,36 +101,36 @@ const scenarios: Scenario[] = [
       {
         id: "recipe-user",
         type: "user",
-        title: "User: Quick Snack Recipe",
-        description: "Give me a very simple recipe for 'vegetable pakora' that a beginner can make quickly.",
+        title: "User: Quick Snack Recipe Request",
+        description: "Give me a very simple recipe for 'vegetable pakora' that a beginner can make quickly (under 20 minutes prep & cook).",
         icon: Puzzle
       },
       {
         id: "recipe-rag",
         type: "rag",
         title: "RAG: Common Pakora Ingredients",
-        description: "Context: Basic pakora ingredients usually include gram flour (besan), onion, potato, spinach, and common Indian spices.",
+        description: "Context: Basic pakora ingredients usually include gram flour (besan), onion, potato, spinach, and common Indian spices (turmeric, chili powder, coriander).",
         icon: ListChecks
       },
       {
         id: "recipe-examples",
         type: "examples",
         title: "Examples: Output Structure",
-        description: "Example Format: Ingredients:\n- Item 1 (qty)\n- Item 2 (qty)\nInstructions:\n1. Brief step 1.\n2. Brief step 2.",
+        description: "Example Format:\n**Ingredients:**\n- Item 1 (qty)\n- Item 2 (qty)\n**Instructions (Max 5 steps):**\n1. Brief step 1.\n2. Brief step 2.",
         icon: Eye
       },
       {
         id: "recipe-constraints",
         type: "constraints",
-        title: "Constraints: Format and Brevity",
-        description: "List ingredients first, then provide step-by-step instructions. Max 5 steps. Keep it very short and simple.",
+        title: "Constraints: Simplicity & Clarity",
+        description: "List ingredients first, then provide step-by-step instructions (max 5 steps). Use simple language. Specify quantities for 2 servings.",
         icon: SlidersHorizontal
       },
       {
         id: "recipe-guardrails",
         type: "guardrails",
-        title: "Guardrails: Cooking Safety",
-        description: "If deep frying is involved, briefly mention 'Be careful with hot oil.'",
+        title: "Guardrails: Cooking Safety Note",
+        description: "If deep frying is involved, include a brief, clear safety reminder about handling hot oil.",
         icon: ShieldCheck
       },
     ]
@@ -144,42 +144,42 @@ const scenarios: Scenario[] = [
         id: "travel-system",
         type: "system",
         title: "System: Weekend Trip Planner",
-        description: "You are a travel planner specializing in suggesting short weekend getaways from major cities.",
+        description: "You are a travel planner specializing in suggesting short (2-day) weekend getaways from major Indian cities.",
         icon: Settings2
       },
       {
         id: "travel-user",
         type: "user",
         title: "User: Trip Idea from Bangalore",
-        description: "Suggest a 2-day weekend trip from Bangalore for someone who enjoys nature and historical sites. Budget is moderate.",
+        description: "Suggest a 2-day weekend trip from Bangalore for someone who enjoys nature and historical sites. Budget is moderate (approx. ₹5000-₹8000 per person, excluding travel to destination).",
         icon: Puzzle
       },
       {
         id: "travel-rag",
         type: "rag",
-        title: "RAG: User Preferences",
-        description: "Optional: User prefers less crowded places and enjoys local cuisine.",
+        title: "RAG: User Preferences (Optional)",
+        description: "Contextual Info: User prefers less crowded places, enjoys local cuisine, and is comfortable with public transport or budget taxi services.",
         icon: ListChecks
       },
       {
         id: "travel-examples",
         type: "examples",
         title: "Examples: Sample Itinerary Snippet",
-        description: "Example Output:\n**Destination:** Mysore\n**Activities:**\n1. Mysore Palace.\n2. Brindavan Gardens.",
+        description: "Example Output Snippet:\n**Destination:** Mysore (Approx. 3-4 hours from Bangalore)\n**Day 1:** Mysore Palace, Local Market for silk sarees, Chamundeshwari Temple (evening)\n**Day 2:** Brindavan Gardens, St. Philomena's Church",
         icon: Eye
       },
       {
         id: "travel-constraints",
         type: "constraints",
         title: "Constraints: Output Details",
-        description: "Suggest one main destination. Include 2-3 key activities. Mention estimated travel time.",
+        description: "Suggest one main destination. Include 2-3 key activities per day. Mention estimated travel time from Bangalore. Briefly state why it fits the 'nature' and 'historical' criteria.",
         icon: SlidersHorizontal
       },
       {
         id: "travel-guardrails",
         type: "guardrails",
-        title: "Guardrails: Feasibility",
-        description: "Ensure the suggested activities are generally feasible within a 2-day trip.",
+        title: "Guardrails: Practicality & Safety",
+        description: "Ensure suggestions are generally feasible within a 2-day trip and are safe for solo travelers or small groups. Mention typical best times to visit if relevant (e.g., avoid monsoon peaks for outdoor sites).",
         icon: ShieldCheck
       },
     ]
@@ -346,6 +346,8 @@ export function PromptBuilderSection() {
       id="workshop"
       title="The Prompt Canvas"
       subtitle="Select a scenario, then assemble your AI prompts like building blocks. Drag pre-filled components from the left to the assembly area below."
+      isContainedCard={true}
+      className="!py-12 md:!py-16"
     >
       <div className="bg-card p-0.5 yellow-glowing-box rounded-lg">
         <div className="bg-card rounded-md p-6">
@@ -388,6 +390,7 @@ export function PromptBuilderSection() {
                         description={comp.description}
                         icon={comp.icon}
                         data-component-id={comp.id}
+                        className="card-neon-animated-border" 
                       />
                     ))}
                   </div>
@@ -425,7 +428,7 @@ export function PromptBuilderSection() {
                           description={item.description}
                           icon={item.icon}
                           isDraggable={false}
-                          className="opacity-95 group-hover:opacity-100 cursor-default"
+                          className="opacity-95 group-hover:opacity-100 cursor-default card-neon-animated-border" 
                         />
                         <Button
                           variant="ghost"
@@ -498,3 +501,4 @@ export function PromptBuilderSection() {
     </SectionContainer>
   );
 }
+

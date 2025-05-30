@@ -27,29 +27,74 @@ const playgroundScenarios: PlaygroundScenario[] = [
     name: "Restaurant Assistant",
     icon: UtensilsCrossed,
     basicPrompt: "Suggest a good Italian restaurant nearby.",
-    engineeredPrompt: `System: You are a helpful local guide AI designed to provide specific and actionable restaurant recommendations.
+    engineeredPrompt: `System: You are a helpful local guide AI. Your goal is to provide specific, actionable, and highly relevant restaurant recommendations based on all user-stated criteria.
+
 User: Suggest a good Italian restaurant nearby.
-Constraints: I need a family-friendly Italian restaurant in downtown San Francisco. It must be open for dinner around 7 PM tonight. Vegetarian options are essential. It should have an average rating of at least 4 stars. My budget is moderate ($$-$$$).
-Output Format: Provide 2-3 suggestions. For each, include a brief description (1-2 sentences), its address, and clearly state why it fits all the specified criteria. Respond as a numbered list.`,
+
+Constraints & Context:
+- Cuisine: Italian
+- Location: Downtown San Francisco
+- Occasion: Family-friendly dinner
+- Time: Around 7 PM tonight
+- Dietary Needs: Vegetarian options absolutely essential
+- Quality: Average rating of at least 4 stars
+- Budget: Moderate ($$-$$$)
+
+Output Format:
+Provide 2-3 distinct suggestions. For each restaurant:
+1. Name and a brief (1-2 sentences) description.
+2. Full Address.
+3. Clearly state how it meets EACH of the specified criteria (Cuisine, Location, Occasion, Time, Dietary, Quality, Budget).
+Respond as a numbered list.`,
   },
   {
     id: "study-buddy",
     name: "Study Buddy - History",
     icon: BookOpen,
     basicPrompt: "Tell me about World War 2.",
-    engineeredPrompt: `System: You are a history tutor AI, skilled at explaining complex topics clearly for high school students.
+    engineeredPrompt: `System: You are an expert history tutor AI. Your specialty is explaining complex historical events to high school students in a clear, engaging, and easy-to-understand manner.
+
 User: Tell me about World War 2.
-Contextual Focus: Explain the main causes of World War 2. Specifically focus on the Treaty of Versailles, the rise of fascism, and the failure of the League of Nations.
-Output Requirements: Keep the explanation concise (around 3-4 paragraphs) and easy to understand. Provide key dates for major events mentioned.`,
+
+Specific Focus Areas for this Explanation:
+1. The main causes of World War 2.
+2. Specifically elaborate on:
+    a. The Treaty of Versailles and its impact.
+    b. The rise of fascism in Europe (Germany, Italy).
+    c. The failure of the League of Nations.
+3. Key dates for major events mentioned.
+
+Output Requirements:
+- Explanation Length: Approximately 3-4 paragraphs.
+- Language: Clear, concise, and suitable for a high school student.
+- Structure: Logically organized, addressing each focus area.`,
   },
   {
     id: "code-explainer",
     name: "Code Explainer - Python",
     icon: Bot, 
     basicPrompt: "What does this Python code do: `print('Hello')`?",
-    engineeredPrompt: `System: You are an expert Python programming assistant. Your goal is to provide clear, line-by-line explanations of Python code, detailing its purpose, expected output, and any relevant best practices or potential pitfalls.
+    engineeredPrompt: `System: You are an expert Python programming assistant AI. Your objective is to provide crystal-clear, line-by-line explanations of Python code snippets. For each snippet, detail its purpose, expected output, and any relevant best practices or potential pitfalls for beginner to intermediate Python developers.
+
 User: What does this Python code do: \`print('Hello')\`?
-Output Format: Respond in Markdown. Include a section for "Explanation", "Expected Output", and "Notes/Best Practices".`,
+
+Output Format (Strict Markdown):
+### Code Snippet
+\`\`\`python
+# [User's code snippet will be here]
+\`\`\`
+
+### Explanation
+- [Detailed line-by-line explanation of what the code does]
+- [Purpose of the overall snippet]
+
+### Expected Output
+\`\`\`
+# [Show the exact output if the code were run]
+\`\`\`
+
+### Notes / Best Practices
+- [Any relevant notes, alternative approaches, or best practices related to the code or concepts used]`,
   },
   {
     id: "erp-feature-explanation",
@@ -57,13 +102,20 @@ Output Format: Respond in Markdown. Include a section for "Explanation", "Expect
     icon: FileText,
     basicPrompt: "Explain the inventory management module.",
     engineeredPrompt: `System: You are an AI training assistant for 'InnovateERP', a comprehensive enterprise resource planning system. Your primary goal is to clearly explain ERP module features to new users who may not be familiar with ERP jargon. Use simple language and provide a tangible real-world benefit for each feature mentioned. Structure your response clearly.
+
 User: Explain the inventory management module.
-Specific Focus Areas: I'm a newly hired warehouse supervisor. Can you explain the core functionalities? Specifically, I need to understand:
-1. Real-time Stock Level Tracking.
-2. Automated Reorder Point (ROP) Calculations.
-3. Batch and Serial Number Traceability.
-4. Kitting and Assembly Management.
-Output Requirements: For each functionality, please provide a brief (1-2 sentences) explanation of what it is, and its primary benefit to me in managing the warehouse efficiently. Format your response using Markdown, with each functionality as an H3 heading.`
+
+Specific Focus Areas (for a newly hired warehouse supervisor):
+1.  Real-time Stock Level Tracking.
+2.  Automated Reorder Point (ROP) Calculations.
+3.  Batch and Serial Number Traceability.
+4.  Kitting and Assembly Management.
+
+Output Requirements:
+For each of the four functionalities listed above, please provide:
+a.  A brief (1-2 sentences) explanation of what it is.
+b.  Its primary benefit to a warehouse supervisor in managing the warehouse efficiently.
+Format your response using Markdown, with each functionality as an H3 heading.`,
   },
 ];
 
@@ -129,6 +181,8 @@ export function BasicVsEngineeredSection() {
       id="comparison"
       title="Basic vs. Engineered: A Live Comparison"
       subtitle="See the difference! Compare AI responses from basic vs. engineered prompts in real-time using Gemini."
+      isContainedCard={true}
+      className="!py-12 md:!py-16"
     >
       <div className="bg-card p-0.5 yellow-glowing-box rounded-lg">
         <div className="bg-card rounded-md p-6 space-y-6">
@@ -167,7 +221,7 @@ export function BasicVsEngineeredSection() {
                     value={basicPrompt}
                     onChange={(e) => setBasicPrompt(e.target.value)}
                     placeholder="Enter a basic prompt..."
-                    rows={8} 
+                    rows={12} 
                     className="bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90 custom-scrollbar"
                   />
                 </div>
@@ -178,7 +232,7 @@ export function BasicVsEngineeredSection() {
                     value={engineeredPrompt}
                     onChange={(e) => setEngineeredPrompt(e.target.value)}
                     placeholder="Enter an engineered prompt..."
-                    rows={8} 
+                    rows={12} 
                     className="bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90 custom-scrollbar"
                   />
                 </div>

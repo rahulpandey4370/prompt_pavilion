@@ -2,7 +2,7 @@
 "use client";
 
 import { SectionContainer } from "@/components/shared/section-container";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; // Changed import
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
 import { Settings2, Puzzle, ListChecks, Eye, SlidersHorizontal, ShieldCheck, Wrench, Wand2 } from "lucide-react";
@@ -14,7 +14,7 @@ interface AnatomyPart {
   colorClass: string;
   textColorClass: string;
   borderColorClass: string;
-  conciseDescription: string; // Changed from elaborateDescription
+  conciseDescription: string; 
 }
 
 const anatomyParts: AnatomyPart[] = [
@@ -24,7 +24,7 @@ const anatomyParts: AnatomyPart[] = [
     icon: Settings2,
     colorClass: "bg-prompt-system",
     textColorClass: "text-purple-100",
-    borderColorClass: "border-purple-500", // Made border color slightly more distinct
+    borderColorClass: "border-purple-500",
     conciseDescription: "Sets the AI's persona, context, and overall operational guidelines. Essential for guiding tone and behavior. E.g., 'You are a witty travel expert for budget trips.'"
   },
   {
@@ -98,6 +98,8 @@ export function PromptAnatomyLabSection() {
       id="anatomy"
       title="The Prompt Anatomy Lab"
       subtitle="A well-crafted prompt is made of several key components. Click on each block below to explore its role in guiding the AI."
+      isContainedCard={true}
+      className="!py-12 md:!py-16"
     >
       <div className="bg-card p-0.5 yellow-glowing-box rounded-lg">
         <div className="bg-card rounded-md p-6 md:p-8">
@@ -105,18 +107,18 @@ export function PromptAnatomyLabSection() {
             {anatomyParts.map((part) => (
               <Popover key={part.id}>
                 <PopoverTrigger asChild>
-                  <div // Styled trigger card
+                  <div
                     className={cn(
-                      "card-neon-animated-border rounded-lg shadow-md p-0.5 cursor-pointer h-full", // Ensure full height for flex alignment
+                      "card-neon-animated-border rounded-lg shadow-md p-0.5 cursor-pointer h-full",
                       "hover:scale-105 transition-transform duration-150 ease-in-out"
                     )}
                   >
-                    <div // Inner content div of the trigger card
+                    <div 
                       className={cn(
                         "h-full w-full p-4 rounded-[calc(var(--radius)-var(--neon-border-thickness))]",
                         part.colorClass,
                         part.textColorClass,
-                        "flex flex-col items-center justify-center text-center min-h-[150px]" // Center content, set min height
+                        "flex flex-col items-center justify-center text-center min-h-[150px]"
                       )}
                     >
                       <part.icon className="w-10 h-10 mb-3" />
@@ -129,9 +131,9 @@ export function PromptAnatomyLabSection() {
                   align="center"
                   className={cn(
                     "w-80 sm:w-96 p-4 rounded-md shadow-xl text-sm",
-                    part.borderColorClass, // Use the defined border color class
-                    "border-2", // Apply a border to the popover
-                    "bg-popover text-popover-foreground" // Use popover theme colors
+                    part.borderColorClass,
+                    "border-2",
+                    "bg-popover text-popover-foreground"
                   )}
                 >
                   {part.conciseDescription}

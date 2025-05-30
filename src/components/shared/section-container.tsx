@@ -35,9 +35,9 @@ export function SectionContainer({
       className={cn(
         "flex flex-col justify-center items-center overflow-hidden",
         isContainedCard 
-          ? "my-10 md:my-16 border-2 border-primary rounded-2xl shadow-2xl w-full" // Static border for contained card
-          : "py-16 md:py-24 min-h-[90vh] w-full", // Default styling
-        isContainedCard ? "!py-12 md:!py-16" : "", // Specific padding for contained card
+          ? "my-10 md:my-16 w-full" // Removed border-2 border-primary rounded-2xl shadow-2xl
+          : "py-16 md:py-24 min-h-[90vh] w-full", 
+        isContainedCard ? "!py-12 md:!py-16" : "", 
         className
       )}
       {...props}
@@ -45,8 +45,8 @@ export function SectionContainer({
       <div className={cn(
         "w-full h-full", 
         isContainedCard 
-          ? "bg-[hsl(var(--background-card-container-raw))] max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-10 md:py-12 rounded-[calc(var(--radius)+0.3rem)]" // Adjusted rounding for inner div
-          : "w-full px-6 sm:px-10 lg:px-16" // Full width for default sections
+          ? "bg-[hsl(var(--background-card-container-raw))] max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-10 md:py-12 rounded-[calc(var(--radius)+0.3rem)] shadow-2xl" // Retained shadow for depth
+          : "w-full px-6 sm:px-10 lg:px-16"
       )}
       >
         {title && (
