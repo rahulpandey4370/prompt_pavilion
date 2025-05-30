@@ -27,8 +27,8 @@ const playgroundScenarios: PlaygroundScenario[] = [
     name: "Restaurant Assistant",
     icon: UtensilsCrossed,
     basicPrompt: "Suggest a good Italian restaurant nearby.",
-    engineeredPrompt: `System: You are a helpful local guide AI. Your primary goal is to provide specific, actionable, and relevant restaurant recommendations. 
-If the user's request is vague (e.g., missing cuisine, location, budget, occasion, dietary needs), politely ask for these details before making suggestions. 
+    engineeredPrompt: `System: You are a helpful local guide AI. Your primary goal is to provide specific, actionable, and relevant restaurant recommendations.
+If the user's request is vague (e.g., missing cuisine, location, budget, occasion, dietary needs), politely ask for these details before making suggestions.
 Once sufficient details are available or if the user provides them upfront, provide 2-3 distinct suggestions. For each restaurant, include its Name, a brief description, and its relevance to the user's stated preferences. Aim for a concise, numbered list.
 
 User: Suggest a good Italian restaurant nearby.`,
@@ -38,8 +38,8 @@ User: Suggest a good Italian restaurant nearby.`,
     name: "Study Buddy - History",
     icon: BookOpen,
     basicPrompt: "Tell me about World War 2.",
-    engineeredPrompt: `System: You are an expert history tutor AI for high school students. Your role is to explain complex historical events clearly, engagingly, and in a structured manner. 
-If a topic is broad, offer to focus on specific aspects (e.g., causes, key figures, major battles, impact on different regions). 
+    engineeredPrompt: `System: You are an expert history tutor AI for high school students. Your role is to explain complex historical events clearly, engagingly, and in a structured manner.
+If a topic is broad, offer to focus on specific aspects (e.g., causes, key figures, major battles, impact on different regions).
 Explain key concepts, include important dates, and use language appropriate for a high school student. Aim for approximately 3-4 well-structured paragraphs.
 
 User: Tell me about World War 2.`,
@@ -47,9 +47,9 @@ User: Tell me about World War 2.`,
   {
     id: "code-explainer",
     name: "Code Explainer - Python",
-    icon: Bot, 
+    icon: Bot,
     basicPrompt: "What does this Python code do: \`print('Hello')\`?",
-    engineeredPrompt: `System: You are an expert Python programming assistant AI. Your main function is to provide clear, line-by-line explanations for Python code snippets. 
+    engineeredPrompt: `System: You are an expert Python programming assistant AI. Your main function is to provide clear, line-by-line explanations for Python code snippets.
 For any code provided by the user, you MUST:
 1.  Analyze the code thoroughly.
 2.  Explain its overall purpose and what each significant line or block of code does.
@@ -77,10 +77,18 @@ User: What does this Python code do: \`print('Hello')\`?`,
     name: "ERP Module Feature Explanation",
     icon: FileText,
     basicPrompt: "Explain the inventory management module.",
-    engineeredPrompt: `System: You are 'InnovateERP Helper', an AI training assistant for a comprehensive ERP system. Your role is to explain ERP module features to new users who may not be familiar with ERP jargon. 
-Use simple language and provide a tangible real-world benefit for each feature mentioned. 
-If the user asks about a general module, ask them to specify which features they are most interested in or their role (e.g., warehouse supervisor, finance manager), so you can tailor the explanation. 
-For each feature, provide a brief (1-2 sentences) explanation of what it is and its primary benefit. Structure your response clearly using Markdown, with each functionality as an H3 heading.
+    engineeredPrompt: `System: You are 'InnovateERP Helper', an AI training assistant. Your role is to explain ERP module features simply for new users, highlighting real-world benefits.
+When a user asks to "Explain the inventory management module", you MUST:
+1.  Provide a concise (1-2 sentences) overview of the Inventory Management module's purpose.
+2.  Then, explain the following key functionalities in detail:
+    a.  Real-time Stock Level Tracking
+    b.  Automated Reorder Point (ROP) Calculations
+    c.  Batch and Serial Number Traceability
+    d.  Kitting and Assembly Management
+3.  For each of these four functionalities, clearly state:
+    i.  What it is (1-2 sentences).
+    ii. Its primary benefit for warehouse operations or business efficiency.
+4.  Structure your entire response using Markdown, with each of the four functionalities under its own H3 heading. Do not ask clarifying questions for this specific request; proceed with the detailed explanation.
 
 User: Explain the inventory management module.`,
   },
@@ -89,12 +97,12 @@ User: Explain the inventory management module.`,
 export function BasicVsEngineeredSection() {
   const { toast } = useToast();
   const [selectedScenarioId, setSelectedScenarioId] = useState<string>(playgroundScenarios[1].id); // Default to "Study Buddy - History"
-  
+
   const currentScenario = playgroundScenarios.find(s => s.id === selectedScenarioId) || playgroundScenarios[1];
 
   const [basicPrompt, setBasicPrompt] = useState(currentScenario.basicPrompt);
   const [engineeredPrompt, setEngineeredPrompt] = useState(currentScenario.engineeredPrompt);
-  
+
   const [basicResponse, setBasicResponse] = useState("");
   const [engineeredResponse, setEngineeredResponse] = useState("");
 
@@ -103,7 +111,7 @@ export function BasicVsEngineeredSection() {
     if (scenario) {
       setBasicPrompt(scenario.basicPrompt);
       setEngineeredPrompt(scenario.engineeredPrompt);
-      setBasicResponse(""); 
+      setBasicResponse("");
       setEngineeredResponse("");
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -138,7 +146,7 @@ export function BasicVsEngineeredSection() {
   };
 
   const CurrentDisplayIcon = currentScenario.icon || HelpCircle;
-  
+
   const basicResponseQuality = mutation.data?.basicResponse ? Math.min(100, (mutation.data.basicResponse.length / 500) * 60 + 10) : 10;
   const engineeredResponseQuality = mutation.data?.engineeredResponse ? Math.min(100, (mutation.data.engineeredResponse.length / 500) * 80 + 20) : 85;
 
@@ -147,7 +155,7 @@ export function BasicVsEngineeredSection() {
     <SectionContainer
       id="comparison"
       title="Basic vs. Engineered: A Live Comparison"
-      subtitle="See the difference! Compare AI responses from basic vs. engineered prompts in real-time using Gemini."
+      subtitle="See the difference! Compare AI responses from basic vs. engineered prompts in real-time."
       isContainedCard={true}
       className="!py-12 md:!py-16"
     >
@@ -156,7 +164,7 @@ export function BasicVsEngineeredSection() {
           <GlassCard className="h-full !p-0 !shadow-none !border-none !bg-transparent">
             <GlassCardHeader className="pt-0 px-0">
               <GlassCardTitle className="text-neon-yellow flex items-center text-xl md:text-2xl">
-                <CurrentDisplayIcon className="inline-block mr-3 h-6 w-6" /> 
+                <CurrentDisplayIcon className="inline-block mr-3 h-6 w-6" />
                 Scenario: {currentScenario.name}
               </GlassCardTitle>
             </GlassCardHeader>
@@ -188,7 +196,7 @@ export function BasicVsEngineeredSection() {
                     value={basicPrompt}
                     onChange={(e) => setBasicPrompt(e.target.value)}
                     placeholder="Enter a basic prompt..."
-                    rows={18} 
+                    rows={18}
                     className="bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90 custom-scrollbar"
                   />
                 </div>
@@ -199,7 +207,7 @@ export function BasicVsEngineeredSection() {
                     value={engineeredPrompt}
                     onChange={(e) => setEngineeredPrompt(e.target.value)}
                     placeholder="Enter an engineered prompt..."
-                    rows={18} 
+                    rows={18}
                     className="bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90 custom-scrollbar"
                   />
                 </div>
@@ -210,7 +218,7 @@ export function BasicVsEngineeredSection() {
                   {mutation.isPending ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Lightbulb className="mr-2 h-5 w-5" />} Compare AI Responses
                 </Button>
               </div>
-              
+
               {(mutation.isSuccess || mutation.isError || basicResponse || engineeredResponse) && (
                 <div className="grid md:grid-cols-2 gap-6 mt-4">
                   <div>
@@ -218,7 +226,7 @@ export function BasicVsEngineeredSection() {
                     <Textarea
                       readOnly
                       value={basicResponse}
-                      className="h-56 bg-card/50 border-0 resize-none text-foreground/90 custom-scrollbar" 
+                      className="h-56 bg-card/50 border-0 resize-none text-foreground/90 custom-scrollbar"
                       placeholder="AI response to basic prompt..."
                     />
                   </div>
@@ -227,7 +235,7 @@ export function BasicVsEngineeredSection() {
                     <Textarea
                       readOnly
                       value={engineeredResponse}
-                      className="h-56 bg-card/50 border-0 resize-none text-foreground/90 custom-scrollbar" 
+                      className="h-56 bg-card/50 border-0 resize-none text-foreground/90 custom-scrollbar"
                       placeholder="AI response to engineered prompt..."
                     />
                   </div>
@@ -245,8 +253,8 @@ export function BasicVsEngineeredSection() {
                         <div className="text-center w-full">
                             <p className="text-sm text-muted-foreground mb-1">Basic Prompt</p>
                             <div className="w-full h-6 bg-destructive/30 rounded-lg overflow-hidden relative">
-                                <div 
-                                    className="h-full bg-destructive transition-all duration-500 ease-out" 
+                                <div
+                                    className="h-full bg-destructive transition-all duration-500 ease-out"
                                     style={{ width: `${Math.max(5, Math.min(100, basicResponseQuality))}%` }}
                                 />
                                 <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-destructive-foreground">
@@ -258,8 +266,8 @@ export function BasicVsEngineeredSection() {
                         <div className="text-center w-full">
                             <p className="text-sm text-muted-foreground mb-1">Engineered Prompt</p>
                             <div className="w-full h-6 bg-[hsl(var(--neon-lime-raw))]/30 rounded-lg overflow-hidden relative">
-                                <div 
-                                    className="h-full bg-[hsl(var(--neon-lime-raw))] transition-all duration-500 ease-out" 
+                                <div
+                                    className="h-full bg-[hsl(var(--neon-lime-raw))] transition-all duration-500 ease-out"
                                     style={{ width: `${Math.max(5, Math.min(100, engineeredResponseQuality))}%` }}
                                 />
                                 <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
@@ -278,7 +286,3 @@ export function BasicVsEngineeredSection() {
     </SectionContainer>
   );
 }
-
-    
-
-    
