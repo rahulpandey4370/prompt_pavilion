@@ -1,17 +1,17 @@
-// 'use server';
-
-/**
- * @fileOverview A live AI response demo flow that compares basic vs engineered prompts using the Gemini 2.0 Flash API.
- *
- * - liveAIResponseDemo - A function that handles the live AI response demo process.
- * - LiveAIResponseDemoInput - The input type for the liveAIResponseDemo function.
- * - LiveAIResponseDemoOutput - The return type for the liveAIResponseDemo function.
- */
 
 'use server';
+/**
+ * @fileOverview Uses Azure OpenAI directly for a live AI response demo.
+ *
+ * - liveAIResponseDemo - Handles the live AI response demo process.
+ * - LiveAIResponseDemoInput - The input type.
+ * - LiveAIResponseDemoOutput - The output type.
+ */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { AzureOpenAI } from 'openai';
+import { z } from 'zod';
+import { config } from 'dotenv';
+config();
 
 const LiveAIResponseDemoInputSchema = z.object({
   basicPrompt: z.string().describe('The basic prompt to be used for comparison.'),
@@ -25,35 +25,50 @@ const LiveAIResponseDemoOutputSchema = z.object({
 });
 export type LiveAIResponseDemoOutput = z.infer<typeof LiveAIResponseDemoOutputSchema>;
 
-export async function liveAIResponseDemo(input: LiveAIResponseDemoInput): Promise<LiveAIResponseDemoOutput> {
-  return liveAIResponseDemoFlow(input);
+const azureApiKey = process.env.AZURE_OPENAI_API_KEY;
+const azureEndpoint = process.env.AZURE_OPENAI_ENDPOINT;
+const azureApiVersion = process.env.AZURE_OPENAI_API_VERSION;
+const azureDeploymentId = process.env.AZURE_OPENAI_CHAT_DEPLOYMENT_ID;
+
+if (!azureApiKey || !azureEndpoint || !azureApiVersion || !azureDeploymentId) {
+  throw new Error('Missing one or more Azure OpenAI environment variables for direct SDK usage.');
 }
 
-const prompt = ai.definePrompt({
-  name: 'liveAIResponseDemoPrompt',
-  input: {
-    schema: LiveAIResponseDemoInputSchema,
-  },
-  output: {
-    schema: LiveAIResponseDemoOutputSchema,
-  },
-  prompt: `You are an AI prompt evaluator. Given a basic prompt and an engineered prompt, evaluate the quality of the responses and return the responses for both prompts.
-
-  Basic Prompt: {{{basicPrompt}}}
-  Engineered Prompt: {{{engineeredPrompt}}}
-
-  Respond with the output from both prompts, making sure to fill out the JSON schema completely.
-  `,
+const azureClient = new AzureOpenAI({
+  apiKey: azureApiKey,
+  endpoint: azureEndpoint,
+  apiVersion: azureApiVersion,
 });
 
-const liveAIResponseDemoFlow = ai.defineFlow(
-  {
-    name: 'liveAIResponseDemoFlow',
-    inputSchema: LiveAIResponseDemoInputSchema,
-    outputSchema: LiveAIResponseDemoOutputSchema,
-  },
-  async input => {
-    const {output} = await prompt(input);
-    return output!;
+async function getAzureOpenAIResponse(promptText: string): Promise<string> {
+  try {
+    const chatCompletion = await azureClient.chat.completions.create({
+      model: azureDeploymentId,
+      messages: [{ role: 'user', content: promptText }],
+    });
+    const responseText = chatCompletion.choices[0]?.message?.content;
+    return typeof responseText === 'string' ? responseText : "AI did not return a valid text response.";
+  } catch (error: any) {
+    console.error("Error getting Azure OpenAI response:", error.message);
+    return `Error generating AI response: ${error.message}`;
   }
-);
+}
+
+export async function liveAIResponseDemo(input: LiveAIResponseDemoInput): Promise<LiveAIResponseDemoOutput> {
+  try {
+    LiveAIResponseDemoInputSchema.parse(input);
+
+    const [basicResponse, engineeredResponse] = await Promise.all([
+      getAzureOpenAIResponse(input.basicPrompt),
+      getAzureOpenAIResponse(input.engineeredPrompt),
+    ]);
+
+    return { basicResponse, engineeredResponse };
+  } catch (error: any) {
+    console.error("Error in liveAIResponseDemo:", error.message);
+    return {
+      basicResponse: `Error: ${error.message}`,
+      engineeredResponse: `Error: ${error.message}`,
+    };
+  }
+}

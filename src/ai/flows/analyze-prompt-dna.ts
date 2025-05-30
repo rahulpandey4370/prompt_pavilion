@@ -1,15 +1,17 @@
 
 'use server';
 /**
- * @fileOverview A Genkit flow to analyze the DNA (structure, components, clarity) of a given prompt.
+ * @fileOverview Uses Azure OpenAI directly to analyze the DNA of a given prompt.
  *
  * - analyzePromptDNA - A function that takes a prompt and returns its analysis.
  * - AnalyzePromptDNAInput - The input type.
  * - AnalyzePromptDNAOutput - The output type.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { AzureOpenAI } from 'openai';
+import { z } from 'zod';
+import { config } from 'dotenv';
+config();
 
 const AnalyzePromptDNAInputSchema = z.object({
   promptText: z.string().describe('The text of the prompt to be analyzed.'),
@@ -32,26 +34,32 @@ const AnalyzePromptDNAOutputSchema = z.object({
 });
 export type AnalyzePromptDNAOutput = z.infer<typeof AnalyzePromptDNAOutputSchema>;
 
-export async function analyzePromptDNA(
-  input: AnalyzePromptDNAInput
-): Promise<AnalyzePromptDNAOutput> {
-  return analyzePromptDNAFlow(input);
+const azureApiKey = process.env.AZURE_OPENAI_API_KEY;
+const azureEndpoint = process.env.AZURE_OPENAI_ENDPOINT;
+const azureApiVersion = process.env.AZURE_OPENAI_API_VERSION;
+const azureDeploymentId = process.env.AZURE_OPENAI_CHAT_DEPLOYMENT_ID;
+
+if (!azureApiKey || !azureEndpoint || !azureApiVersion || !azureDeploymentId) {
+  throw new Error('Missing one or more Azure OpenAI environment variables for direct SDK usage.');
 }
 
-const prompt = ai.definePrompt({
-  name: 'analyzePromptDNAPrompt',
-  input: {schema: AnalyzePromptDNAInputSchema},
-  output: {schema: AnalyzePromptDNAOutputSchema},
-  prompt: `You are an expert AI Prompt Engineer, acting as a "Prompt DNA Analyzer".
+const azureClient = new AzureOpenAI({
+  apiKey: azureApiKey,
+  endpoint: azureEndpoint,
+  apiVersion: azureApiVersion,
+});
+
+const systemPromptForDNAAnalysis = `You are an expert AI Prompt Engineer, acting as a "Prompt DNA Analyzer".
 Your task is to meticulously analyze the provided prompt text and break down its structure.
+You MUST respond with a valid JSON object that strictly adheres to the following Zod schema for the output:
+${JSON.stringify(AnalyzePromptDNAOutputSchema.openapi('AnalyzePromptDNAOutput'))}
 
-Analyze the following prompt:
+Analyze the following prompt text:
 ---
-{{{promptText}}}
+<USER_PROMPT_TEXT_HERE>
 ---
 
-Based on your analysis, provide the following in strict JSON format adhering to the output schema:
-
+Based on your analysis, provide the following in the specified JSON format:
 1.  'overallAssessment': A concise (2-3 sentences) summary of the prompt's structure, completeness, and clarity for guiding an AI.
 2.  'clarityScore': Assign a clarity and effectiveness score. This can be a numerical rating from 1 (Poor) to 10 (Excellent), or a descriptive rating (e.g., "Excellent", "Good", "Fair", "Needs Improvement", "Poor").
 3.  'identifiedComponents': An array. For each of the following standard prompt components, determine if it's present in the analyzed prompt:
@@ -72,26 +80,58 @@ Based on your analysis, provide the following in strict JSON format adhering to 
 5.  'suggestions': A list of 3-5 specific, actionable suggestions for improving the prompt's structure, clarity, or effectiveness. Focus on what could make the prompt guide the AI better towards a desired, high-quality output.
 
 Ensure all fields in the output schema are populated. If a component is not found, 'isPresent' should be false, and 'extractedText' can be omitted or briefly note its absence.
-`,
-});
+Respond ONLY with the JSON object. Do not include any explanatory text before or after the JSON.`;
 
-const analyzePromptDNAFlow = ai.defineFlow(
-  {
-    name: 'analyzePromptDNAFlow',
-    inputSchema: AnalyzePromptDNAInputSchema,
-    outputSchema: AnalyzePromptDNAOutputSchema,
-  },
-  async (input) => {
-    const {output} = await prompt(input);
-    if (!output || !output.clarityScore || !output.identifiedComponents || !output.overallAssessment || !output.strengths || !output.suggestions) {
-      return {
-        overallAssessment: "Could not fully analyze the prompt due to an error or incomplete AI response.",
-        clarityScore: "Error",
-        identifiedComponents: [],
-        strengths: ["Analysis incomplete."],
-        suggestions: ["AI did not return a valid analysis. Please check the prompt or model configuration."],
-      };
+export async function analyzePromptDNA(
+  input: AnalyzePromptDNAInput
+): Promise<AnalyzePromptDNAOutput> {
+  try {
+    AnalyzePromptDNAInputSchema.parse(input);
+
+    const userMessageContent = systemPromptForDNAAnalysis.replace('<USER_PROMPT_TEXT_HERE>', input.promptText);
+
+    const chatCompletion = await azureClient.chat.completions.create({
+      model: azureDeploymentId,
+      messages: [{ role: 'user', content: userMessageContent }],
+      // Consider response_format for models that support it for more reliable JSON
+      // response_format: { type: "json_object" }, // If supported by your deployment & API version
+      temperature: 0.2, // Lower temperature for more deterministic structured output
+    });
+
+    const responseText = chatCompletion.choices[0]?.message?.content;
+
+    if (!responseText) {
+      throw new Error("AI returned an empty response for DNA analysis.");
     }
-    return output;
+
+    // Attempt to parse the JSON response
+    let parsedOutput: AnalyzePromptDNAOutput;
+    try {
+      parsedOutput = JSON.parse(responseText);
+    } catch (e) {
+      console.error("Failed to parse JSON response from AI for DNA analysis:", responseText, e);
+      throw new Error("AI returned an invalid JSON format for DNA analysis. Raw response: " + responseText);
+    }
+    
+    // Validate against Zod schema
+    const validationResult = AnalyzePromptDNAOutputSchema.safeParse(parsedOutput);
+    if (!validationResult.success) {
+        console.error("AI response for DNA analysis failed Zod validation:", validationResult.error.issues);
+        console.error("Problematic AI JSON:", parsedOutput);
+        throw new Error("AI response for DNA analysis did not match the expected structure.");
+    }
+
+    return validationResult.data;
+
+  } catch (error: any) {
+    console.error("Error in analyzePromptDNA:", error.message);
+    // Return a structured error response if appropriate for the frontend
+    return {
+      overallAssessment: "Could not analyze the prompt due to an error.",
+      clarityScore: "Error",
+      identifiedComponents: [],
+      strengths: ["Analysis failed."],
+      suggestions: [`Error during analysis: ${error.message}`],
+    };
   }
-);
+}

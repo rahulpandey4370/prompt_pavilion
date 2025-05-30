@@ -1,14 +1,17 @@
+
 'use server';
 /**
- * @fileOverview A Genkit flow to generate a response from an assembled prompt.
+ * @fileOverview Uses Azure OpenAI directly to generate a response from an assembled prompt.
  *
  * - generateFromAssembledPrompt - A function that takes an assembled prompt and returns an AI response.
  * - GenerateFromAssembledPromptInput - The input type.
  * - GenerateFromAssembledPromptOutput - The output type.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { AzureOpenAI } from 'openai';
+import { z } from 'zod';
+import { config } from 'dotenv';
+config(); // Load environment variables
 
 const GenerateFromAssembledPromptInputSchema = z.object({
   assembledPrompt: z.string().describe('The fully assembled prompt text.'),
@@ -24,33 +27,50 @@ export type GenerateFromAssembledPromptOutput = z.infer<
   typeof GenerateFromAssembledPromptOutputSchema
 >;
 
+const azureApiKey = process.env.AZURE_OPENAI_API_KEY;
+const azureEndpoint = process.env.AZURE_OPENAI_ENDPOINT;
+const azureApiVersion = process.env.AZURE_OPENAI_API_VERSION;
+const azureDeploymentId = process.env.AZURE_OPENAI_CHAT_DEPLOYMENT_ID;
+
+if (!azureApiKey || !azureEndpoint || !azureApiVersion || !azureDeploymentId) {
+  throw new Error('Missing one or more Azure OpenAI environment variables for direct SDK usage.');
+}
+
+const azureClient = new AzureOpenAI({
+  apiKey: azureApiKey,
+  endpoint: azureEndpoint,
+  apiVersion: azureApiVersion,
+});
+
 export async function generateFromAssembledPrompt(
   input: GenerateFromAssembledPromptInput
 ): Promise<GenerateFromAssembledPromptOutput> {
-  return generateFromAssembledPromptFlow(input);
-}
+  try {
+    GenerateFromAssembledPromptInputSchema.parse(input); // Validate input
 
-const prompt = ai.definePrompt({
-  name: 'generateFromAssembledPromptPrompt',
-  input: {schema: GenerateFromAssembledPromptInputSchema},
-  output: {schema: GenerateFromAssembledPromptOutputSchema},
-  prompt: `{{{assembledPrompt}}}`, // Directly use the assembled prompt
-});
+    const chatCompletion = await azureClient.chat.completions.create({
+      model: azureDeploymentId, // Your Azure deployment ID (e.g., "gpt-4o")
+      messages: [{ role: 'user', content: input.assembledPrompt }],
+      // Add other parameters like temperature, max_tokens if needed
+      // temperature: 0.7,
+      // max_tokens: 800,
+    });
 
-const generateFromAssembledPromptFlow = ai.defineFlow(
-  {
-    name: 'generateFromAssembledPromptFlow',
-    inputSchema: GenerateFromAssembledPromptInputSchema,
-    outputSchema: GenerateFromAssembledPromptOutputSchema,
-  },
-  async input => {
-    const {output} = await prompt(input);
-    // Ensure output and response are not null/undefined
-    if (!output || typeof output.response !== 'string') {
-      // throw new Error('AI did not return a valid response.');
-      // Return a structured error or a default response if necessary
-      return { response: "AI did not return a structured response. Please check the prompt or model configuration." };
+    const responseText = chatCompletion.choices[0]?.message?.content;
+
+    if (typeof responseText !== 'string') {
+      console.error('Azure OpenAI response content is not a string:', chatCompletion.choices[0]);
+      return { response: "AI did not return a valid text response. The response might be empty or in an unexpected format." };
     }
-    return output;
+
+    return { response: responseText };
+
+  } catch (error: any) {
+    console.error("Error calling Azure OpenAI in generateFromAssembledPrompt:", error.message);
+    if (error.response) {
+      console.error("Azure OpenAI API Error Details:", error.response.data);
+    }
+    // Provide a more user-friendly error message or re-throw if needed
+    return { response: `Error generating response from AI: ${error.message}` };
   }
-);
+}
