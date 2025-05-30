@@ -44,11 +44,17 @@ const azureClient = new AzureOpenAI({
   apiVersion: azureApiVersion,
 });
 
+const improvePromptSuggestionsOutputDescription = `
+The expected JSON output structure is:
+{
+  "suggestions": ["string", "string", "..."] (An array of 3-5 actionable suggestions for improving the prompt.)
+}`;
+
 const systemPromptForSuggestions = `You are an AI prompt engineering expert.
 Your task is to analyze the given user prompt and provide 3-5 specific, actionable suggestions for improving its clarity, effectiveness, and ability to guide an AI towards a desired, high-quality output.
 Focus on aspects like specificity, context, constraints, examples, role definition, and output formatting.
-You MUST respond with a valid JSON object that strictly adheres to the following Zod schema for the output:
-${JSON.stringify(ImprovePromptSuggestionsOutputSchema.openapi('ImprovePromptSuggestionsOutput'))}
+You MUST respond with a valid JSON object that strictly adheres to the following JSON structure description for the output:
+${improvePromptSuggestionsOutputDescription}
 
 User's prompt to improve:
 ---

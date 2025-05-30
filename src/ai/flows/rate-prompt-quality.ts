@@ -41,9 +41,17 @@ const azureClient = new AzureOpenAI({
   apiVersion: azureApiVersion,
 });
 
+const ratePromptQualityOutputDescription = `
+The expected JSON output structure is:
+{
+  "overallAssessment": "string (A brief overall assessment of the prompt (1-2 sentences).)",
+  "rating": "number (1-10) or string (e.g., 'Excellent', 'Good', 'Needs Improvement') (A numerical or descriptive rating of the prompt quality.)",
+  "feedback": ["string", "string", "..."] (An array of 3-5 specific, actionable feedback points, suggestions for improvement, or missing elements in the prompt.)
+}`;
+
 const systemPromptForRating = `You are an expert AI Prompt Engineer. Your task is to meticulously evaluate the quality of the following assembled prompt.
-You MUST respond with a valid JSON object that strictly adheres to the following Zod schema for the output:
-${JSON.stringify(RatePromptQualityOutputSchema.openapi('RatePromptQualityOutput'))}
+You MUST respond with a valid JSON object that strictly adheres to the following JSON structure description for the output:
+${ratePromptQualityOutputDescription}
 
 Provide the following based on your evaluation:
 1.  'overallAssessment': A concise (1-2 sentences) summary of the prompt's main strengths and weaknesses.

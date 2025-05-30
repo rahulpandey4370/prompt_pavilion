@@ -49,10 +49,28 @@ const azureClient = new AzureOpenAI({
   apiVersion: azureApiVersion,
 });
 
+const analyzePromptDNAOutputDescription = `
+The expected JSON output structure is:
+{
+  "overallAssessment": "string (A concise 2-3 sentences overall assessment of the prompt's structure, completeness, and clarity for guiding an AI.)",
+  "clarityScore": "number (1-10) or string (e.g., 'Excellent', 'Good', 'Fair', 'Needs Improvement', 'Poor') (A numerical or descriptive rating of the prompt's overall clarity and effectiveness.)",
+  "identifiedComponents": [
+    {
+      "componentName": "string (Name of the identified prompt component e.g., 'System Instructions', 'User Task', 'Context/RAG', 'Examples (Few-shot)', 'Constraints/Rules', 'Guardrails/Safety', 'Tool Definition', 'Output Format Specifier').",
+      "extractedText": "string (optional) (The text segment identified for this component. May be omitted if not clearly present.)",
+      "isPresent": "boolean (Whether this type of component was clearly identified or seems to be present.)",
+      "assessment": "string (optional) (A brief assessment of this component's quality or impact, or a note if it's missing but recommended.)"
+    }
+    // ... more components if identified
+  ],
+  "strengths": ["string", "string", "..."] (A list of 2-3 key strengths or well-implemented aspects of the prompt.),
+  "suggestions": ["string", "string", "..."] (A list of 3-5 specific, actionable suggestions for improving the prompt's structure, clarity, or effectiveness.)
+}`;
+
 const systemPromptForDNAAnalysis = `You are an expert AI Prompt Engineer, acting as a "Prompt DNA Analyzer".
 Your task is to meticulously analyze the provided prompt text and break down its structure.
-You MUST respond with a valid JSON object that strictly adheres to the following Zod schema for the output:
-${JSON.stringify(AnalyzePromptDNAOutputSchema.openapi('AnalyzePromptDNAOutput'))}
+You MUST respond with a valid JSON object that strictly adheres to the following JSON structure description for the output:
+${analyzePromptDNAOutputDescription}
 
 Analyze the following prompt text:
 ---
