@@ -3,42 +3,42 @@
 
 import { SectionContainer } from "@/components/shared/section-container";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
-import Link from "next/link"; // Added Link import
-import { Newspaper, PenTool, BrainCircuit, BookOpen, Cloud, FileText } from "lucide-react"; // Added new icons
+import Link from "next/link";
+import { BookOpen, Cloud, FileText } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 interface Article {
   title: string;
   summary: string;
-  aiHint: string;
-  icon: LucideIcon;
-  category: string;
-  externalUrl?: string; // Added for external links
+  // aiHint: string; // Removed as it's no longer used in rendering
+  icon: LucideIcon; // Keeping icon for potential future use, but won't render it for now
+  // category: string; // Removed as it's no longer rendered
+  externalUrl?: string;
 }
 
 const articles: Article[] = [
   {
     title: "Anthropic: Prompt Engineering Overview",
     summary: "Learn core concepts and techniques for effective prompt engineering with Claude, directly from Anthropic's official documentation. Covers basics, examples, and advanced strategies.",
-    aiHint: "AI documentation",
+    // aiHint: "AI documentation",
     icon: BookOpen,
-    category: "Official Guide",
+    // category: "Official Guide",
     externalUrl: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview",
   },
   {
     title: "Google Cloud: What is Prompt Engineering?",
     summary: "Google Cloud's explanation of prompt engineering, its importance in generative AI, techniques, and best practices for designing effective prompts for large language models.",
-    aiHint: "cloud learning",
+    // aiHint: "cloud learning",
     icon: Cloud,
-    category: "Conceptual Overview",
+    // category: "Conceptual Overview",
     externalUrl: "https://cloud.google.com/discover/what-is-prompt-engineering",
   },
   {
     title: "OpenAI: Text Generation Guide",
     summary: "OpenAI's guide on working with their text generation models, including tips for crafting effective prompts, managing responses, and understanding model capabilities.",
-    aiHint: "API guide",
+    // aiHint: "API guide",
     icon: FileText,
-    category: "API Documentation",
+    // category: "API Documentation",
     externalUrl: "https://platform.openai.com/docs/guides/text?api-mode=responses",
   },
 ];
@@ -49,19 +49,22 @@ export function ArticlesSection() {
       id="articles"
       title="Prompt Engineering Articles & Resources"
       subtitle="Expand your knowledge with our curated collection of insights, tips, and best practices in prompt engineering."
+      isContainedCard={true}
+      className="!py-12 md:!py-16"
     >
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {articles.map((article, index) => (
           <GlassCard key={index} className="flex flex-col hover:scale-105 transition-transform duration-200 ease-in-out article-card-border">
             {article.externalUrl ? ( 
               <Link href={article.externalUrl} target="_blank" rel="noopener noreferrer" className="flex flex-col h-full p-6">
-                  data-ai-hint={article.aiHint}
-                />
-                <GlassCardHeader>
+                {/* Removed image placeholder and data-ai-hint */}
+                <GlassCardHeader className="pt-0">
+                  {/* Removed category and icon display
                   <div className="flex items-center text-sm text-primary mb-1">
                     <article.icon className="w-4 h-4 mr-2" />
                     {article.category}
                   </div>
+                  */}
                   <GlassCardTitle className="!text-xl text-neon-yellow">{article.title}</GlassCardTitle>
                 </GlassCardHeader>
                 <GlassCardContent className="flex-grow">
@@ -70,13 +73,14 @@ export function ArticlesSection() {
               </Link>
             ) : (
               <div className="flex flex-col h-full p-6">
-                  data-ai-hint={article.aiHint}
-                />
-                <GlassCardHeader>
+                {/* Removed image placeholder and data-ai-hint */}
+                <GlassCardHeader className="pt-0">
+                  {/* Removed category and icon display
                   <div className="flex items-center text-sm text-primary mb-1">
                     <article.icon className="w-4 h-4 mr-2" />
                     {article.category}
                   </div>
+                  */}
                   <GlassCardTitle className="!text-xl text-neon-yellow">{article.title}</GlassCardTitle>
                 </GlassCardHeader>
                 <GlassCardContent className="flex-grow">
