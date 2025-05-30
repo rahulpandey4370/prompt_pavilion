@@ -52,7 +52,7 @@ export function SectionContainer({
           <AnimatedTitle
             as="h2"
             className={cn(
-              "text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-foreground font-title",
+              "text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-foreground", // Removed font-title
               titleClassName
             )}
           >
