@@ -35,7 +35,7 @@ export function SectionContainer({
       className={cn(
         "flex flex-col justify-center items-center overflow-hidden",
         isContainedCard 
-          ? "my-10 md:my-16 w-full" // Removed border-2 border-primary rounded-2xl shadow-2xl
+          ? "my-10 md:my-16 w-full" 
           : "py-16 md:py-24 min-h-[90vh] w-full", 
         isContainedCard ? "!py-12 md:!py-16" : "", 
         className
@@ -45,7 +45,7 @@ export function SectionContainer({
       <div className={cn(
         "w-full h-full", 
         isContainedCard 
-          ? "bg-[hsl(var(--background-card-container-raw))] max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-10 md:py-12 rounded-[calc(var(--radius)+0.3rem)] shadow-2xl" // Retained shadow for depth
+          ? "bg-[hsl(var(--background-card-container-raw))] max-w-screen-2xl mx-auto px-6 sm:px-10 lg:px-16 py-10 md:py-12 rounded-[calc(var(--radius)+0.3rem)] shadow-2xl"
           : "w-full px-6 sm:px-10 lg:px-16"
       )}
       >
@@ -53,7 +53,7 @@ export function SectionContainer({
           <AnimatedTitle
             as="h2"
             className={cn(
-              "text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-foreground",
+              "text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-6 text-foreground",
               titleClassName
             )}
           >

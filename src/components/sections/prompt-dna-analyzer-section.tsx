@@ -67,8 +67,8 @@ export function PromptDNAAnalyzerSection() {
       title="Prompt DNA Analyzer"
       subtitle="Paste any text prompt to see its 'genetic makeup'. Get an AI-powered breakdown of its components, clarity, strengths, and areas for improvement."
     >
-      <div className="bg-card p-6 yellow-glowing-box rounded-lg w-full max-w-5xl mx-auto"> {/* Added yellow-glowing-box and bg-card */}
-        <GlassCard className="w-full !shadow-none !border-none !bg-transparent !p-0"> {/* Removed card-neon-animated-border, shadow, border, padding */}
+      <div className="bg-card p-6 yellow-glowing-box rounded-lg w-full max-w-screen-2xl mx-auto">
+        <GlassCard className="w-full !shadow-none !border-none !bg-transparent !p-0">
           <GlassCardHeader className="pb-3">
             <GlassCardTitle className="text-neon-yellow flex items-center">
               <Fingerprint className="mr-2" /> Analyze Your Prompt's DNA
@@ -80,14 +80,14 @@ export function PromptDNAAnalyzerSection() {
               rows={8}
               value={promptText}
               onChange={(e) => setPromptText(e.target.value)}
-              className="mb-4 bg-background/30 border-neon-yellow/50 focus:ring-neon-yellow text-base text-foreground/90" /* Adjusted styles */
+              className="mb-4 bg-background/30 border-neon-yellow/50 focus:ring-neon-yellow text-base text-foreground/90"
             />
             <div className="flex justify-center">
               <Button 
                 onClick={handleAnalyzePrompt} 
                 disabled={mutation.isPending}
                 size="lg"
-                className="bg-neon-yellow hover:bg-neon-yellow/90 text-neon-yellow-foreground" /* Use neon-yellow */
+                className="bg-neon-yellow hover:bg-neon-yellow/90 text-neon-yellow-foreground"
               >
                 {mutation.isPending ? (
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" />
