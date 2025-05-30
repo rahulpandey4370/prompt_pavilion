@@ -18,8 +18,7 @@ export default function HomePage() {
       <PromptDNAAnalyzerSection />
       <AdvancedTechniquesSection />
       <ArticlesSection />
-      {/* Dummy section to ensure scrolling for all nav links */}
-      <div id="final-spacer" style={{ height: '50vh' }} className="bg-background"></div>
+      {/* The 50vh spacer div previously here has been removed */}
     </>
   );
 }
