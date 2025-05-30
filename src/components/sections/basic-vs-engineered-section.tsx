@@ -27,11 +27,8 @@ const playgroundScenarios: PlaygroundScenario[] = [
     name: "Restaurant Assistant",
     icon: UtensilsCrossed,
     basicPrompt: "Suggest a good Italian restaurant nearby.",
-    engineeredPrompt: `System: You are a helpful local guide AI. Your goal is to provide specific, actionable, and highly relevant restaurant recommendations based on all user-stated criteria.
-
-User: Suggest a good Italian restaurant nearby.
-
-Constraints & Context:
+    engineeredPrompt: `System: You are a helpful local guide AI. Your goal is to provide specific, actionable, and highly relevant restaurant recommendations.
+Please consider the following user criteria:
 - Cuisine: Italian
 - Location: Downtown San Francisco
 - Occasion: Family-friendly dinner
@@ -40,82 +37,69 @@ Constraints & Context:
 - Quality: Average rating of at least 4 stars
 - Budget: Moderate ($$-$$$)
 
-Output Format:
-Provide 2-3 distinct suggestions. For each restaurant:
+Your output should be a numbered list of 2-3 distinct suggestions. For each restaurant, provide:
 1. Name and a brief (1-2 sentences) description.
 2. Full Address.
 3. Clearly state how it meets EACH of the specified criteria (Cuisine, Location, Occasion, Time, Dietary, Quality, Budget).
-Respond as a numbered list.`,
+
+User: Suggest a good Italian restaurant nearby.`,
   },
   {
     id: "study-buddy",
     name: "Study Buddy - History",
     icon: BookOpen,
     basicPrompt: "Tell me about World War 2.",
-    engineeredPrompt: `System: You are an expert history tutor AI. Your specialty is explaining complex historical events to high school students in a clear, engaging, and easy-to-understand manner.
-
-User: Tell me about World War 2.
-
-Specific Focus Areas for this Explanation:
+    engineeredPrompt: `System: You are an expert history tutor AI, skilled at explaining complex events to high school students clearly and engagingly.
+Please focus on these areas for the explanation:
 1. The main causes of World War 2.
-2. Specifically elaborate on:
-    a. The Treaty of Versailles and its impact.
-    b. The rise of fascism in Europe (Germany, Italy).
-    c. The failure of the League of Nations.
-3. Key dates for major events mentioned.
+2. Specifically elaborate on: The Treaty of Versailles and its impact, the rise of fascism in Europe (Germany, Italy), and the failure of the League of Nations.
+3. Include key dates for major events.
 
-Output Requirements:
-- Explanation Length: Approximately 3-4 paragraphs.
-- Language: Clear, concise, and suitable for a high school student.
-- Structure: Logically organized, addressing each focus area.`,
+Output should be approximately 3-4 paragraphs, in clear language for a high school student, and logically structured.
+
+User: Tell me about World War 2.`,
   },
   {
     id: "code-explainer",
     name: "Code Explainer - Python",
     icon: Bot, 
     basicPrompt: "What does this Python code do: `print('Hello')`?",
-    engineeredPrompt: `System: You are an expert Python programming assistant AI. Your objective is to provide crystal-clear, line-by-line explanations of Python code snippets. For each snippet, detail its purpose, expected output, and any relevant best practices or potential pitfalls for beginner to intermediate Python developers.
-
-User: What does this Python code do: \`print('Hello')\`?
-
-Output Format (Strict Markdown):
+    engineeredPrompt: `System: You are an expert Python programming assistant AI. Provide clear, line-by-line explanations for Python code snippets, detailing purpose, output, and best practices for beginner/intermediate developers.
+Use the following strict Markdown format for your response:
 ### Code Snippet
 \`\`\`python
 # [User's code snippet will be here]
 \`\`\`
-
 ### Explanation
-- [Detailed line-by-line explanation of what the code does]
-- [Purpose of the overall snippet]
-
+- [Detailed line-by-line explanation]
+- [Overall purpose of the snippet]
 ### Expected Output
 \`\`\`
-# [Show the exact output if the code were run]
+# [Exact output if run]
 \`\`\`
-
 ### Notes / Best Practices
-- [Any relevant notes, alternative approaches, or best practices related to the code or concepts used]`,
+- [Relevant notes, alternatives, or best practices]
+
+User: What does this Python code do: \`print('Hello')\`?`,
   },
   {
     id: "erp-feature-explanation",
     name: "ERP Module Feature Explanation",
     icon: FileText,
     basicPrompt: "Explain the inventory management module.",
-    engineeredPrompt: `System: You are an AI training assistant for 'InnovateERP', a comprehensive enterprise resource planning system. Your primary goal is to clearly explain ERP module features to new users who may not be familiar with ERP jargon. Use simple language and provide a tangible real-world benefit for each feature mentioned. Structure your response clearly.
+    engineeredPrompt: `System: You are 'InnovateERP Helper', an AI training assistant. Your role is to explain ERP module features to new users clearly, using simple language, and providing tangible benefits for each feature.
+Specifically for a newly hired warehouse supervisor, explain these 'Inventory Management' module features:
+1. Real-time Stock Level Tracking.
+2. Automated Reorder Point (ROP) Calculations.
+3. Batch and Serial Number Traceability.
+4. Kitting and Assembly Management.
 
-User: Explain the inventory management module.
+For each feature, provide:
+a. A brief (1-2 sentences) explanation.
+b. Its primary benefit to a warehouse supervisor.
+Format your response using Markdown, with each functionality as an H3 heading.
 
-Specific Focus Areas (for a newly hired warehouse supervisor):
-1.  Real-time Stock Level Tracking.
-2.  Automated Reorder Point (ROP) Calculations.
-3.  Batch and Serial Number Traceability.
-4.  Kitting and Assembly Management.
-
-Output Requirements:
-For each of the four functionalities listed above, please provide:
-a.  A brief (1-2 sentences) explanation of what it is.
-b.  Its primary benefit to a warehouse supervisor in managing the warehouse efficiently.
-Format your response using Markdown, with each functionality as an H3 heading.`,
+User: Explain the inventory management module.`,
   },
 ];
 
@@ -311,6 +295,3 @@ export function BasicVsEngineeredSection() {
     </SectionContainer>
   );
 }
-
-
-    
