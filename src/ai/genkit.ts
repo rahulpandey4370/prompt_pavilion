@@ -1,62 +1,65 @@
+
 'use server';
 /**
  * @fileOverview Initializes and configures the Genkit AI instance with Azure OpenAI
- * using the genkitx-azure-openai community plugin.
+ * using the community genkitx-azure-openai plugin.
  */
 
 import {genkit} from 'genkit';
-import {azureOpenAI} from 'genkitx-azure-openai'; // Community plugin
+import {azureOpenAI} from 'genkitx-azure-openai';
 import {config} from 'dotenv';
 config(); // Load environment variables from .env file
 
-// Validate essential environment variables for Azure OpenAI
-if (!process.env.AZURE_OPENAI_ENDPOINT) {
-  throw new Error('Missing environment variable: AZURE_OPENAI_ENDPOINT');
-}
-if (!process.env.AZURE_OPENAI_API_KEY) {
+// Load and validate essential environment variables for Azure OpenAI
+const apiKey = process.env.AZURE_OPENAI_API_KEY;
+const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
+const apiVersion = process.env.AZURE_OPENAI_API_VERSION;
+const chatDeployment = process.env.AZURE_OPENAI_CHAT_DEPLOYMENT_ID;
+const embeddingDeployment = process.env.AZURE_OPENAI_EMBEDDING_DEPLOYMENT_ID; // Optional for embeddings
+
+if (!apiKey) {
   throw new Error('Missing environment variable: AZURE_OPENAI_API_KEY');
 }
-if (!process.env.AZURE_OPENAI_CHAT_DEPLOYMENT_ID) {
+if (!endpoint) {
+  throw new Error('Missing environment variable: AZURE_OPENAI_ENDPOINT');
+}
+if (!apiVersion) {
+  throw new Error('Missing environment variable: AZURE_OPENAI_API_VERSION');
+}
+if (!chatDeployment) {
   throw new Error(
     'Missing environment variable: AZURE_OPENAI_CHAT_DEPLOYMENT_ID for the chat model'
   );
 }
-const apiVersion = process.env.AZURE_OPENAI_API_VERSION;
-if (!apiVersion) {
-  throw new Error(
-    'Missing environment variable: AZURE_OPENAI_API_VERSION'
-  );
-}
 
-// Options for the genkitx-azure-openai plugin.
-// Temporarily removing modelDeploymentMap to diagnose "plugin is not a function" error.
-const pluginOptions: {
-  apiKey: string;
-  endpoint: string;
-  apiVersion: string;
-  deployment?: string; // For embeddings, optional
-} = {
-    apiKey: process.env.AZURE_OPENAI_API_KEY!,
-    endpoint: process.env.AZURE_OPENAI_ENDPOINT!,
-    apiVersion: apiVersion,
-  };
+// This identifier should match a model family supported by the plugin/Azure, 
+// e.g., 'gpt-3.5-turbo', 'gpt-4', 'gpt-4o'.
+// Adjust this if your AZURE_OPENAI_CHAT_DEPLOYMENT_ID is for a different model type.
+const chatModelIdentifier = 'gpt-3.5-turbo'; 
 
-// Conditionally add the 'deployment' field if an embedding model deployment ID is provided.
-// This 'deployment' field in genkitx-azure-openai is for a default embedding model.
-if (process.env.AZURE_OPENAI_EMBEDDING_DEPLOYMENT_ID) {
-  pluginOptions.deployment = process.env.AZURE_OPENAI_EMBEDDING_DEPLOYMENT_ID;
+const pluginOptions: any = {
+  apiKey: apiKey!,
+  endpoint: endpoint!,
+  apiVersion: apiVersion!,
+  modelDeploymentMap: {
+    [chatModelIdentifier]: chatDeployment!,
+  },
+};
+
+if (embeddingDeployment) {
+  // The 'deployment' field in genkitx-azure-openai plugin options is typically for a default/embedding deployment.
+  pluginOptions.deployment = embeddingDeployment;
 } else {
   console.warn(
     "Optional environment variable AZURE_OPENAI_EMBEDDING_DEPLOYMENT_ID is not set. " +
-    "If you plan to use embedding models with this plugin, ensure this variable is configured."
+    "If you plan to use embedding models with this plugin, ensure this variable is configured and the plugin uses it as its default 'deployment'."
   );
 }
 
 export const ai = genkit({
   plugins: [
-    azureOpenAI(pluginOptions),
+    azureOpenAI(pluginOptions)
   ],
-  // If modelDeploymentMap is removed from pluginOptions,
-  // try setting the model directly to the Azure deployment ID.
-  model: process.env.AZURE_OPENAI_CHAT_DEPLOYMENT_ID!,
+  // Use the string identifier that is mapped in modelDeploymentMap
+  model: chatModelIdentifier, 
 });
