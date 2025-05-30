@@ -24,42 +24,46 @@ interface PlaygroundScenario {
 const playgroundScenarios: PlaygroundScenario[] = [
   {
     id: "restaurant-assistant",
-    name: "Restaurant Assistant (Generic)",
+    name: "Restaurant Assistant",
     icon: UtensilsCrossed,
     basicPrompt: "Suggest a good Italian restaurant nearby.",
-    engineeredPrompt: "System: You are a helpful local guide AI. User: I'm looking for a family-friendly Italian restaurant in downtown San Francisco that's open for dinner around 7 PM tonight, has vegetarian options, and an average rating of at least 4 stars. My budget is moderate ($$-$$$). Please provide 2-3 suggestions with a brief description, address, and why it fits my criteria. Format as a numbered list.",
+    engineeredPrompt: `System: You are a helpful local guide AI designed to provide specific and actionable restaurant recommendations.
+User: Suggest a good Italian restaurant nearby.
+Constraints: I need a family-friendly Italian restaurant in downtown San Francisco. It must be open for dinner around 7 PM tonight. Vegetarian options are essential. It should have an average rating of at least 4 stars. My budget is moderate ($$-$$$).
+Output Format: Provide 2-3 suggestions. For each, include a brief description (1-2 sentences), its address, and clearly state why it fits all the specified criteria. Respond as a numbered list.`,
   },
   {
     id: "study-buddy",
-    name: "Study Buddy - History (Generic)",
+    name: "Study Buddy - History",
     icon: BookOpen,
     basicPrompt: "Tell me about World War 2.",
-    engineeredPrompt: "System: You are a history tutor AI. User: Explain the main causes of World War 2 for a high school student. Focus on the Treaty of Versailles, rise of fascism, and failure of the League of Nations. Keep the explanation concise (around 3-4 paragraphs) and easy to understand. Provide key dates for major events mentioned.",
+    engineeredPrompt: `System: You are a history tutor AI, skilled at explaining complex topics clearly for high school students.
+User: Tell me about World War 2.
+Contextual Focus: Explain the main causes of World War 2. Specifically focus on the Treaty of Versailles, the rise of fascism, and the failure of the League of Nations.
+Output Requirements: Keep the explanation concise (around 3-4 paragraphs) and easy to understand. Provide key dates for major events mentioned.`,
   },
   {
     id: "code-explainer",
-    name: "Code Explainer - Python (Generic)",
+    name: "Code Explainer - Python",
     icon: Bot, 
     basicPrompt: "What does this Python code do: `print('Hello')`?",
-    engineeredPrompt: "System: You are an expert Python programming assistant. User: Explain the following Python code snippet line by line, including its purpose and expected output. Identify any potential improvements or common pitfalls related to this type of code. Code: \n```python\ndef greet(name):\n  return f\"Hello, {name}!\"\n\nmessage = greet(\"Alice\")\nprint(message)\n```\nRespond in Markdown.",
+    engineeredPrompt: `System: You are an expert Python programming assistant. Your goal is to provide clear, line-by-line explanations of Python code, detailing its purpose, expected output, and any relevant best practices or potential pitfalls.
+User: What does this Python code do: \`print('Hello')\`?
+Output Format: Respond in Markdown. Include a section for "Explanation", "Expected Output", and "Notes/Best Practices".`,
   },
   {
     id: "erp-feature-explanation",
-    name: "ERP Module Feature Explanation (Business)",
+    name: "ERP Module Feature Explanation",
     icon: FileText,
     basicPrompt: "Explain the inventory management module.",
     engineeredPrompt: `System: You are an AI training assistant for 'InnovateERP', a comprehensive enterprise resource planning system. Your primary goal is to clearly explain ERP module features to new users who may not be familiar with ERP jargon. Use simple language and provide a tangible real-world benefit for each feature mentioned. Structure your response clearly.
-
-User: I'm a newly hired warehouse supervisor starting to use InnovateERP. Can you explain the core functionalities of the 'Inventory Management' module? Specifically, I need to understand:
+User: Explain the inventory management module.
+Specific Focus Areas: I'm a newly hired warehouse supervisor. Can you explain the core functionalities? Specifically, I need to understand:
 1. Real-time Stock Level Tracking.
 2. Automated Reorder Point (ROP) Calculations.
 3. Batch and Serial Number Traceability.
 4. Kitting and Assembly Management.
-
-For each functionality, please provide:
-- A brief (1-2 sentences) explanation of what it is.
-- Its primary benefit to me in managing the warehouse efficiently.
-Format your response using Markdown, with each functionality as an H3 heading.`
+Output Requirements: For each functionality, please provide a brief (1-2 sentences) explanation of what it is, and its primary benefit to me in managing the warehouse efficiently. Format your response using Markdown, with each functionality as an H3 heading.`
   },
 ];
 
@@ -116,8 +120,6 @@ export function BasicVsEngineeredSection() {
 
   const CurrentDisplayIcon = currentScenario.icon || HelpCircle;
   
-  // Placeholder quality scores - these are not dynamically calculated by AI in this version.
-  // They are illustrative, assuming the engineered prompt generally yields better (e.g., longer, more structured) responses.
   const basicResponseQuality = mutation.data?.basicResponse ? Math.min(100, (mutation.data.basicResponse.length / 500) * 60 + 10) : 10;
   const engineeredResponseQuality = mutation.data?.engineeredResponse ? Math.min(100, (mutation.data.engineeredResponse.length / 500) * 80 + 20) : 85;
 
@@ -255,3 +257,6 @@ export function BasicVsEngineeredSection() {
     </SectionContainer>
   );
 }
+
+
+    
