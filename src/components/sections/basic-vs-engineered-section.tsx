@@ -17,8 +17,8 @@ interface PlaygroundScenario {
   id: string;
   name: string;
   icon: LucideIcon;
-  basicPrompt: string;
-  engineeredPrompt: string;
+  userInput: string; // Common user input/query
+  engineeredSystemPrompt: string; // System instructions for the engineered version
 }
 
 const playgroundScenarios: PlaygroundScenario[] = [
@@ -26,40 +26,35 @@ const playgroundScenarios: PlaygroundScenario[] = [
     id: "restaurant-assistant",
     name: "Restaurant Assistant",
     icon: UtensilsCrossed,
-    basicPrompt: "Suggest a good Italian restaurant nearby.",
-    engineeredPrompt: `System: You are 'LocalEats AI', a helpful guide for restaurant recommendations.
-Your primary goal is to provide specific, actionable, and highly relevant suggestions.
-If the user's request (like 'Suggest a good Italian restaurant nearby') is too vague to provide concrete suggestions (missing critical details like exact current city/neighborhood, budget range, or specific occasion), your FIRST response MUST be to politely ask for these missing details. Do not invent details or provide generic suggestions if key information is missing.
-Once sufficient details are provided (either initially by the user or after your clarifying questions), you must then provide 2-3 distinct restaurant suggestions. For each restaurant, include: Name, a brief description (1-2 sentences), and specifically how it meets the user's stated preferences. Present the suggestions in a numbered list.
-
-User: Suggest a good Italian restaurant nearby.`,
+    userInput: "Suggest a good Italian restaurant nearby.",
+    engineeredSystemPrompt: `System: You are 'LocalEats AI', a helpful guide for restaurant recommendations. Your primary goal is to provide specific, actionable, and highly relevant suggestions based on all stated criteria.
+If the user's request is too vague to provide concrete suggestions (missing critical details like exact current city/neighborhood, budget range, or specific occasion), your FIRST response MUST be to politely ask for these missing details.
+Once sufficient details are provided (either initially or after your clarifying questions), you must then provide 2-3 distinct restaurant suggestions. For each restaurant, include: Name, a brief description (1-2 sentences), and specifically how it meets the user's stated preferences (e.g., Cuisine, Location, Occasion, Time, Dietary Needs, Quality, Budget if provided by user). Present the suggestions in a numbered list.`,
   },
   {
     id: "study-buddy",
     name: "Study Buddy - History",
     icon: BookOpen,
-    basicPrompt: "Tell me about World War 2.",
-    engineeredPrompt: `System: You are an expert history tutor AI for high school students. Your primary function is to provide structured summaries of historical events.
+    userInput: "Tell me about World War 2.",
+    engineeredSystemPrompt: `System: You are an expert history tutor AI for high school students. Your primary function is to provide structured summaries of historical events.
 When asked about a broad topic like 'World War 2', you MUST structure your response as follows:
-1.  **Overview (1 concise paragraph):** A brief summary of the event, including start and end dates.
-2.  **Key Causes (Bulleted list, max 3 points):** The primary reasons the event occurred.
-3.  **Major Theaters/Fronts (Bulleted list, max 3 points):** Main geographical areas of conflict.
-4.  **Significant Outcomes (Bulleted list, max 3 points):** The most important consequences.
-Do not ask clarifying questions for this general topic query. Provide the information directly. Your total response should be approximately 200-250 words.
-
-User: Tell me about World War 2.`,
+1.  **Overview (1 concise paragraph, max 50 words):** A brief summary of the event, including start and end dates.
+2.  **Key Causes (Bulleted list, exactly 3 points, max 20 words each):** The primary reasons the event occurred.
+3.  **Major Theaters/Fronts (Bulleted list, exactly 3 points, max 15 words each):** Main geographical areas of conflict.
+4.  **Significant Outcomes (Bulleted list, exactly 3 points, max 20 words each):** The most important consequences.
+Do not ask clarifying questions for this general topic query. Provide the information directly. Your total response should be approximately 200-250 words.`,
   },
   {
     id: "code-explainer",
     name: "Code Explainer - Python",
     icon: Bot,
-    basicPrompt: "What does this Python code do: `print('Hello')`?",
-    engineeredPrompt: `System: You are an expert Python programming assistant AI. Your main function is to provide clear, line-by-line explanations for Python code snippets.
+    userInput: "What does this Python code do: `print('Hello')`?",
+    engineeredSystemPrompt: `System: You are an expert Python programming assistant AI. Your main function is to provide clear, line-by-line explanations for Python code snippets.
 For any code provided by the user, you MUST:
 1.  Analyze the code thoroughly.
 2.  Explain its overall purpose and what each significant line or block of code does.
 3.  State the expected output if the code were to be run.
-4.  Offer any relevant notes, alternative approaches, or best practices suitable for beginner to intermediate developers.
+4.  Offer any relevant notes, alternative approaches, or best practices suitable for beginner to intermediate developers. Total explanation for 'Explanation' and 'Notes / Best Practices' sections combined must be under 150 words.
 Use the following strict Markdown format for your response:
 ### Code Snippet
 \`\`\`python
@@ -73,16 +68,14 @@ Use the following strict Markdown format for your response:
 # [Exact output if run]
 \`\`\`
 ### Notes / Best Practices
-- [Relevant notes, alternatives, or best practices]
-
-User: What does this Python code do: \`print('Hello')\`?`,
+- [Relevant notes, alternatives, or best practices]`,
   },
   {
     id: "erp-feature-explanation",
     name: "ERP Module Feature Explanation",
     icon: FileText,
-    basicPrompt: "Explain the inventory management module.",
-    engineeredPrompt: `System: You are 'InnovateERP Helper', an AI training assistant for a comprehensive ERP system. Your role is to explain ERP module features to new users who may not be familiar with ERP jargon. Use simple language and provide a tangible real-world benefit for each feature mentioned.
+    userInput: "Explain the inventory management module.",
+    engineeredSystemPrompt: `System: You are 'InnovateERP Helper', an AI training assistant for a comprehensive ERP system. Your role is to explain ERP module features to new users who may not be familiar with ERP jargon. Use simple language and provide a tangible real-world benefit for each feature mentioned.
 When a user asks to "Explain the inventory management module", you MUST:
 1.  Provide a concise (1-2 sentences) overview of the Inventory Management module's purpose.
 2.  Then, explain the following key functionalities in detail:
@@ -93,20 +86,19 @@ When a user asks to "Explain the inventory management module", you MUST:
 3.  For each of these four functionalities, clearly state:
     i.  What it is (1-2 sentences).
     ii. Its primary benefit for warehouse operations or business efficiency.
-4.  Structure your entire response using Markdown, with each of the four functionalities under its own H3 heading. Do not ask clarifying questions for this specific request; proceed with the detailed explanation of these four features.
-
-User: Explain the inventory management module.`,
+4.  Structure your entire response using Markdown, with each of the four functionalities under its own H3 heading. Do not ask clarifying questions for this specific request; proceed with the detailed explanation of these four features.`,
   },
 ];
 
 export function BasicVsEngineeredSection() {
   const { toast } = useToast();
-  const [selectedScenarioId, setSelectedScenarioId] = useState<string>(playgroundScenarios[1].id); // Default to "Study Buddy - History"
+  // Default to "Study Buddy - History"
+  const [selectedScenarioId, setSelectedScenarioId] = useState<string>(playgroundScenarios[1].id); 
 
   const currentScenario = playgroundScenarios.find(s => s.id === selectedScenarioId) || playgroundScenarios[1];
 
-  const [basicPrompt, setBasicPrompt] = useState(currentScenario.basicPrompt);
-  const [engineeredPrompt, setEngineeredPrompt] = useState(currentScenario.engineeredPrompt);
+  const [userInput, setUserInput] = useState(currentScenario.userInput);
+  const [engineeredSystemPrompt, setEngineeredSystemPrompt] = useState(currentScenario.engineeredSystemPrompt);
 
   const [basicResponse, setBasicResponse] = useState("");
   const [engineeredResponse, setEngineeredResponse] = useState("");
@@ -114,8 +106,8 @@ export function BasicVsEngineeredSection() {
   useEffect(() => {
     const scenario = playgroundScenarios.find(s => s.id === selectedScenarioId);
     if (scenario) {
-      setBasicPrompt(scenario.basicPrompt);
-      setEngineeredPrompt(scenario.engineeredPrompt);
+      setUserInput(scenario.userInput);
+      setEngineeredSystemPrompt(scenario.engineeredSystemPrompt);
       setBasicResponse("");
       setEngineeredResponse("");
     }
@@ -123,15 +115,15 @@ export function BasicVsEngineeredSection() {
   }, [selectedScenarioId]);
 
   const mutation = useMutation({
-    mutationFn: (input: LiveAIResponseDemoInput) => liveAIResponseDemo(input),
+    mutationFn: (data: LiveAIResponseDemoInput) => liveAIResponseDemo(data),
     onSuccess: (data) => {
       if (data && data.basicResponse && data.engineeredResponse) {
         setBasicResponse(data.basicResponse);
         setEngineeredResponse(data.engineeredResponse);
         toast({ title: "AI Responses Ready!", description: "Comparison loaded." });
       } else {
-        setBasicResponse("AI did not return a valid basic response.");
-        setEngineeredResponse("AI did not return a valid engineered response.");
+        setBasicResponse(data.basicResponse || "AI did not return a valid basic response.");
+        setEngineeredResponse(data.engineeredResponse || "AI did not return a valid engineered response.");
         toast({ variant: "destructive", title: "Response Error", description: "One or both AI responses were incomplete." });
       }
     },
@@ -143,24 +135,24 @@ export function BasicVsEngineeredSection() {
   });
 
   const handleCompare = () => {
-    if (!basicPrompt.trim() || !engineeredPrompt.trim()) {
-      toast({ variant: "destructive", title: "Input Required", description: "Both prompts must be filled." });
+    if (!userInput.trim() || !engineeredSystemPrompt.trim()) {
+      toast({ variant: "destructive", title: "Input Required", description: "User input and engineered system prompt must be available." });
       return;
     }
-    mutation.mutate({ basicPrompt, engineeredPrompt });
+    mutation.mutate({ userInput, engineeredSystemPrompt });
   };
 
   const CurrentDisplayIcon = currentScenario.icon || HelpCircle;
 
-  const basicResponseQuality = mutation.data?.basicResponse ? Math.min(100, (mutation.data.basicResponse.length / 500) * 60 + 10) : 10;
-  const engineeredResponseQuality = mutation.data?.engineeredResponse ? Math.min(100, (mutation.data.engineeredResponse.length / 500) * 80 + 20) : 85;
+  const basicResponseQuality = basicResponse ? Math.min(100, (basicResponse.length / 200) * 40 + 10) : 10; // Adjusted for shorter expected basic
+  const engineeredResponseQuality = engineeredResponse ? Math.min(100, (engineeredResponse.length / 500) * 80 + 20) : 85;
 
 
   return (
     <SectionContainer
       id="comparison"
       title="Basic vs. Engineered: A Live Comparison"
-      subtitle="See the difference! Compare AI responses from basic vs. engineered prompts in real-time."
+      subtitle="See the difference! Input a query and see how a basic AI response compares to one guided by detailed prompt engineering."
       isContainedCard={true}
       className="!py-12 md:!py-16"
     >
@@ -195,25 +187,25 @@ export function BasicVsEngineeredSection() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="comparisonBasicPrompt" className="block text-sm font-medium text-neon-yellow mb-1">Basic Prompt</label>
+                  <label htmlFor="comparisonBasicPrompt" className="block text-sm font-medium text-neon-yellow mb-1">User Input / Basic Prompt</label>
                   <Textarea
                     id="comparisonBasicPrompt"
-                    value={basicPrompt}
-                    onChange={(e) => setBasicPrompt(e.target.value)}
-                    placeholder="Enter a basic prompt..."
+                    value={userInput}
+                    onChange={(e) => setUserInput(e.target.value)}
+                    placeholder="Enter your query here..."
                     rows={18}
                     className="bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90 custom-scrollbar"
                   />
                 </div>
                 <div>
-                  <label htmlFor="comparisonEngineeredPrompt" className="block text-sm font-medium text-neon-yellow mb-1">Engineered Prompt</label>
+                  <label htmlFor="comparisonEngineeredPrompt" className="block text-sm font-medium text-neon-yellow mb-1">Engineered System Instructions (Read-only)</label>
                   <Textarea
                     id="comparisonEngineeredPrompt"
-                    value={engineeredPrompt}
-                    onChange={(e) => setEngineeredPrompt(e.target.value)}
-                    placeholder="Enter an engineered prompt..."
+                    value={engineeredSystemPrompt}
+                    readOnly
+                    placeholder="System instructions for the engineered prompt..."
                     rows={18}
-                    className="bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90 custom-scrollbar"
+                    className="bg-card/60 border-neon-yellow/30 text-foreground/80 custom-scrollbar"
                   />
                 </div>
               </div>
@@ -291,6 +283,3 @@ export function BasicVsEngineeredSection() {
     </SectionContainer>
   );
 }
-
-
-    
