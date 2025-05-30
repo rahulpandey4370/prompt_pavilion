@@ -15,8 +15,8 @@ import { config } from 'dotenv';
 config();
 
 const LiveAIResponseDemoInputSchema = z.object({
-  userInput: z.string().describe("The common user input/query."),
-  engineeredSystemPrompt: z.string().describe("The detailed system prompt for the engineered version."),
+  basicUserInput: z.string().describe("The user input for the basic prompt."),
+  fullEngineeredPrompt: z.string().describe("The complete text of the engineered prompt, including system instructions and user input."),
 });
 export type LiveAIResponseDemoInput = z.infer<typeof LiveAIResponseDemoInputSchema>;
 
@@ -44,17 +44,20 @@ const azureClient = new AzureOpenAI({
 const BASIC_SYSTEM_PROMPT = "You are a helpful chatbot. Please provide a very concise and direct answer, typically 1-2 sentences and under 80 words. Avoid lists or detailed formatting.";
 
 async function getAzureOpenAIResponse(
-  systemPrompt: string,
+  systemPrompt: string | null, // System prompt can be null for engineered if all instructions are in user content
   userPrompt: string,
   modelConfig: Record<string, any>
 ): Promise<string> {
   try {
+    const messages: Array<{role: "system" | "user", content: string}> = [];
+    if (systemPrompt) {
+      messages.push({ role: 'system', content: systemPrompt });
+    }
+    messages.push({ role: 'user', content: userPrompt });
+
     const chatCompletion = await azureClient.chat.completions.create({
       model: azureDeploymentId,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt }
-      ],
+      messages: messages,
       ...modelConfig,
     });
     const responseText = chatCompletion.choices[0]?.message?.content;
@@ -79,21 +82,22 @@ export async function liveAIResponseDemo(input: LiveAIResponseDemoInput): Promis
 
     const engineeredModelConfig = {
       temperature: 0.7,
-      max_tokens: 400, // Increased slightly for more detailed engineered responses
+      max_tokens: 400,
       top_p: 0.95,
       frequency_penalty: 0.0,
       presence_penalty: 0.0,
     };
 
+    // For the engineered prompt, the entire text is passed as user content.
+    // The system prompt is minimal or null, as instructions are embedded.
     const [basicResponse, engineeredResponse] = await Promise.all([
-      getAzureOpenAIResponse(BASIC_SYSTEM_PROMPT, input.userInput, basicModelConfig),
-      getAzureOpenAIResponse(input.engineeredSystemPrompt, input.userInput, engineeredModelConfig),
+      getAzureOpenAIResponse(BASIC_SYSTEM_PROMPT, input.basicUserInput, basicModelConfig),
+      getAzureOpenAIResponse(null, input.fullEngineeredPrompt, engineeredModelConfig), 
     ]);
 
     return { basicResponse, engineeredResponse };
   } catch (error: any) {
     console.error("Error in liveAIResponseDemo:", error.message);
-    // Ensure a valid LiveAIResponseDemoOutput structure is returned even on error
     const errorMessage = `Error processing request: ${error.message}`;
     return {
       basicResponse: errorMessage,

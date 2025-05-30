@@ -17,8 +17,8 @@ interface PlaygroundScenario {
   id: string;
   name: string;
   icon: LucideIcon;
-  userInput: string; // Common user input/query
-  engineeredSystemPrompt: string; // System instructions for the engineered version
+  userInput: string; // This is the core user question, used for basic and as part of engineered.
+  engineeredSystemPrompt: string; // This is ONLY the system instructions part for the engineered prompt.
 }
 
 const playgroundScenarios: PlaygroundScenario[] = [
@@ -38,11 +38,11 @@ Once sufficient details are provided (either initially or after your clarifying 
     userInput: "Tell me about World War 2.",
     engineeredSystemPrompt: `System: You are an expert history tutor AI for high school students. Your primary function is to provide structured summaries of historical events.
 When asked about a broad topic like 'World War 2', you MUST structure your response as follows:
-1.  **Overview (1 concise paragraph, max 50 words):** A brief summary of the event, including start and end dates.
-2.  **Key Causes (Bulleted list, exactly 3 points, max 20 words each):** The primary reasons the event occurred.
-3.  **Major Theaters/Fronts (Bulleted list, exactly 3 points, max 15 words each):** Main geographical areas of conflict.
-4.  **Significant Outcomes (Bulleted list, exactly 3 points, max 20 words each):** The most important consequences.
-Do not ask clarifying questions for this general topic query. Provide the information directly. Your total response should be approximately 200-250 words.`,
+1.  **Overview (1 concise paragraph, max 25 words):** A brief summary of the event, including start and end dates.
+2.  **Key Causes (Bulleted list, exactly 2 points, max 15 words each):** The primary reasons the event occurred.
+3.  **Major Theaters/Fronts (Bulleted list, exactly 2 points, max 10 words each):** Main geographical areas of conflict.
+4.  **Primary Outcome (1 concise sentence, max 20 words):** The most important consequence.
+Do not ask clarifying questions for this general topic query. Provide the information directly. Your total response should be approximately 100-150 words.`,
   },
   {
     id: "code-explainer",
@@ -54,7 +54,7 @@ For any code provided by the user, you MUST:
 1.  Analyze the code thoroughly.
 2.  Explain its overall purpose and what each significant line or block of code does.
 3.  State the expected output if the code were to be run.
-4.  Offer any relevant notes, alternative approaches, or best practices suitable for beginner to intermediate developers. Total explanation for 'Explanation' and 'Notes / Best Practices' sections combined must be under 150 words.
+4.  Offer any relevant notes, alternative approaches, or best practices suitable for beginner to intermediate developers. Total explanation for 'Explanation' and 'Notes / Best Practices' sections combined must be under 100 words.
 Use the following strict Markdown format for your response:
 ### Code Snippet
 \`\`\`python
@@ -92,13 +92,14 @@ When a user asks to "Explain the inventory management module", you MUST:
 
 export function BasicVsEngineeredSection() {
   const { toast } = useToast();
-  // Default to "Study Buddy - History"
   const [selectedScenarioId, setSelectedScenarioId] = useState<string>(playgroundScenarios[1].id); 
 
   const currentScenario = playgroundScenarios.find(s => s.id === selectedScenarioId) || playgroundScenarios[1];
 
-  const [userInput, setUserInput] = useState(currentScenario.userInput);
-  const [engineeredSystemPrompt, setEngineeredSystemPrompt] = useState(currentScenario.engineeredSystemPrompt);
+  const [basicPromptText, setBasicPromptText] = useState(currentScenario.userInput);
+  const [fullEngineeredPromptText, setFullEngineeredPromptText] = useState(
+    `${currentScenario.engineeredSystemPrompt}\n\nUser: ${currentScenario.userInput}`
+  );
 
   const [basicResponse, setBasicResponse] = useState("");
   const [engineeredResponse, setEngineeredResponse] = useState("");
@@ -106,8 +107,8 @@ export function BasicVsEngineeredSection() {
   useEffect(() => {
     const scenario = playgroundScenarios.find(s => s.id === selectedScenarioId);
     if (scenario) {
-      setUserInput(scenario.userInput);
-      setEngineeredSystemPrompt(scenario.engineeredSystemPrompt);
+      setBasicPromptText(scenario.userInput);
+      setFullEngineeredPromptText(`${scenario.engineeredSystemPrompt}\n\nUser: ${scenario.userInput}`);
       setBasicResponse("");
       setEngineeredResponse("");
     }
@@ -135,16 +136,16 @@ export function BasicVsEngineeredSection() {
   });
 
   const handleCompare = () => {
-    if (!userInput.trim() || !engineeredSystemPrompt.trim()) {
-      toast({ variant: "destructive", title: "Input Required", description: "User input and engineered system prompt must be available." });
+    if (!basicPromptText.trim() || !fullEngineeredPromptText.trim()) {
+      toast({ variant: "destructive", title: "Input Required", description: "Basic prompt and engineered prompt must be available." });
       return;
     }
-    mutation.mutate({ userInput, engineeredSystemPrompt });
+    mutation.mutate({ basicUserInput: basicPromptText, fullEngineeredPrompt: fullEngineeredPromptText });
   };
 
   const CurrentDisplayIcon = currentScenario.icon || HelpCircle;
 
-  const basicResponseQuality = basicResponse ? Math.min(100, (basicResponse.length / 200) * 40 + 10) : 10; // Adjusted for shorter expected basic
+  const basicResponseQuality = basicResponse ? Math.min(100, (basicResponse.length / 200) * 40 + 10) : 10;
   const engineeredResponseQuality = engineeredResponse ? Math.min(100, (engineeredResponse.length / 500) * 80 + 20) : 85;
 
 
@@ -152,7 +153,7 @@ export function BasicVsEngineeredSection() {
     <SectionContainer
       id="comparison"
       title="Basic vs. Engineered: A Live Comparison"
-      subtitle="See the difference! Input a query and see how a basic AI response compares to one guided by detailed prompt engineering."
+      subtitle="See the difference! Compare AI responses from basic vs. engineered prompts in real-time."
       isContainedCard={true}
       className="!py-12 md:!py-16"
     >
@@ -187,25 +188,25 @@ export function BasicVsEngineeredSection() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="comparisonBasicPrompt" className="block text-sm font-medium text-neon-yellow mb-1">User Input / Basic Prompt</label>
+                  <label htmlFor="basicPrompt" className="block text-sm font-medium text-neon-yellow mb-1">Basic Prompt</label>
                   <Textarea
-                    id="comparisonBasicPrompt"
-                    value={userInput}
-                    onChange={(e) => setUserInput(e.target.value)}
-                    placeholder="Enter your query here..."
+                    id="basicPrompt"
+                    value={basicPromptText}
+                    onChange={(e) => setBasicPromptText(e.target.value)}
+                    placeholder="Enter your basic query here..."
                     rows={18}
                     className="bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90 custom-scrollbar"
                   />
                 </div>
                 <div>
-                  <label htmlFor="comparisonEngineeredPrompt" className="block text-sm font-medium text-neon-yellow mb-1">Engineered System Instructions (Read-only)</label>
+                  <label htmlFor="engineeredPromptFull" className="block text-sm font-medium text-neon-yellow mb-1">Engineered Prompt</label>
                   <Textarea
-                    id="comparisonEngineeredPrompt"
-                    value={engineeredSystemPrompt}
-                    readOnly
-                    placeholder="System instructions for the engineered prompt..."
+                    id="engineeredPromptFull"
+                    value={fullEngineeredPromptText}
+                    onChange={(e) => setFullEngineeredPromptText(e.target.value)}
+                    placeholder="Compose your full engineered prompt here..."
                     rows={18}
-                    className="bg-card/60 border-neon-yellow/30 text-foreground/80 custom-scrollbar"
+                    className="bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground/90 custom-scrollbar"
                   />
                 </div>
               </div>
