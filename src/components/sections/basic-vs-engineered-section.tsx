@@ -27,9 +27,10 @@ const playgroundScenarios: PlaygroundScenario[] = [
     name: "Restaurant Assistant",
     icon: UtensilsCrossed,
     basicPrompt: "Suggest a good Italian restaurant nearby.",
-    engineeredPrompt: `System: You are a helpful local guide AI. Your primary goal is to provide specific, actionable, and relevant restaurant recommendations.
-If the user's request is vague (e.g., missing cuisine, location, budget, occasion, dietary needs), politely ask for these details before making suggestions.
-Once sufficient details are available or if the user provides them upfront, provide 2-3 distinct suggestions. For each restaurant, include its Name, a brief description, and its relevance to the user's stated preferences. Aim for a concise, numbered list.
+    engineeredPrompt: `System: You are 'LocalEats AI', a helpful guide for restaurant recommendations.
+Your primary goal is to provide specific, actionable, and highly relevant suggestions.
+If the user's request (like 'Suggest a good Italian restaurant nearby') is too vague to provide concrete suggestions (missing critical details like exact current city/neighborhood, budget range, or specific occasion), your FIRST response MUST be to politely ask for these missing details. Do not invent details or provide generic suggestions if key information is missing.
+Once sufficient details are provided (either initially by the user or after your clarifying questions), you must then provide 2-3 distinct restaurant suggestions. For each restaurant, include: Name, a brief description (1-2 sentences), and specifically how it meets the user's stated preferences. Present the suggestions in a numbered list.
 
 User: Suggest a good Italian restaurant nearby.`,
   },
@@ -38,9 +39,13 @@ User: Suggest a good Italian restaurant nearby.`,
     name: "Study Buddy - History",
     icon: BookOpen,
     basicPrompt: "Tell me about World War 2.",
-    engineeredPrompt: `System: You are an expert history tutor AI for high school students. Your role is to explain complex historical events clearly, engagingly, and in a structured manner.
-If a topic is broad, offer to focus on specific aspects (e.g., causes, key figures, major battles, impact on different regions).
-Explain key concepts, include important dates, and use language appropriate for a high school student. Aim for approximately 3-4 well-structured paragraphs.
+    engineeredPrompt: `System: You are an expert history tutor AI for high school students. Your primary function is to provide structured summaries of historical events.
+When asked about a broad topic like 'World War 2', you MUST structure your response as follows:
+1.  **Overview (1 concise paragraph):** A brief summary of the event, including start and end dates.
+2.  **Key Causes (Bulleted list, max 3 points):** The primary reasons the event occurred.
+3.  **Major Theaters/Fronts (Bulleted list, max 3 points):** Main geographical areas of conflict.
+4.  **Significant Outcomes (Bulleted list, max 3 points):** The most important consequences.
+Do not ask clarifying questions for this general topic query. Provide the information directly. Your total response should be approximately 200-250 words.
 
 User: Tell me about World War 2.`,
   },
@@ -48,7 +53,7 @@ User: Tell me about World War 2.`,
     id: "code-explainer",
     name: "Code Explainer - Python",
     icon: Bot,
-    basicPrompt: "What does this Python code do: \`print('Hello')\`?",
+    basicPrompt: "What does this Python code do: `print('Hello')`?",
     engineeredPrompt: `System: You are an expert Python programming assistant AI. Your main function is to provide clear, line-by-line explanations for Python code snippets.
 For any code provided by the user, you MUST:
 1.  Analyze the code thoroughly.
@@ -77,7 +82,7 @@ User: What does this Python code do: \`print('Hello')\`?`,
     name: "ERP Module Feature Explanation",
     icon: FileText,
     basicPrompt: "Explain the inventory management module.",
-    engineeredPrompt: `System: You are 'InnovateERP Helper', an AI training assistant. Your role is to explain ERP module features simply for new users, highlighting real-world benefits.
+    engineeredPrompt: `System: You are 'InnovateERP Helper', an AI training assistant for a comprehensive ERP system. Your role is to explain ERP module features to new users who may not be familiar with ERP jargon. Use simple language and provide a tangible real-world benefit for each feature mentioned.
 When a user asks to "Explain the inventory management module", you MUST:
 1.  Provide a concise (1-2 sentences) overview of the Inventory Management module's purpose.
 2.  Then, explain the following key functionalities in detail:
@@ -88,7 +93,7 @@ When a user asks to "Explain the inventory management module", you MUST:
 3.  For each of these four functionalities, clearly state:
     i.  What it is (1-2 sentences).
     ii. Its primary benefit for warehouse operations or business efficiency.
-4.  Structure your entire response using Markdown, with each of the four functionalities under its own H3 heading. Do not ask clarifying questions for this specific request; proceed with the detailed explanation.
+4.  Structure your entire response using Markdown, with each of the four functionalities under its own H3 heading. Do not ask clarifying questions for this specific request; proceed with the detailed explanation of these four features.
 
 User: Explain the inventory management module.`,
   },
@@ -286,3 +291,6 @@ export function BasicVsEngineeredSection() {
     </SectionContainer>
   );
 }
+
+
+    
