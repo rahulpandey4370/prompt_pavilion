@@ -46,10 +46,10 @@ const playgroundScenarios: PlaygroundScenario[] = [
     userInput: "Tell me about World War 2.",
     engineeredSystemPrompt: `System: You are an expert history tutor AI for high school students. Your primary function is to provide structured summaries of historical events.
 When asked about a broad topic like 'World War 2', you MUST structure your response as follows:
-1.  **Overview (Paragraph):** A summary of the event, including start and end dates.
-2.  **Key Causes (Bulleted list, provide key points):** The primary reasons the event occurred.
-3.  **Major Theaters/Fronts (Bulleted list, provide key points):** Main geographical areas of conflict.
-4.  **Primary Outcome (Sentence):** The most important consequence.`
+1.  **Overview:** A summary of the event, including start and end dates.
+2.  **Key Causes:** The primary reasons the event occurred.
+3.  **Major Theaters/Fronts:** Main geographical areas of conflict.
+4.  **Primary Outcome:** The most important consequence.`
   },
   {
     id: "creative-writing-assistant",
@@ -85,7 +85,7 @@ Use simple language and encourage the student.`
     icon: PackageSearch,
     userInput: "How do I manage inventory effectively in Epicor ERP, specifically regarding reorder points?",
     engineeredSystemPrompt: `System: You are an Epicor ERP supply chain consultant with 10+ years experience. When answering questions about inventory management and reorder points in Epicor, structure your response as:
-1.  **Concept Overview:** Briefly explain reorder points (ROP).
+1.  **Concept Overview:** Briefly explain reorder points.
 2.  **Epicor Navigation Path:** Detail the menu path in Epicor.
 3.  **Key Epicor Fields & Functions for ROP:** List important Epicor fields or functions related to ROPs. Explain their role.
 4.  **Best Practice Tip:** Offer one critical recommendation for setting ROPs.
@@ -486,9 +486,13 @@ export function BasicVsEngineeredSection() {
                   </SelectTrigger>
                   <SelectContent className="bg-card border-neon-yellow text-foreground">
                     {playgroundScenarios.map(scenario => (
-                      <SelectItem key={scenario.id} value={scenario.id} className="focus:bg-neon-yellow/20">
+                      <SelectItem 
+                        key={scenario.id} 
+                        value={scenario.id} 
+                        className="focus:bg-neon-yellow/20 focus:text-neon-yellow-foreground"
+                      >
                         <div className="flex items-center">
-                          <scenario.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                          <scenario.icon className="mr-2 h-4 w-4 text-neon-yellow" />
                           {scenario.name}
                         </div>
                       </SelectItem>
@@ -605,4 +609,3 @@ export function BasicVsEngineeredSection() {
     </SectionContainer>
   );
 }
-
