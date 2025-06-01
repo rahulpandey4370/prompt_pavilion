@@ -13,7 +13,7 @@ import { useState, useEffect, type ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress"; // Added Progress import
+import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { 
   Loader2, 
@@ -114,7 +114,7 @@ Keep explanations focused on operational efficiency and standard Epicor Kinetic 
     userInput: "Plan a 7-day cultural trip to Japan for first-timers, focusing on Tokyo and Kyoto.",
     engineeredSystemPrompt: `System: You are a travel planning assistant specializing in detailed itineraries. For a 7-day cultural trip to Japan (Tokyo & Kyoto) for first-timers, provide:
 1.  **Overall Trip Theme:** Briefly state the focus.
-2.  **Suggested Itinerary Outline (Day-by-Day):
+2.  **Suggested Itinerary Outline (Day-by-Day):**
 3.  **Accommodation Style Recommendation:** Suggest a type of accommodation suitable for cultural immersion.
 4.  **Cultural Tips :** Important etiquette or cultural notes for Japan.
 5.  **Foodie Highlight:** Mention one must-try Japanese dish or food experience.
@@ -610,17 +610,11 @@ export function BasicVsEngineeredSection() {
                           <span className="text-sm font-medium text-neon-yellow">Response Quality:</span>
                           <span className="text-sm font-semibold text-neon-yellow">{engineeredResponseQuality}%</span>
                         </div>
-                        <Progress value={engineeredResponseQuality} className="w-full h-3 [&>div]:bg-accent" />
+                        <Progress value={engineeredResponseQuality} className="w-full h-3 [&>div]:bg-primary" />
                       </div>
                     )}
                   </div>
                 </div>
-              )}
-
-              {showResponseArea && (
-                 <div className="mt-8 text-center text-sm text-muted-foreground">
-                    How is the response quality being calculated? See the `calculateResponseQuality` function for details.
-                 </div>
               )}
             </GlassCardContent>
           </GlassCard>
