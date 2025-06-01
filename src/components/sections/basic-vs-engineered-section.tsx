@@ -13,6 +13,7 @@ import { useState, useEffect, type ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress"; // Added Progress import
 import { cn } from "@/lib/utils";
 import { 
   Loader2, 
@@ -258,7 +259,6 @@ const calculateResponseQuality = (
   return Math.max(5, Math.min(100, Math.round(score)));
 };
 
-// Basic Markdown Preview Component (simplified)
 function BasicMarkdownPreview({ markdown }: { markdown: string | null }) {
   if (!markdown) return null;
 
@@ -489,10 +489,14 @@ export function BasicVsEngineeredSection() {
                       <SelectItem 
                         key={scenario.id} 
                         value={scenario.id} 
-                        className="data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        className={cn(
+                          "data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground",
+                          "data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground",
+                          "focus:bg-accent focus:text-accent-foreground"
+                        )}
                       >
                         <div className="flex items-center">
-                          <scenario.icon className="mr-2 h-4 w-4 text-primary" />
+                          <scenario.icon className="mr-2 h-4 w-4 text-primary group-data-[highlighted]:text-accent-foreground group-data-[state=checked]:text-accent-foreground" />
                           {scenario.name}
                         </div>
                       </SelectItem>
@@ -544,14 +548,13 @@ export function BasicVsEngineeredSection() {
                             id="basic-preview-switch"
                             checked={basicPreviewMode}
                             onCheckedChange={setBasicPreviewMode}
-                            size="sm"
                           />
                           <Label htmlFor="basic-preview-switch" className="text-xs text-neon-yellow/80">Preview</Label>
                         </div>
                       )}
                     </div>
                     {basicPreviewMode && basicResponse ? (
-                       <div className="h-56 bg-card/50 resize-none text-foreground/90 custom-scrollbar rounded-md border border-transparent p-3 overflow-y-auto">
+                       <div className="h-80 bg-card/50 resize-none text-foreground/90 custom-scrollbar rounded-md border border-transparent p-3 overflow-y-auto">
                          <BasicMarkdownPreview markdown={basicResponse} />
                        </div>
                     ) : (
@@ -559,9 +562,18 @@ export function BasicVsEngineeredSection() {
                         id="basicPromptResponse"
                         readOnly
                         value={basicResponse}
-                        className="h-56 bg-card/50 border-0 resize-none text-foreground/90 custom-scrollbar"
+                        className="h-80 bg-card/50 border-0 resize-none text-foreground/90 custom-scrollbar"
                         placeholder="AI response to basic prompt..."
                       />
+                    )}
+                    {(mutation.isSuccess || basicResponse) && !mutation.isPending && (
+                      <div className="mt-3">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-sm font-medium text-neon-yellow">Response Quality:</span>
+                          <span className="text-sm font-semibold text-neon-yellow">{basicResponseQuality}%</span>
+                        </div>
+                        <Progress value={basicResponseQuality} className="w-full h-3 [&>div]:bg-primary" />
+                      </div>
                     )}
                   </div>
                   <div>
@@ -574,14 +586,13 @@ export function BasicVsEngineeredSection() {
                             id="engineered-preview-switch"
                             checked={engineeredPreviewMode}
                             onCheckedChange={setEngineeredPreviewMode}
-                            size="sm"
                           />
                           <Label htmlFor="engineered-preview-switch" className="text-xs text-neon-yellow/80">Preview</Label>
                         </div>
                       )}
                     </div>
                     {engineeredPreviewMode && engineeredResponse ? (
-                       <div className="h-56 bg-card/50 resize-none text-foreground/90 custom-scrollbar rounded-md border border-transparent p-3 overflow-y-auto">
+                       <div className="h-80 bg-card/50 resize-none text-foreground/90 custom-scrollbar rounded-md border border-transparent p-3 overflow-y-auto">
                          <BasicMarkdownPreview markdown={engineeredResponse} />
                        </div>
                     ) : (
@@ -589,17 +600,26 @@ export function BasicVsEngineeredSection() {
                         id="engineeredPromptResponse"
                         readOnly
                         value={engineeredResponse}
-                        className="h-56 bg-card/50 border-0 resize-none text-foreground/90 custom-scrollbar"
+                        className="h-80 bg-card/50 border-0 resize-none text-foreground/90 custom-scrollbar"
                         placeholder="AI response to engineered prompt..."
                       />
+                    )}
+                     {(mutation.isSuccess || engineeredResponse) && !mutation.isPending && (
+                      <div className="mt-3">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-sm font-medium text-neon-yellow">Response Quality:</span>
+                          <span className="text-sm font-semibold text-neon-yellow">{engineeredResponseQuality}%</span>
+                        </div>
+                        <Progress value={engineeredResponseQuality} className="w-full h-3 [&>div]:bg-accent" />
+                      </div>
                     )}
                   </div>
                 </div>
               )}
 
               {showResponseArea && (
-                 <div className="mt-8">
-                    How is the response quality being calculated here?
+                 <div className="mt-8 text-center text-sm text-muted-foreground">
+                    How is the response quality being calculated? See the `calculateResponseQuality` function for details.
                  </div>
               )}
             </GlassCardContent>
@@ -609,4 +629,3 @@ export function BasicVsEngineeredSection() {
     </SectionContainer>
   );
 }
-
