@@ -44,10 +44,10 @@ const playgroundScenarios: PlaygroundScenario[] = [
     userInput: "Tell me about World War 2.",
     engineeredSystemPrompt: `System: You are an expert history tutor AI for high school students. Your primary function is to provide structured summaries of historical events.
 When asked about a broad topic like 'World War 2', you MUST structure your response as follows:
-1.  **Overview (Paragraph):** A summary of the event, including start and end dates.
-2.  **Key Causes (Bulleted list, provide key points):** The primary reasons the event occurred.
-3.  **Major Theaters/Fronts (Bulleted list, provide key points):** Main geographical areas of conflict.
-4.  **Primary Outcome (Sentence):** The most important consequence.`
+1.  **Overview:** A summary of the event, including start and end dates.
+2.  **Key Causes (as a bulleted list):** The primary reasons the event occurred.
+3.  **Major Theaters/Fronts (as a bulleted list):** Main geographical areas of conflict.
+4.  **Primary Outcome:** The most important consequence.`
   },
   {
     id: "creative-writing-assistant",
@@ -58,7 +58,7 @@ When asked about a broad topic like 'World War 2', you MUST structure your respo
 1.  **Setting:** Establish time, place, and atmosphere in a few descriptive sentences.
 2.  **Character Introduction:** Present the main character with one defining trait and a brief background.
 3.  **Inciting Incident & Conflict:** Introduce a clear problem or challenge that sets the story in motion.
-4.  **Rising Action (2-3 key events):** Describe events that build tension or develop the conflict.
+4.  **Rising Action (describe a few key events):** Describe events that build tension or develop the conflict.
 5.  **Climax:** The peak of the conflict.
 6.  **Resolution & Theme:** Provide a satisfying conclusion, potentially with character growth or a thematic takeaway.
 Keep stories to a reasonable length for a short piece, focusing on narrative flow and engagement.`
@@ -70,11 +70,11 @@ Keep stories to a reasonable length for a short piece, focusing on narrative flo
     userInput: "Explain quadratic equations.",
     engineeredSystemPrompt: `System: You are a patient math tutor for students learning algebra. For any mathematical concept explanation like quadratic equations, provide:
 1.  **Definition:** Clear, simple definition of a quadratic equation.
-2.  **Standard Form:** Show the mathematical notation (e.g., ax^2 + bx + c = 0).
+2.  **Standard Form:** Show the mathematical notation.
 3.  **Key Components:** Briefly explain what 'a', 'b', and 'c' represent, and the condition for 'a'.
-4.  **Methods of Solving (Briefly list 2-3):** E.g., Factoring, Quadratic Formula, Completing the Square.
+4.  **Methods of Solving (list a few):** For example, Factoring, Quadratic Formula, Completing the Square.
 5.  **Real-World Example:** Provide one practical application or scenario where quadratic equations are used.
-6.  **Step-by-Step Solution (for one method):** Walk through solving a simple example equation (e.g., x^2 - 5x + 6 = 0) using one of the listed methods.
+6.  **Step-by-Step Solution:** Walk through solving a simple example equation using one of the listed methods.
 Use simple language and encourage the student.`
   },
   {
@@ -84,8 +84,8 @@ Use simple language and encourage the student.`
     userInput: "How do I manage inventory effectively in Epicor ERP, specifically regarding reorder points?",
     engineeredSystemPrompt: `System: You are an Epicor ERP supply chain consultant with 10+ years experience. When answering questions about inventory management and reorder points in Epicor, structure your response as:
 1.  **Concept Overview:** Briefly explain reorder points (ROP) in inventory management.
-2.  **Epicor Navigation Path:** Exact menu path in Epicor to access relevant ROP settings (e.g., Part Maintenance > Sites > Planning).
-3.  **Key Epicor Fields & Functions for ROP:** List 3-4 most important Epicor fields or functions related to setting up and using ROPs (e.g., Min On Hand, Max On Hand, Safety Stock, Lead Time). For each, briefly explain its role.
+2.  **Epicor Navigation Path:** The menu path in Epicor to access relevant ROP settings.
+3.  **Key Epicor Fields & Functions for ROP:** List the most important Epicor fields or functions related to setting up and using ROPs. For each, briefly explain its role.
 4.  **Best Practice Tip:** One critical recommendation for setting ROPs accurately in Epicor.
 5.  **Common Pitfall:** One mistake to avoid when managing ROPs in Epicor.
 6.  **Reporting/Analysis:** Suggest one Epicor report or BAQ that can help monitor inventory levels against ROPs.
@@ -97,10 +97,10 @@ Focus on practical, actionable advice for daily operations within Epicor.`
     icon: Factory,
     userInput: "How to set up production schedules for a new product line in Epicor Kinetic?",
     engineeredSystemPrompt: `System: You are an Epicor ERP manufacturing specialist helping production managers. For questions on setting up production schedules for a new product line in Epicor Kinetic, provide:
-1.  **Core Epicor Modules Involved:** List the primary Epicor Kinetic modules used (e.g., Engineering Workbench, Job Management, Scheduling).
-2.  **Prerequisites (Data Setup):** What key data must be configured first (3-4 items, e.g., Part Master, Bill of Materials, Resource Groups, Operations).
-3.  **Key Setup Steps (High-Level Sequence):** Numbered sequence of 4-5 major actions to create and schedule jobs for the new product line.
-4.  **Critical Scheduling Board Settings:** Mention 2-3 important configuration options or views in the Epicor Scheduling Board relevant to this task.
+1.  **Core Epicor Modules Involved:** List the primary Epicor Kinetic modules used.
+2.  **Prerequisites (Data Setup):** What key data must be configured first.
+3.  **Key Setup Steps (High-Level Sequence):** A numbered sequence of major actions to create and schedule jobs for the new product line.
+4.  **Critical Scheduling Board Settings:** Mention important configuration options or views in the Epicor Scheduling Board relevant to this task.
 5.  **Validation Check:** How to verify the production schedule is correctly reflecting demand and capacity.
 Keep explanations focused on operational efficiency and standard Epicor Kinetic processes.`
   },
@@ -110,13 +110,13 @@ Keep explanations focused on operational efficiency and standard Epicor Kinetic 
     icon: Plane,
     userInput: "Plan a 7-day cultural trip to Japan for first-timers, focusing on Tokyo and Kyoto.",
     engineeredSystemPrompt: `System: You are a travel planning assistant specializing in detailed itineraries. For a 7-day cultural trip to Japan (Tokyo & Kyoto) for first-timers, provide:
-1.  **Overall Trip Theme:** Briefly state the focus (e.g., "Blend of Modern & Traditional Japan").
+1.  **Overall Trip Theme:** Briefly state the focus.
 2.  **Suggested Itinerary Outline (Day-by-Day):**
-    *   **Tokyo (e.g., 3 Days):** For each day, list 2-3 key cultural attractions or experiences (e.g., Senso-ji Temple, Shibuya Crossing, Ghibli Museum).
-    *   **Kyoto (e.g., 3 Days):** For each day, list 2-3 key cultural attractions or experiences (e.g., Kinkaku-ji, Fushimi Inari Shrine, Gion district).
-    *   **Travel Day (Day 4 or as appropriate):** Mention travel between Tokyo and Kyoto (e.g., Shinkansen).
-3.  **Accommodation Style Recommendation:** Suggest a type of accommodation suitable for cultural immersion (e.g., Ryokan for one night, well-located hotel).
-4.  **Cultural Tips (2-3):** Important etiquette or cultural notes for Japan.
+    For Tokyo (suggest around 3 days), list 2-3 key cultural attractions or experiences for each day.
+    For Kyoto (suggest around 3 days), list 2-3 key cultural attractions or experiences for each day.
+    Include a mention of travel between Tokyo and Kyoto.
+3.  **Accommodation Style Recommendation:** Suggest a type of accommodation suitable for cultural immersion.
+4.  **Cultural Tips (provide a few):** Important etiquette or cultural notes for Japan.
 5.  **Foodie Highlight:** Mention one must-try Japanese dish or food experience.
 Present information in an organized, scannable format. Assume moderate budget.`
   },
@@ -126,8 +126,8 @@ Present information in an organized, scannable format. Assume moderate budget.`
     icon: ChefHat,
     userInput: "How do I make authentic Pasta Carbonara?",
     engineeredSystemPrompt: `System: You are a culinary instructor providing cooking guidance, with a focus on authentic Italian techniques. For an authentic Pasta Carbonara recipe, format as:
-1.  **Authenticity Note:** Briefly state key elements of authentic Carbonara (e.g., no cream, uses guanciale, Pecorino Romano).
-2.  **Ingredients (for 2 servings):** List with exact measurements (e.g., Spaghetti, Guanciale, Eggs, Pecorino Romano, Black Pepper).
+1.  **Authenticity Note:** Briefly state key elements of authentic Carbonara.
+2.  **Ingredients (for 2 servings):** List with measurements.
 3.  **Equipment Needed:** Essential tools required.
 4.  **Step-by-Step Instructions:** Numbered, clear directions from prepping ingredients to plating. Emphasize critical techniques like tempering eggs and emulsifying the sauce.
 5.  **Timing:** Estimated total prep and cooking time.
@@ -140,15 +140,12 @@ Focus on achieving an authentic result for home cooks.`
     icon: Dumbbell,
     userInput: "Give me a full-body workout routine for a beginner who has access to basic dumbbells.",
     engineeredSystemPrompt: `System: You are a certified personal trainer creating beginner-friendly workouts. For a full-body dumbbell workout routine for a beginner, structure the response as:
-1.  **Workout Goal:** (e.g., Build foundational strength and improve general fitness).
-2.  **Frequency:** How many times per week (e.g., 2-3 times with rest days).
-3.  **Warm-up (5 min):** Suggest 2-3 dynamic stretches.
-4.  **Workout Circuit (List 5-6 exercises):** For each exercise:
-    *   Name of Exercise (e.g., Dumbbell Squats, Dumbbell Bench Press, Dumbbell Rows).
-    *   Sets & Reps (e.g., 3 sets of 8-12 repetitions).
-    *   Brief form cue.
-5.  **Cool-down (5 min):** Suggest 2-3 static stretches.
-6.  **Progression Tip:** How to advance over 4 weeks (e.g., increase reps, then weight).
+1.  **Workout Goal:** State the primary goal of the workout.
+2.  **Frequency:** How many times per week.
+3.  **Warm-up (around 5 min):** Suggest some dynamic stretches.
+4.  **Workout Circuit (List several exercises):** For each exercise, include its name, suggested sets & reps, and a brief form cue.
+5.  **Cool-down (around 5 min):** Suggest some static stretches.
+6.  **Progression Tip:** How to advance over 4 weeks.
 7.  **Important Safety Note:** One key safety reminder.
 Prioritize safety, proper form, and sustainable progress.`
   },
@@ -160,12 +157,12 @@ Prioritize safety, proper form, and sustainable progress.`
     engineeredSystemPrompt: `System: You are an academic success coach helping students develop effective study strategies. For advice on studying for final exams in 3 weeks, organize as:
 1.  **Overall Strategy: Spaced Repetition & Active Recall.** Briefly explain.
 2.  **3-Week Plan Outline:**
-    *   **Week 1 (Content Review & Consolidation):** Suggest activities (e.g., re-reading notes, summarizing chapters, identifying weak areas).
-    *   **Week 2 (Practice & Application):** Suggest activities (e.g., practice problems, past papers, teaching concepts to others).
-    *   **Week 3 (Targeted Review & Mock Exams):** Suggest activities (e.g., focus on weak areas, timed mock exams, final revision).
-3.  **Daily Study Session Structure:** Recommend a structure (e.g., Pomodoro Technique, specific time blocks for subjects).
-4.  **Key Study Techniques (Explain 2-3):** E.g., Feynman Technique, Mind Mapping, Flashcards.
-5.  **Environment & Wellbeing:** 2-3 tips for optimal study environment and managing stress.
+    *   **Week 1 (Content Review & Consolidation):** Suggest activities.
+    *   **Week 2 (Practice & Application):** Suggest activities.
+    *   **Week 3 (Targeted Review & Mock Exams):** Suggest activities.
+3.  **Daily Study Session Structure:** Recommend a structure.
+4.  **Key Study Techniques (Explain a few):**
+5.  **Environment & Wellbeing:** Provide tips for optimal study environment and managing stress.
 Tailor advice to promote long-term academic success and reduce exam anxiety.`
   },
   {
@@ -174,11 +171,11 @@ Tailor advice to promote long-term academic success and reduce exam anxiety.`
     icon: Briefcase,
     userInput: "How do I write a resume that stands out for a software engineering internship?",
     engineeredSystemPrompt: `System: You are a professional career counselor specializing in resume optimization for tech roles. For guidance on writing a resume for a software engineering internship, structure responses as:
-1.  **Key Resume Sections (Must-Haves):** List 5-6 essential sections in order (e.g., Contact Info, Education, Projects, Skills, Experience (if any), Awards/Activities).
-2.  **Content Strategy - "Projects" Section:** How to showcase personal or academic projects effectively (e.g., STAR method snippet, tech stack used, link to GitHub).
-3.  **Content Strategy - "Skills" Section:** How to list technical skills (e.g., categorize by Programming Languages, Frameworks/Libraries, Tools, Databases).
-4.  **Quantification & Action Verbs:** Emphasize using numbers/metrics and strong action verbs. Provide 2-3 examples.
-5.  **ATS (Applicant Tracking System) Optimization:** 2-3 tips for making the resume ATS-friendly.
+1.  **Key Resume Sections (Must-Haves):** List essential sections in order.
+2.  **Content Strategy - "Projects" Section:** How to showcase personal or academic projects effectively.
+3.  **Content Strategy - "Skills" Section:** How to list technical skills.
+4.  **Quantification & Action Verbs:** Emphasize using numbers/metrics and strong action verbs. Provide some examples.
+5.  **ATS (Applicant Tracking System) Optimization:** Provide tips for making the resume ATS-friendly.
 6.  **Customization Tip:** Stress tailoring the resume for each specific internship application.
 Focus on current hiring practices for software engineering interns and making the resume impactful.`
   }
@@ -186,18 +183,14 @@ Focus on current hiring practices for software engineering interns and making th
 
 const extractKeywordsFromPrompt = (promptText: string): string[] => {
   const keywords = new Set<string>();
-  // Try to find bolded items that look like section headers in the prompt
-  // This pattern looks for things like "1. **Overview (Paragraph):**" or "**Key Causes (Bulleted list):**"
   const boldMatches = promptText.matchAll(/(?:\d+\.|[-*+])\s*\*\*(.*?)\*\*(?:[\s:]|\(|$)/g);
   for (const match of boldMatches) {
     const term = match[1].trim();
-    // Filter out very short or generic bolded terms, focus on potential section titles
-    if (term.length > 3 && term.split(' ').length <= 4) { // Allow slightly longer section titles
-      keywords.add(term.replace(/\([\s\S]*?\)/g, '').trim()); // Remove parenthetical explanations more robustly
+    if (term.length > 3 && term.split(' ').length <= 4) {
+      keywords.add(term.replace(/\([\s\S]*?\)/g, '').trim());
     }
   }
-  // Add some known section keywords as fallbacks if the regex doesn't catch them
-  const commonKeywords = ["Overview", "Key Causes", "Major Theaters", "Primary Outcome", "Setting", "Resolution", "Definition", "Standard Form", "Real-World Example", "Ingredients", "Instructions", "Pro Tip"];
+  const commonKeywords = ["Overview", "Key Causes", "Major Theaters", "Primary Outcome", "Setting", "Resolution", "Definition", "Standard Form", "Real-World Example", "Ingredients", "Instructions", "Pro Tip", "Concept Overview", "Navigation Path", "Modules Involved", "Prerequisites", "Setup Steps", "Itinerary Outline", "Workout Goal", "Warm-up", "Workout Circuit", "Cool-down", "Overall Strategy", "Resume Sections", "Projects Section", "Skills Section"];
   commonKeywords.forEach(kw => {
     if (promptText.toLowerCase().includes(kw.toLowerCase())) {
       keywords.add(kw);
@@ -213,26 +206,24 @@ const calculateResponseQuality = (
   engineeredPromptTextForKeywords?: string
 ): number => {
   if (!responseText || responseText.trim() === "" || responseText.includes("Error generating response") || responseText.includes("AI did not return")) {
-    return isEngineered ? 15 : 5; // Low score for errors or empty
+    return isEngineered ? 15 : 5; 
   }
 
   let score = 0;
   const words = responseText.split(/\s+/).filter(Boolean).length;
-  // More robust regex for Markdown headers (match at start of line)
   const markdownHeaders = (responseText.match(/^#{1,6}\s.*$/gm) || []).length;
-  // More robust regex for bullet points (match at start of line, potentially indented)
   const bulletPoints = (responseText.match(/^\s*[-*+]\s.*$/gm) || []).length;
-  const boldSections = (responseText.match(/\*\*(?:[^*]|\*[^*])*\*\*/g) || []).length; // Match non-greedy bold
+  const boldSections = (responseText.match(/\*\*(?:[^*]|\*[^*])*\*\*/g) || []).length; 
 
   if (isEngineered) {
-    score += 25; // Base for engineered
+    score += 25; 
 
     if (words > 75) score += 15;
-    if (words > 150) score += 10; // Max 25 for length (more room for elaborate)
+    if (words > 150) score += 10; 
 
-    score += Math.min(markdownHeaders * 7, 28); // Max 28 for headers (e.g., 4 headers)
-    score += Math.min(bulletPoints * 3, 24);   // Max 24 for bullet points (e.g., 8 bullets)
-    score += Math.min(boldSections * 2, 13);   // Max 13 for bold sections
+    score += Math.min(markdownHeaders * 7, 28); 
+    score += Math.min(bulletPoints * 3, 24);   
+    score += Math.min(boldSections * 2, 13);   
 
     if (engineeredPromptTextForKeywords) {
       const expectedKeywords = extractKeywordsFromPrompt(engineeredPromptTextForKeywords);
@@ -243,27 +234,27 @@ const calculateResponseQuality = (
           foundKeywords++;
         }
       });
-      score += Math.min(foundKeywords * 4, 20); // Max 20 for keywords
+      score += Math.min(foundKeywords * 4, 20); 
     }
-    // Ensure it's typically higher than basic if it shows some effort
     if (score < 65 && words > 60 && (markdownHeaders > 0 || bulletPoints > 0)) {
          score = Math.min(100, score + 10);
     }
+  } else { 
+    score += 15; 
+    
+    // Add random variance for basic prompt score
+    const randomFactor = Math.floor(Math.random() * 21) - 10; // -10 to +10
+    score += randomFactor;
 
 
-  } else { // Basic prompt
-    score += 15; // Base for basic
-
-    // Target 100-150 words for basic (as per its system prompt)
-    // Max score of 40 for length in basic
     if (words >= 80 && words <= 170) { 
       score += 40;
-    } else if (words < 80 && words > 30) { // Penalize if too short, but give some points
+    } else if (words < 80 && words > 30) { 
       score += words * 0.4;
     } else if (words <= 30) {
-      score += words * 0.2; // Very short
-    } else { // words > 170
-      score += Math.max(10, 40 - (words - 170) * 0.3); // Penalize if too long but not too harshly
+      score += words * 0.2; 
+    } else { 
+      score += Math.max(10, 40 - (words - 170) * 0.3); 
     }
 
     if (markdownHeaders > 0) score -= Math.min(markdownHeaders * 6, 18);
@@ -300,7 +291,7 @@ export function BasicVsEngineeredSection() {
       setFullEngineeredPromptText(`${scenario.engineeredSystemPrompt}\n\nUser: ${scenario.userInput}`);
       setBasicResponse("");
       setEngineeredResponse("");
-      setBasicResponseQuality(10); // Reset quality scores
+      setBasicResponseQuality(10); 
       setEngineeredResponseQuality(15);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -342,7 +333,6 @@ export function BasicVsEngineeredSection() {
       toast({ variant: "destructive", title: "Input Required", description: "Basic prompt and engineered prompt must be available." });
       return;
     }
-    // Reset responses and quality before new call
     setBasicResponse("");
     setEngineeredResponse("");
     setBasicResponseQuality(0); 
