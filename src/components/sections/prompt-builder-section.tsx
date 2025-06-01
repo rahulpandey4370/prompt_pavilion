@@ -7,13 +7,14 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch"; // Added Switch import
 import { 
   Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles, Settings2,
   Dumbbell, ChefHat, MapPin, Gamepad2, Languages, Briefcase // Scenario specific icons
 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useState, type DragEvent, useEffect } from "react";
+import { useState, type DragEvent, useEffect, type ReactNode } from "react"; // Added ReactNode
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
@@ -289,6 +290,124 @@ interface DroppedItem extends AvailableComponent {}
 
 const PLACEHOLDER_PROMPT_TEXT = "Your assembled prompt will appear here... Drag components from the left to build it!";
 
+// Basic Markdown Preview Component (simplified)
+function BasicMarkdownPreview({ markdown }: { markdown: string | null }) {
+  if (!markdown) return null;
+
+  const elements: ReactNode[] = [];
+  const lines = markdown.split('\n');
+
+  let inList = false;
+  let listType: 'ul' | 'ol' | null = null;
+  let listItems: JSX.Element[] = [];
+
+  const formatInline = (text: string, keyPrefix: string): React.ReactNode[] => {
+    const parts: React.ReactNode[] = [];
+    let lastIndex = 0;
+    // Regex for **bold** or __bold__ and *italic* or _italic_
+    // It's a simplified regex, might not cover all edge cases like nested styles perfectly.
+    const regex = /(\*\*|__)(.*?)\1|(\*|_)(.*?)\3/g;
+    let match;
+    let count = 0;
+    while ((match = regex.exec(text)) !== null) {
+      if (lastIndex < match.index) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+      if (match[1]) { // Bold
+        parts.push(<strong key={`${keyPrefix}-strong-${count++}`}>{match[2]}</strong>);
+      } else if (match[3]) { // Italic
+        // Avoid matching internal underscores in words by checking surrounding characters or simple length.
+        // This is a very basic check; a real parser would be more robust.
+        if (match[4].length > 0 && (!match[4].includes(' ') || match[4].trim() === match[4])) {
+             parts.push(<em key={`${keyPrefix}-italic-${count++}`}>{match[4]}</em>);
+        } else {
+            parts.push(match[0]); // Not valid italic, push original
+        }
+      }
+      lastIndex = regex.lastIndex;
+    }
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+    return parts;
+  };
+  
+  const flushList = (keySuffix: string) => {
+    if (listItems.length > 0 && listType) {
+      if (listType === 'ul') {
+        elements.push(<ul key={`ul-${keySuffix}`} className="list-disc pl-6 my-2 space-y-1">{listItems}</ul>);
+      } else {
+        elements.push(<ol key={`ol-${keySuffix}`} className="list-decimal pl-6 my-2 space-y-1">{listItems}</ol>);
+      }
+    }
+    listItems = [];
+    inList = false;
+    listType = null;
+  };
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const lineKey = `line-${i}`;
+
+    if (line.startsWith('### ')) {
+      flushList(`${lineKey}-prev`);
+      elements.push(<h3 key={lineKey} className="text-xl font-semibold mt-3 mb-1">{formatInline(line.substring(4), lineKey)}</h3>);
+      continue;
+    }
+    if (line.startsWith('## ')) {
+      flushList(`${lineKey}-prev`);
+      elements.push(<h2 key={lineKey} className="text-2xl font-semibold mt-4 mb-2">{formatInline(line.substring(3), lineKey)}</h2>);
+      continue;
+    }
+    if (line.startsWith('# ')) {
+      flushList(`${lineKey}-prev`);
+      elements.push(<h1 key={lineKey} className="text-3xl font-semibold mt-5 mb-3">{formatInline(line.substring(2), lineKey)}</h1>);
+      continue;
+    }
+    if (line.match(/^(\-\-\-|\*\*\*|___)\s*$/)) {
+      flushList(`${lineKey}-prev`);
+      elements.push(<hr key={lineKey} className="my-4 border-border" />);
+      continue;
+    }
+
+    const ulMatch = line.match(/^(\*|-|\+)\s+(.*)/);
+    if (ulMatch) {
+      if (!inList || listType !== 'ul') {
+        flushList(`${lineKey}-prev-ul`);
+        inList = true;
+        listType = 'ul';
+      }
+      listItems.push(<li key={`${lineKey}-li`}>{formatInline(ulMatch[2], `${lineKey}-li-text`)}</li>);
+      if (i === lines.length - 1) flushList(`${lineKey}-last`); // Flush if last line is a list item
+      continue;
+    }
+
+    const olMatch = line.match(/^(\d+)\.\s+(.*)/);
+    if (olMatch) {
+      if (!inList || listType !== 'ol') {
+        flushList(`${lineKey}-prev-ol`);
+        inList = true;
+        listType = 'ol';
+      }
+      listItems.push(<li key={`${lineKey}-li`}>{formatInline(olMatch[2], `${lineKey}-li-text`)}</li>);
+      if (i === lines.length - 1) flushList(`${lineKey}-last`); // Flush if last line is a list item
+      continue;
+    }
+    
+    flushList(`${lineKey}-prev-p`); // End any list if current line is not a list item
+    if (line.trim() !== '') {
+      elements.push(<p key={lineKey} className="my-2">{formatInline(line, lineKey)}</p>);
+    } else if (elements.length > 0 && !elements[elements.length -1]?.key?.toString().includes('-br-')) {
+      // Add a visual break for empty lines if the previous wasn't already a break
+      elements.push(<br key={`${lineKey}-br-${i}`} />);
+    }
+  }
+  flushList(`final`); // Final flush for any remaining list items
+
+  // Using basic Tailwind classes for styling instead of prose
+  return <div className="text-foreground/90 p-1">{elements}</div>;
+}
+
 
 export function PromptBuilderSection() {
   const [currentScenarioId, setCurrentScenarioId] = useState<string>(scenarios[0].id);
@@ -297,14 +416,16 @@ export function PromptBuilderSection() {
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
   const [draggedOver, setDraggedOver] = useState(false);
   const [aiResponse, setAiResponse] = useState<string | null>(null);
+  const [isPreviewMode, setIsPreviewMode] = useState(false); // State for Markdown preview
   const { toast } = useToast();
 
   useEffect(() => {
     const selectedScenario = scenarios.find(s => s.id === currentScenarioId);
     if (selectedScenario) {
       setCurrentAvailableComponents(selectedScenario.availableComponents);
-      setDroppedItems([]); // Clear dropped items when scenario changes
-      setAiResponse(null); // Clear previous AI response
+      setDroppedItems([]); 
+      setAiResponse(null);
+      setIsPreviewMode(false); // Reset preview mode on scenario change
     }
   }, [currentScenarioId]);
 
@@ -357,12 +478,8 @@ export function PromptBuilderSection() {
         return;
       }
       
-      // For non-singleton types, allow multiple instances by generating a unique ID for the dropped item
       const newDroppedItemId = isSingletonType ? originalComponent.id : `${originalComponent.id}-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
       
-      // Ensure 'tools' type components are also treated as allowing multiples if needed in future, for now, it's not singleton.
-      // For this specific request, we ensure only one instance of system and user type. Others can be multiple.
-
       setDroppedItems(prev => [...prev, { ...originalComponent, id: newDroppedItemId }]);
     }
   };
@@ -376,7 +493,8 @@ export function PromptBuilderSection() {
       toast({ variant: "destructive", title: "Empty Prompt", description: "Please assemble a prompt before testing." });
       return;
     }
-    setAiResponse(null); // Clear previous response
+    setAiResponse(null); 
+    setIsPreviewMode(false); // Default to raw view for new responses
     toast({ title: "Processing...", description: "Generating AI response..." });
     generateResponseMutation.mutate({ assembledPrompt: livePreviewText });
   };
@@ -474,7 +592,7 @@ export function PromptBuilderSection() {
                           title={item.title}
                           description={item.description}
                           icon={item.icon}
-                          isDraggable={false} // Dropped items are not draggable from here
+                          isDraggable={false} 
                           className="opacity-95 group-hover:opacity-100 cursor-default card-neon-animated-border" 
                         />
                         <Button
@@ -524,22 +642,40 @@ export function PromptBuilderSection() {
         {(generateResponseMutation.isPending || aiResponse) && (
         <GlassCard className="mt-8 w-full !shadow-none !border-none !bg-transparent !p-0">
             <GlassCardHeader className="pb-3">
-            <GlassCardTitle className="text-neon-yellow flex items-center">
-                <Sparkles className="mr-2 h-5 w-5" /> AI Response
-            </GlassCardTitle>
+              <div className="flex justify-between items-center">
+                <GlassCardTitle className="text-neon-yellow flex items-center">
+                    <Sparkles className="mr-2 h-5 w-5" /> AI Response
+                </GlassCardTitle>
+                {aiResponse && !generateResponseMutation.isPending && (
+                  <div className="flex items-center space-x-2">
+                    <Label htmlFor="markdown-preview-switch" className="text-sm text-neon-yellow/80">Raw</Label>
+                    <Switch
+                      id="markdown-preview-switch"
+                      checked={isPreviewMode}
+                      onCheckedChange={setIsPreviewMode}
+                      disabled={!aiResponse || generateResponseMutation.isPending}
+                    />
+                    <Label htmlFor="markdown-preview-switch" className="text-sm text-neon-yellow/80">Preview</Label>
+                  </div>
+                )}
+              </div>
             </GlassCardHeader>
             <GlassCardContent>
             {generateResponseMutation.isPending && !aiResponse ? (
-                <div className="flex items-center justify-center p-8">
-                <Loader2 className="h-8 w-8 animate-spin text-neon-yellow" />
-                <p className="ml-3 text-foreground/80">Generating response...</p>
+                <div className="flex items-center justify-center p-8 min-h-[256px] bg-background/30 rounded-md border border-neon-yellow/50">
+                  <Loader2 className="h-8 w-8 animate-spin text-neon-yellow" />
+                  <p className="ml-3 text-foreground/80">Generating response...</p>
                 </div>
-            ) : (
+            ) : isPreviewMode && aiResponse ? (
+                <div className="h-auto min-h-[256px] max-h-[500px] overflow-y-auto bg-background/30 text-foreground/90 resize-none !p-4 !border-neon-yellow/50 custom-scrollbar rounded-md border">
+                  <BasicMarkdownPreview markdown={aiResponse} />
+                </div>
+              ) : (
                 <Textarea
-                readOnly
-                value={aiResponse || ""}
-                placeholder="AI response will appear here..."
-                className="h-64 bg-background/30 text-foreground/90 resize-none !p-3 !border-neon-yellow/50 custom-scrollbar"
+                  readOnly
+                  value={aiResponse || ""}
+                  placeholder="AI response will appear here..."
+                  className="h-64 bg-background/30 text-foreground/90 resize-none !p-3 !border-neon-yellow/50 custom-scrollbar"
                 />
             )}
             </GlassCardContent>
