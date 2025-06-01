@@ -1,7 +1,7 @@
 
 "use client";
 
-import { SectionContainer as BasicVsEngineeredSectionContainer } from "@/components/shared/section-container";
+import { SectionContainer } from "@/components/shared/section-container"; // Corrected this import
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -25,7 +25,9 @@ import {
   Dumbbell,
   Brain,
   Briefcase,
-  BarChartBig
+  BarChartBig,
+  Code2,
+  MessageSquare
 } from "lucide-react";
 
 interface PlaygroundScenario {
@@ -44,10 +46,10 @@ const playgroundScenarios: PlaygroundScenario[] = [
     userInput: "Tell me about World War 2.",
     engineeredSystemPrompt: `System: You are an expert history tutor AI for high school students. Your primary function is to provide structured summaries of historical events.
 When asked about a broad topic like 'World War 2', you MUST structure your response as follows:
-1.  **Overview:** A summary of the event, including start and end dates.
-2.  **Key Causes (as a bulleted list):** The primary reasons the event occurred.
-3.  **Major Theaters/Fronts (as a bulleted list):** Main geographical areas of conflict.
-4.  **Primary Outcome:** The most important consequence.`
+1.  **Overview (Paragraph):** A summary of the event, including start and end dates.
+2.  **Key Causes (Bulleted list, provide key points):** The primary reasons the event occurred.
+3.  **Major Theaters/Fronts (Bulleted list, provide key points):** Main geographical areas of conflict.
+4.  **Primary Outcome (Sentence):** The most important consequence.`
   },
   {
     id: "creative-writing-assistant",
@@ -58,7 +60,7 @@ When asked about a broad topic like 'World War 2', you MUST structure your respo
 1.  **Setting:** Establish time, place, and atmosphere in a few descriptive sentences.
 2.  **Character Introduction:** Present the main character with one defining trait and a brief background.
 3.  **Inciting Incident & Conflict:** Introduce a clear problem or challenge that sets the story in motion.
-4.  **Rising Action (describe a few key events):** Describe events that build tension or develop the conflict.
+4.  **Rising Action (describe a few key events):** Detail events that build tension or develop the conflict.
 5.  **Climax:** The peak of the conflict.
 6.  **Resolution & Theme:** Provide a satisfying conclusion, potentially with character growth or a thematic takeaway.
 Keep stories to a reasonable length for a short piece, focusing on narrative flow and engagement.`
@@ -69,10 +71,10 @@ Keep stories to a reasonable length for a short piece, focusing on narrative flo
     icon: Calculator,
     userInput: "Explain quadratic equations.",
     engineeredSystemPrompt: `System: You are a patient math tutor for students learning algebra. For any mathematical concept explanation like quadratic equations, provide:
-1.  **Definition:** Clear, simple definition of a quadratic equation.
-2.  **Standard Form:** Show the mathematical notation.
+1.  **Definition:** Offer a clear, simple definition of a quadratic equation.
+2.  **Standard Form:** Show the general mathematical notation.
 3.  **Key Components:** Briefly explain what 'a', 'b', and 'c' represent, and the condition for 'a'.
-4.  **Methods of Solving (list a few):** For example, Factoring, Quadratic Formula, Completing the Square.
+4.  **Methods of Solving:** List a few common methods for solving these equations.
 5.  **Real-World Example:** Provide one practical application or scenario where quadratic equations are used.
 6.  **Step-by-Step Solution:** Walk through solving a simple example equation using one of the listed methods.
 Use simple language and encourage the student.`
@@ -84,10 +86,10 @@ Use simple language and encourage the student.`
     userInput: "How do I manage inventory effectively in Epicor ERP, specifically regarding reorder points?",
     engineeredSystemPrompt: `System: You are an Epicor ERP supply chain consultant with 10+ years experience. When answering questions about inventory management and reorder points in Epicor, structure your response as:
 1.  **Concept Overview:** Briefly explain reorder points (ROP) in inventory management.
-2.  **Epicor Navigation Path:** The menu path in Epicor to access relevant ROP settings.
+2.  **Epicor Navigation Path:** Detail the menu path in Epicor to access relevant ROP settings.
 3.  **Key Epicor Fields & Functions for ROP:** List the most important Epicor fields or functions related to setting up and using ROPs. For each, briefly explain its role.
-4.  **Best Practice Tip:** One critical recommendation for setting ROPs accurately in Epicor.
-5.  **Common Pitfall:** One mistake to avoid when managing ROPs in Epicor.
+4.  **Best Practice Tip:** Offer one critical recommendation for setting ROPs accurately in Epicor.
+5.  **Common Pitfall:** Describe one mistake to avoid when managing ROPs in Epicor.
 6.  **Reporting/Analysis:** Suggest one Epicor report or BAQ that can help monitor inventory levels against ROPs.
 Focus on practical, actionable advice for daily operations within Epicor.`
   },
@@ -98,10 +100,10 @@ Focus on practical, actionable advice for daily operations within Epicor.`
     userInput: "How to set up production schedules for a new product line in Epicor Kinetic?",
     engineeredSystemPrompt: `System: You are an Epicor ERP manufacturing specialist helping production managers. For questions on setting up production schedules for a new product line in Epicor Kinetic, provide:
 1.  **Core Epicor Modules Involved:** List the primary Epicor Kinetic modules used.
-2.  **Prerequisites (Data Setup):** What key data must be configured first.
-3.  **Key Setup Steps (High-Level Sequence):** A numbered sequence of major actions to create and schedule jobs for the new product line.
+2.  **Prerequisites (Data Setup):** Detail what key data must be configured first.
+3.  **Key Setup Steps (High-Level Sequence):** Offer a numbered sequence of major actions to create and schedule jobs for the new product line.
 4.  **Critical Scheduling Board Settings:** Mention important configuration options or views in the Epicor Scheduling Board relevant to this task.
-5.  **Validation Check:** How to verify the production schedule is correctly reflecting demand and capacity.
+5.  **Validation Check:** Explain how to verify the production schedule is correctly reflecting demand and capacity.
 Keep explanations focused on operational efficiency and standard Epicor Kinetic processes.`
   },
   {
@@ -111,12 +113,9 @@ Keep explanations focused on operational efficiency and standard Epicor Kinetic 
     userInput: "Plan a 7-day cultural trip to Japan for first-timers, focusing on Tokyo and Kyoto.",
     engineeredSystemPrompt: `System: You are a travel planning assistant specializing in detailed itineraries. For a 7-day cultural trip to Japan (Tokyo & Kyoto) for first-timers, provide:
 1.  **Overall Trip Theme:** Briefly state the focus.
-2.  **Suggested Itinerary Outline (Day-by-Day):**
-    For Tokyo (suggest around 3 days), list 2-3 key cultural attractions or experiences for each day.
-    For Kyoto (suggest around 3 days), list 2-3 key cultural attractions or experiences for each day.
-    Include a mention of travel between Tokyo and Kyoto.
+2.  **Suggested Itinerary Outline (Day-by-Day):
 3.  **Accommodation Style Recommendation:** Suggest a type of accommodation suitable for cultural immersion.
-4.  **Cultural Tips (provide a few):** Important etiquette or cultural notes for Japan.
+4.  **Cultural Tips :** Important etiquette or cultural notes for Japan.
 5.  **Foodie Highlight:** Mention one must-try Japanese dish or food experience.
 Present information in an organized, scannable format. Assume moderate budget.`
   },
@@ -128,10 +127,10 @@ Present information in an organized, scannable format. Assume moderate budget.`
     engineeredSystemPrompt: `System: You are a culinary instructor providing cooking guidance, with a focus on authentic Italian techniques. For an authentic Pasta Carbonara recipe, format as:
 1.  **Authenticity Note:** Briefly state key elements of authentic Carbonara.
 2.  **Ingredients (for 2 servings):** List with measurements.
-3.  **Equipment Needed:** Essential tools required.
-4.  **Step-by-Step Instructions:** Numbered, clear directions from prepping ingredients to plating. Emphasize critical techniques like tempering eggs and emulsifying the sauce.
-5.  **Timing:** Estimated total prep and cooking time.
-6.  **Pro Tip:** One technique to elevate the dish or avoid common mistakes.
+3.  **Equipment Needed:** Detail essential tools required.
+4.  **Step-by-Step Instructions:** Offer numbered, clear directions from prepping ingredients to plating. Emphasize critical techniques like tempering eggs and emulsifying the sauce.
+5.  **Timing:** Give an estimated total prep and cooking time.
+6.  **Pro Tip:** Provide one technique to elevate the dish or avoid common mistakes.
 Focus on achieving an authentic result for home cooks.`
   },
   {
@@ -141,12 +140,12 @@ Focus on achieving an authentic result for home cooks.`
     userInput: "Give me a full-body workout routine for a beginner who has access to basic dumbbells.",
     engineeredSystemPrompt: `System: You are a certified personal trainer creating beginner-friendly workouts. For a full-body dumbbell workout routine for a beginner, structure the response as:
 1.  **Workout Goal:** State the primary goal of the workout.
-2.  **Frequency:** How many times per week.
+2.  **Frequency:** Recommend how many times per week.
 3.  **Warm-up (around 5 min):** Suggest some dynamic stretches.
 4.  **Workout Circuit (List several exercises):** For each exercise, include its name, suggested sets & reps, and a brief form cue.
 5.  **Cool-down (around 5 min):** Suggest some static stretches.
-6.  **Progression Tip:** How to advance over 4 weeks.
-7.  **Important Safety Note:** One key safety reminder.
+6.  **Progression Tip:** Explain how to advance over 4 weeks.
+7.  **Important Safety Note:** Offer one key safety reminder.
 Prioritize safety, proper form, and sustainable progress.`
   },
   {
@@ -156,10 +155,7 @@ Prioritize safety, proper form, and sustainable progress.`
     userInput: "How do I study effectively for my final exams coming up in 3 weeks?",
     engineeredSystemPrompt: `System: You are an academic success coach helping students develop effective study strategies. For advice on studying for final exams in 3 weeks, organize as:
 1.  **Overall Strategy: Spaced Repetition & Active Recall.** Briefly explain.
-2.  **3-Week Plan Outline:**
-    *   **Week 1 (Content Review & Consolidation):** Suggest activities.
-    *   **Week 2 (Practice & Application):** Suggest activities.
-    *   **Week 3 (Targeted Review & Mock Exams):** Suggest activities.
+2.  **Week Plan Outline:**
 3.  **Daily Study Session Structure:** Recommend a structure.
 4.  **Key Study Techniques (Explain a few):**
 5.  **Environment & Wellbeing:** Provide tips for optimal study environment and managing stress.
@@ -172,10 +168,10 @@ Tailor advice to promote long-term academic success and reduce exam anxiety.`
     userInput: "How do I write a resume that stands out for a software engineering internship?",
     engineeredSystemPrompt: `System: You are a professional career counselor specializing in resume optimization for tech roles. For guidance on writing a resume for a software engineering internship, structure responses as:
 1.  **Key Resume Sections (Must-Haves):** List essential sections in order.
-2.  **Content Strategy - "Projects" Section:** How to showcase personal or academic projects effectively.
-3.  **Content Strategy - "Skills" Section:** How to list technical skills.
+2.  **Content Strategy - "Projects" Section:** Explain how to showcase personal or academic projects effectively.
+3.  **Content Strategy - "Skills" Section:** Detail how to list technical skills.
 4.  **Quantification & Action Verbs:** Emphasize using numbers/metrics and strong action verbs. Provide some examples.
-5.  **ATS (Applicant Tracking System) Optimization:** Provide tips for making the resume ATS-friendly.
+5.  **ATS (Applicant Tracking System) Optimization:** Offer tips for making the resume ATS-friendly.
 6.  **Customization Tip:** Stress tailoring the resume for each specific internship application.
 Focus on current hiring practices for software engineering interns and making the resume impactful.`
   }
@@ -274,7 +270,7 @@ export function BasicVsEngineeredSection() {
 
   const [basicPromptText, setBasicPromptText] = useState(currentScenario.userInput);
   const [fullEngineeredPromptText, setFullEngineeredPromptText] = useState(
-    `${currentScenario.engineeredSystemPrompt}\n\nUser: ${currentScenario.userInput}`
+     `${currentScenario.engineeredSystemPrompt}\n\nUser: ${currentScenario.userInput}`
   );
 
   const [basicResponse, setBasicResponse] = useState("");
@@ -344,7 +340,7 @@ export function BasicVsEngineeredSection() {
   const CurrentDisplayIcon = currentScenario.icon || HelpCircle;
 
   return (
-    <BasicVsEngineeredSectionContainer
+    <SectionContainer
       id="comparison"
       title="Basic vs. Engineered: A Live Comparison"
       subtitle="See the difference! Compare AI responses from basic vs. engineered prompts in real-time."
@@ -435,49 +431,14 @@ export function BasicVsEngineeredSection() {
               )}
 
               {(mutation.isSuccess || mutation.isError || basicResponse || engineeredResponse) && (
-                 <div className="bg-card p-0.5 yellow-glowing-box rounded-lg mt-8">
-                    <GlassCard className="!bg-card rounded-md">
-                        <GlassCardHeader>
-                            <GlassCardTitle className="text-neon-yellow flex items-center">
-                                <BarChartBig className="mr-2 h-5 w-5"/> Response Quality Meter
-                            </GlassCardTitle>
-                        </GlassCardHeader>
-                        <GlassCardContent className="flex flex-col md:flex-row items-stretch md:items-center justify-center md:justify-around p-6 gap-6 md:gap-4">
-                            <div className="text-center w-full">
-                                <p className="text-sm text-muted-foreground mb-1">Basic Prompt</p>
-                                <div className="w-full h-6 bg-destructive/30 rounded-lg overflow-hidden relative border border-destructive/50">
-                                    <div
-                                        className="h-full bg-destructive transition-all duration-500 ease-out"
-                                        style={{ width: `${Math.max(5, basicResponseQuality)}%` }}
-                                    />
-                                    <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-destructive-foreground">
-                                        {`${Math.round(basicResponseQuality)}%`}
-                                    </span>
-                                </div>
-                                <p className="text-xs mt-1 text-destructive">Generally Lower Quality</p>
-                            </div>
-                            <div className="text-center w-full">
-                                <p className="text-sm text-muted-foreground mb-1">Engineered Prompt</p>
-                                <div className="w-full h-6 bg-[hsl(var(--neon-lime-raw))]/30 rounded-lg overflow-hidden relative border border-[hsl(var(--neon-lime-raw))]/50">
-                                    <div
-                                        className="h-full bg-[hsl(var(--neon-lime-raw))] transition-all duration-500 ease-out"
-                                        style={{ width: `${Math.max(5, engineeredResponseQuality)}%` }}
-                                    />
-                                    <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-background"> {/* Changed text to dark for lime bg */}
-                                      {`${Math.round(engineeredResponseQuality)}%`}
-                                    </span>
-                                </div>
-                                <p className="text-xs mt-1 text-green-400">Generally Higher Quality</p>
-                            </div>
-                        </GlassCardContent>
-                    </GlassCard>
+                 <div className="mt-8">
+                    How is the response quality being calculated here?
                  </div>
               )}
             </GlassCardContent>
           </GlassCard>
         </div>
       </div>
-    </BasicVsEngineeredSectionContainer>
+    </SectionContainer>
   );
 }
-
