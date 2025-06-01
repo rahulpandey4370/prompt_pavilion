@@ -7,7 +7,10 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles, Settings2, Gift, ChefHat, MapPin, TrendingUp, Brain } from "lucide-react";
+import { 
+  Wand2, Eye, Puzzle, SlidersHorizontal, ShieldCheck, Wrench, ListChecks, Bot, Trash2, Loader2, Sparkles, Settings2,
+  Dumbbell, ChefHat, MapPin, Gamepad2, Languages, Briefcase // Scenario specific icons
+} from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState, type DragEvent, useEffect } from "react";
@@ -38,208 +41,247 @@ interface Scenario {
 
 const scenarios: Scenario[] = [
   {
-    id: "festival-greeting",
-    name: "Festival Greeting Card Message",
-    icon: Gift,
+    id: "personal-fitness-trainer",
+    name: "Personal Fitness Trainer",
+    icon: Dumbbell,
     availableComponents: [
       {
-        id: "fest-greet-system",
-        type: "system",
-        title: "System: Friendly Greeting Helper",
-        description: "You are a friendly AI assistant for writing short, warm festival greetings (e.g., for Diwali, Eid, Christmas).",
+        id: "pft-system", type: "system", title: "System: Personal Fitness Coach",
+        description: "You are an enthusiastic personal trainer AI who creates customized workout plans. Always maintain an encouraging, motivational tone.",
         icon: Settings2
       },
       {
-        id: "fest-greet-user",
-        type: "user",
-        title: "User: Festival Greeting Request",
-        description: "Write a joyful message for Diwali to send to my friend, Priya.",
+        id: "pft-user", type: "user", title: "User: Weekly Workout Request",
+        description: "Create a 4-day workout routine that I can do at home with minimal equipment.",
         icon: Puzzle
       },
       {
-        id: "fest-greet-rag",
-        type: "rag",
-        title: "RAG: Recipient Details (Optional)",
-        description: "Context: Priya and I share many childhood memories and a love for traditional sweets.",
+        id: "pft-rag", type: "rag", title: "RAG: User Profile Details (Optional)",
+        description: "Context: User is a beginner, works from home, has 30-45 minutes available per session, owns resistance bands and dumbbells.",
         icon: ListChecks
       },
       {
-        id: "fest-greet-examples",
-        type: "examples",
-        title: "Examples: Sample Greeting Style",
-        description: "Example Style: 'Wishing you a Diwali filled with light and laughter, dear Priya! Hope it's as sweet as our favorite jalebis!'",
+        id: "pft-examples", type: "examples", title: "Examples: Sample Workout Format",
+        description: 'Example Style: "Monday - Upper Body: 3 sets of push-ups (8-12 reps), 3 sets of dumbbell rows (10-15 reps)..." Keep it structured and time-efficient.',
         icon: Eye
       },
       {
-        id: "fest-greet-constraints",
-        type: "constraints",
-        title: "Constraints: Brevity & Tone",
-        description: "Keep the message under 40 words. Ensure the tone is warm, personal, and respectful of the festival.",
+        id: "pft-constraints", type: "constraints", title: "Constraints: Safety & Duration",
+        description: "Keep workouts under 45 minutes. Include proper warm-up and cool-down. Emphasize correct form over intensity.",
         icon: SlidersHorizontal
       },
       {
-        id: "fest-greet-guardrails",
-        type: "guardrails",
-        title: "Guardrails: Cultural Sensitivity",
-        description: "Ensure the message is culturally appropriate and universally positive.",
+        id: "pft-guardrails", type: "guardrails", title: "Guardrails: Health & Safety",
+        description: "Never recommend exercises that could cause injury. Always suggest consulting a doctor before starting new routines.",
         icon: ShieldCheck
       },
     ]
   },
   {
-    id: "quick-snack-recipe",
-    name: "Quick Recipe - Snack",
+    id: "creative-recipe-developer",
+    name: "Creative Recipe Developer",
     icon: ChefHat,
     availableComponents: [
       {
-        id: "recipe-system",
-        type: "system",
-        title: "System: Concise Recipe Assistant",
-        description: "You are a recipe assistant. Provide clear, simple, and concise recipes for easy snacks.",
+        id: "crd-system", type: "system", title: "System: Culinary Creative Assistant",
+        description: "You are a innovative chef AI who loves experimenting with fusion cuisines and creative ingredient combinations.",
         icon: Settings2
       },
       {
-        id: "recipe-user",
-        type: "user",
-        title: "User: Quick Snack Recipe Request",
-        description: "Give me a very simple recipe for 'vegetable pakora' that a beginner can make quickly (under 20 minutes prep & cook).",
+        id: "crd-user", type: "user", title: "User: Fusion Recipe Challenge",
+        description: "Create a unique fusion recipe combining Italian and Asian flavors using chicken as the main protein.",
         icon: Puzzle
       },
       {
-        id: "recipe-rag",
-        type: "rag",
-        title: "RAG: Common Pakora Ingredients",
-        description: "Context: Basic pakora ingredients usually include gram flour (besan), onion, potato, spinach, and common Indian spices (turmeric, chili powder, coriander).",
+        id: "crd-rag", type: "rag", title: "RAG: Dietary Preferences (Optional)",
+        description: "Context: User prefers moderate spice levels, has access to standard kitchen equipment, cooking for 2-4 people.",
         icon: ListChecks
       },
       {
-        id: "recipe-examples",
-        type: "examples",
-        title: "Examples: Output Structure",
-        description: "Example Format:\n**Ingredients:**\n- Item 1 (qty)\n- Item 2 (qty)\n**Instructions (Max 5 steps):**\n1. Brief step 1.\n2. Brief step 2.",
-        icon: Eye
-      },
-      {
-        id: "recipe-constraints",
-        type: "constraints",
-        title: "Constraints: Simplicity & Clarity",
-        description: "List ingredients first, then provide step-by-step instructions (max 5 steps). Use simple language. Specify quantities for 2 servings.",
-        icon: SlidersHorizontal
-      },
-      {
-        id: "recipe-guardrails",
-        type: "guardrails",
-        title: "Guardrails: Cooking Safety Note",
-        description: "If deep frying is involved, include a brief, clear safety reminder about handling hot oil.",
-        icon: ShieldCheck
-      },
-    ]
-  },
-  {
-    id: "weekend-getaway",
-    name: "Weekend Getaway Idea",
-    icon: MapPin,
-    availableComponents: [
-      {
-        id: "travel-system",
-        type: "system",
-        title: "System: Weekend Trip Planner",
-        description: "You are a travel planner specializing in suggesting short (2-day) weekend getaways from major Indian cities.",
-        icon: Settings2
-      },
-      {
-        id: "travel-user",
-        type: "user",
-        title: "User: Trip Idea from Bangalore",
-        description: "Suggest a 2-day weekend trip from Bangalore for someone who enjoys nature and historical sites. Budget is moderate (approx. ₹5000-₹8000 per person, excluding travel to destination).",
-        icon: Puzzle
-      },
-      {
-        id: "travel-rag",
-        type: "rag",
-        title: "RAG: User Preferences (Optional)",
-        description: "Contextual Info: User prefers less crowded places, enjoys local cuisine, and is comfortable with public transport or budget taxi services.",
-        icon: ListChecks
-      },
-      {
-        id: "travel-examples",
-        type: "examples",
-        title: "Examples: Sample Itinerary Snippet",
-        description: "Example Output Snippet:\n**Destination:** Mysore (Approx. 3-4 hours from Bangalore)\n**Day 1:** Mysore Palace, Local Market for silk sarees, Chamundeshwari Temple (evening)\n**Day 2:** Brindavan Gardens, St. Philomena's Church",
-        icon: Eye
-      },
-      {
-        id: "travel-constraints",
-        type: "constraints",
-        title: "Constraints: Output Details",
-        description: "Suggest one main destination. Include 2-3 key activities per day. Mention estimated travel time from Bangalore. Briefly state why it fits the 'nature' and 'historical' criteria.",
-        icon: SlidersHorizontal
-      },
-      {
-        id: "travel-guardrails",
-        type: "guardrails",
-        title: "Guardrails: Practicality & Safety",
-        description: "Ensure suggestions are generally feasible within a 2-day trip and are safe for solo travelers or small groups. Mention typical best times to visit if relevant (e.g., avoid monsoon peaks for outdoor sites).",
-        icon: ShieldCheck
-      },
-    ]
-  },
-  {
-    id: "erp-sales-analysis",
-    name: "ERP: Sales Performance & Anomaly Report",
-    icon: TrendingUp,
-    availableComponents: [
-      {
-        id: "erp-analysis-system",
-        type: "system",
-        title: "System: AI ERP Business Intelligence Analyst",
-        description: "You are 'AnalyticaPro', an advanced AI business intelligence analyst. Your primary function is to generate insightful reports on sales performance from ERP data, identify anomalies, and provide actionable recommendations for sales managers. Use precise business terminology and structure reports logically.",
-        icon: Settings2
-      },
-      {
-        id: "erp-analysis-user",
-        type: "user",
-        title: "User: Quarterly Sales Analysis Request",
-        description: "Generate a sales performance report for the last completed quarter (e.g., Q3 2024) for the 'Engineered Products' division. Specifically, I need to understand:\n1. Overall revenue trend vs. previous quarter and vs. same quarter last year.\n2. Top 3 performing product lines and their growth drivers.\n3. Any significant sales anomalies (e.g., a product line with a >20% unexpected drop or surge in a specific region like 'APAC' or 'EMEA'). For each anomaly, suggest two potential causes.\n4. Three strategic recommendations based on this data for improving next quarter's sales.",
-        icon: Puzzle
-      },
-      {
-        id: "erp-analysis-rag",
-        type: "rag",
-        title: "RAG: Sample ERP Sales Data Extract (Quarterly)",
-        description: "Context: ERP Q3 2024 Sales Data Extract (Engineered Products Division):\n- Total Revenue (Q3 2024): $2.75M (vs. Q2 2024: $2.5M, vs. Q3 2023: $2.3M)\n- Gross Profit Margin (Q3 2024): 38% (vs. Q2 2024: 39%)\n- Product Line 'Custom Turbines': $1.2M (Up 15% QoQ, driven by new contracts in EMEA)\n- Product Line 'Precision Gears': $0.8M (Stable QoQ)\n- Product Line 'Actuator Assemblies': $0.4M (Down 25% QoQ - APAC region showed a 50% drop, EMEA stable, NA up 5%)\n- Regional Performance (APAC - Actuators): $50K (vs $200K in Q2) - Note: New competitor launched aggressive pricing in APAC for similar actuators in August.\n- Key Customer Segment (Aerospace): $1.5M (Up 10% QoQ)",
-        icon: ListChecks
-      },
-      {
-        id: "erp-analysis-constraints",
-        type: "constraints",
-        title: "Constraints: Report Structure & Depth",
-        description: "Output a concise report (maximum 500 words). Use Markdown formatting. Start with an Executive Summary (3-4 sentences). Clearly label each requested section (Overall Trend, Top Products, Anomalies, Recommendations). For anomalies, explicitly state the data points and then list potential causes.",
-        icon: SlidersHorizontal
-      },
-      {
-        id: "erp-analysis-guardrails",
-        type: "guardrails",
-        title: "Guardrails: Scope and Professionalism",
-        description: "Focus only on the 'Engineered Products' division data provided. Do not speculate on causes for anomalies beyond what can be reasonably inferred from the context or what is typical in the manufacturing sector (e.g., supply chain issues, competitor actions, market demand shifts). Avoid making definitive financial investment advice.",
-        icon: ShieldCheck
-      },
-      {
-        id: "erp-analysis-tools",
-        type: "tools",
-        title: "Tools: Conceptual - Data Query & Analysis Functions",
-        description: "Tool Hint (for AI internal conceptualization):\n- `queryERPSalesData(division, quarter_year, metrics_array)`\n- `calculateVariance(current_value, previous_value, type: 'abs'|'perc')`\n- `identifySalesAnomalies(dataset, threshold_percentage, dimensions_array)`",
+        id: "crd-tools", type: "tools", title: "Tools: Nutrition Calculator & Recipe Scaler",
+        description: "Tool Hint (for AI internal conceptualization):\n- calculateNutrition(ingredients, servings)\n- scaleRecipe(originalServings, targetServings)",
         icon: Wrench
       },
       {
-        id: "erp-analysis-examples",
-        type: "examples",
-        title: "Examples: Snippet of Anomaly Section Format",
-        description: "Example of Anomaly Section Format:\n\n**Sales Anomaly: Product Line 'X' - Region 'Y'**\n- Data: Q3 Sales $Value vs. Q2 Sales $Value (Percentage% decrease/increase).\n- Potential Causes:\n  1.  [Plausible Cause 1 based on context or general knowledge]\n  2.  [Plausible Cause 2 based on context or general knowledge]",
+        id: "crd-examples-structure", type: "examples", title: "Examples: Recipe Structure Style",
+        description: 'Format Example: "Prep: 15 min | Cook: 25 min | Serves: 4" followed by ingredients list, then step-by-step instructions with cooking tips.',
         icon: Eye
+      },
+      {
+        id: "crd-examples-sample", type: "examples", title: "Examples: Sample Recipe Format",
+        description: 'Complete Recipe Example: "Asian-Italian Chicken Teriyaki Parmigiana: Chicken breast + teriyaki glaze + mozzarella + panko breadcrumbs. Cooking method: Pan-sear, then bake at 375°F for 20 minutes..."',
+        icon: Eye
+      },
+      {
+        id: "crd-constraints", type: "constraints", title: "Constraints: Time & Accessibility",
+        description: "Recipes should take under 60 minutes total. Use ingredients available in most grocery stores.",
+        icon: SlidersHorizontal
+      },
+      {
+        id: "crd-guardrails", type: "guardrails", title: "Guardrails: Food Safety",
+        description: "Always include proper cooking temperatures and food safety guidelines. Warn about common allergens.",
+        icon: ShieldCheck
       },
     ]
   },
+  {
+    id: "travel-adventure-planner",
+    name: "Travel Adventure Planner",
+    icon: MapPin,
+    availableComponents: [
+      {
+        id: "tap-system", type: "system", title: "System: Adventure Travel Expert",
+        description: "You are an experienced travel guide specializing in off-the-beaten-path destinations and unique cultural experiences.",
+        icon: Settings2
+      },
+      {
+        id: "tap-user", type: "user", title: "User: Weekend Adventure Request",
+        description: "Plan a weekend adventure trip within 200 miles of Chicago that includes outdoor activities and local culture.",
+        icon: Puzzle
+      },
+      {
+        id: "tap-rag", type: "rag", title: "RAG: Travel Preferences (Optional)",
+        description: "Context: Mid-level hiking experience, interested in photography, budget-conscious, has a car, prefers small towns over cities.",
+        icon: ListChecks
+      },
+      {
+        id: "tap-examples", type: "examples", title: "Examples: Itinerary Format",
+        description: 'Sample Day: "Saturday 9 AM - Starved Rock State Park (hiking trail), 1 PM - Local farm-to-table lunch, 4 PM - Historic downtown exploration"',
+        icon: Eye
+      },
+      {
+        id: "tap-constraints", type: "constraints", title: "Constraints: Budget & Distance",
+        description: "Stay within 200-mile radius. Keep total cost under $300 for two people. Focus on weekend-friendly timing.",
+        icon: SlidersHorizontal
+      },
+      {
+        id: "tap-guardrails", type: "guardrails", title: "Guardrails: Safety & Responsibility",
+        description: "Include weather considerations and safety tips. Respect local communities and environmental guidelines.",
+        icon: ShieldCheck
+      },
+    ]
+  },
+  {
+    id: "game-master-storyteller",
+    name: "Game Master Storyteller",
+    icon: Gamepad2,
+    availableComponents: [
+      {
+        id: "gms-system", type: "system", title: "System: Interactive Story Game Master",
+        description: "You are a creative dungeon master who crafts engaging interactive fantasy adventures with meaningful choices and consequences.",
+        icon: Settings2
+      },
+      {
+        id: "gms-user", type: "user", title: "User: Fantasy Adventure Start",
+        description: "Begin a fantasy adventure where I'm a merchant who discovers a mysterious map in my grandfather's attic.",
+        icon: Puzzle
+      },
+      {
+        id: "gms-rag", type: "rag", title: "RAG: Player Preferences (Optional)",
+        description: "Context: Enjoys puzzle-solving over combat, prefers medieval fantasy settings, likes character development and moral dilemmas.",
+        icon: ListChecks
+      },
+      {
+        id: "gms-examples", type: "examples", title: "Examples: Story Interaction Style",
+        description: 'Choice Format: Present 3-4 meaningful options at story decision points: "A) Examine the map more closely, B) Search for more hidden items, C) Research the map\'s symbols"',
+        icon: Eye
+      },
+      {
+        id: "gms-constraints", type: "constraints", title: "Constraints: Pacing & Engagement",
+        description: "Keep story segments to 3-4 paragraphs. Always end with a clear choice or action prompt. Maintain family-friendly content.",
+        icon: SlidersHorizontal
+      },
+      {
+        id: "gms-guardrails", type: "guardrails", title: "Guardrails: Content Appropriateness",
+        description: "Avoid graphic violence or inappropriate content. Focus on adventure, mystery, and character growth.",
+        icon: ShieldCheck
+      },
+    ]
+  },
+  {
+    id: "language-learning-companion",
+    name: "Language Learning Companion",
+    icon: Languages,
+    availableComponents: [
+      {
+        id: "llc-system", type: "system", title: "System: Friendly Language Tutor",
+        description: "You are a patient, encouraging language teacher who makes learning fun through practical conversations and cultural insights.",
+        icon: Settings2
+      },
+      {
+        id: "llc-user", type: "user", title: "User: Spanish Conversation Practice",
+        description: "Help me practice ordering food at a Spanish restaurant. I'm at beginner level but want to sound natural.",
+        icon: Puzzle
+      },
+      {
+        id: "llc-rag", type: "rag", title: "RAG: Learning Progress (Optional)",
+        description: "Context: Knows basic greetings and numbers, struggles with verb conjugations, learns best through repetition and real-world scenarios.",
+        icon: ListChecks
+      },
+      {
+        id: "llc-examples", type: "examples", title: "Examples: Conversation Structure",
+        description: "Practice Format: Present the Spanish phrase, provide pronunciation guide (phonetic), explain cultural context, then practice variations.",
+        icon: Eye
+      },
+      {
+        id: "llc-constraints", type: "constraints", title: "Constraints: Level Appropriateness",
+        description: "Use beginner-friendly vocabulary. Provide pronunciation help. Focus on practical, commonly-used phrases.",
+        icon: SlidersHorizontal
+      },
+      {
+        id: "llc-guardrails", type: "guardrails", title: "Guardrails: Cultural Sensitivity",
+        description: "Ensure cultural accuracy and respect. Avoid stereotypes. Focus on authentic, practical language use.",
+        icon: ShieldCheck
+      },
+    ]
+  },
+  {
+    id: "epicor-erp-consultant",
+    name: "Epicor ERP Implementation Consultant",
+    icon: Briefcase,
+    availableComponents: [
+      {
+        id: "erp-system", type: "system", title: "System: Senior Epicor ERP Consultant",
+        description: "You are an experienced Epicor ERP implementation specialist with 15+ years in manufacturing and supply chain optimization.",
+        icon: Settings2
+      },
+      {
+        id: "erp-user", type: "user", title: "User: Production Planning Setup Query",
+        description: "Walk me through setting up finite capacity scheduling in Epicor for our sheet metal fabrication shop with 12 work centers.",
+        icon: Puzzle
+      },
+      {
+        id: "erp-rag", type: "rag", title: "RAG: Company Operations Data (Optional)",
+        description: "Context: 150-employee shop, mix of custom and repeat orders, current lead times 2-3 weeks, using Epicor 10.2.700, struggling with accurate delivery dates.",
+        icon: ListChecks
+      },
+      {
+        id: "erp-tools", type: "tools", title: "Tools: Epicor Data Query & Configuration Helper",
+        description: "Tool Hint (for AI internal conceptualization):\n- queryEpiCorWorkCenters()\n- validateCapacitySettings()\n- generateImplementationChecklist()",
+        icon: Wrench
+      },
+      {
+        id: "erp-examples-steps", type: "examples", title: "Examples: Configuration Steps Format",
+        description: 'Step Example: "Navigate to Production Management > Capacity Planning > Resource Groups. Define each work center with: 1) Daily capacity hours, 2) Efficiency factors, 3) Queue time parameters"',
+        icon: Eye
+      },
+      {
+        id: "erp-examples-walkthrough", type: "examples", title: "Examples: Capacity Planning Walkthrough",
+        description: 'Complete Setup Example: "Work Center WC001-Laser Cutting: Daily Hours=16, Efficiency=85%, Queue Time=4hrs, Setup Time=30min. Then configure finite scheduling parameters in Global Scheduling Workbench..."',
+        icon: Eye
+      },
+      {
+        id: "erp-constraints", type: "constraints", title: "Constraints: Version & Practicality",
+        description: "Focus on Epicor 10.2.x functionality. Provide actionable steps that can be implemented within 2-3 weeks. Consider typical fabrication shop workflows.",
+        icon: SlidersHorizontal
+      },
+      {
+        id: "erp-guardrails", type: "guardrails", title: "Guardrails: Data Security & Compliance",
+        description: "Never request sensitive company data. Emphasize proper backup procedures before configuration changes. Follow Epicor best practices for system modifications.",
+        icon: ShieldCheck
+      },
+    ]
+  }
 ];
 
 
@@ -261,13 +303,13 @@ export function PromptBuilderSection() {
     const selectedScenario = scenarios.find(s => s.id === currentScenarioId);
     if (selectedScenario) {
       setCurrentAvailableComponents(selectedScenario.availableComponents);
-      setDroppedItems([]);
-      setAiResponse(null);
+      setDroppedItems([]); // Clear dropped items when scenario changes
+      setAiResponse(null); // Clear previous AI response
     }
   }, [currentScenarioId]);
 
   const livePreviewText = droppedItems.length > 0
-    ? droppedItems.map(item => `## ${item.title} (Component Type: ${item.type.toUpperCase()})\n\n${item.description}\n\n---\n`).join('\n')
+    ? droppedItems.map(item => `## ${item.title} (Type: ${item.type.toUpperCase()})\n${item.description}\n\n---\n`).join('\n')
     : PLACEHOLDER_PROMPT_TEXT;
 
   const generateResponseMutation = useMutation({
@@ -311,11 +353,16 @@ export function PromptBuilderSection() {
       const alreadyExists = isSingletonType && droppedItems.some(item => item.type === originalComponent.type);
 
       if (alreadyExists) {
-         toast({ variant: "destructive", title: "Component Limit", description: `A component of type "${originalComponent.type.toUpperCase()}" already exists. Only one is allowed.`});
+         toast({ variant: "destructive", title: "Component Limit", description: `A component of type "${originalComponent.type.toUpperCase()}" already exists. Only one of each is allowed.`});
         return;
       }
+      
+      // For non-singleton types, allow multiple instances by generating a unique ID for the dropped item
+      const newDroppedItemId = isSingletonType ? originalComponent.id : `${originalComponent.id}-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
+      
+      // Ensure 'tools' type components are also treated as allowing multiples if needed in future, for now, it's not singleton.
+      // For this specific request, we ensure only one instance of system and user type. Others can be multiple.
 
-      const newDroppedItemId = `${originalComponent.id}-${Date.now()}-${Math.random()}`;
       setDroppedItems(prev => [...prev, { ...originalComponent, id: newDroppedItemId }]);
     }
   };
@@ -329,7 +376,7 @@ export function PromptBuilderSection() {
       toast({ variant: "destructive", title: "Empty Prompt", description: "Please assemble a prompt before testing." });
       return;
     }
-    setAiResponse(null);
+    setAiResponse(null); // Clear previous response
     toast({ title: "Processing...", description: "Generating AI response..." });
     generateResponseMutation.mutate({ assembledPrompt: livePreviewText });
   };
@@ -337,7 +384,7 @@ export function PromptBuilderSection() {
   const handleScenarioChange = (scenarioId: string) => {
     setCurrentScenarioId(scenarioId);
   };
-
+  
   const currentScenarioForIcon = scenarios.find(s => s.id === currentScenarioId);
 
 
@@ -427,7 +474,7 @@ export function PromptBuilderSection() {
                           title={item.title}
                           description={item.description}
                           icon={item.icon}
-                          isDraggable={false}
+                          isDraggable={false} // Dropped items are not draggable from here
                           className="opacity-95 group-hover:opacity-100 cursor-default card-neon-animated-border" 
                         />
                         <Button
@@ -502,3 +549,4 @@ export function PromptBuilderSection() {
   );
 }
 
+    
