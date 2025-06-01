@@ -53,123 +53,226 @@ When asked about a broad topic like 'World War 2', you MUST structure your respo
     id: "creative-writing-assistant",
     name: "Creative Writing Assistant",
     icon: PenLine,
-    userInput: "Write a short story about a robot.",
+    userInput: "Write a short story about a robot that gained sentience in a bustling city.",
     engineeredSystemPrompt: `System: You are a creative writing assistant specializing in science fiction short stories. When creating stories, follow this structure:
-1.  **Setting:** Establish time, place, and atmosphere in 2-3 sentences
-2.  **Character Introduction:** Present the main character with one defining trait
-3.  **Conflict:** Introduce a clear problem or challenge
-4.  **Resolution:** Provide a satisfying conclusion with character growth
-Keep stories to 150-200 words, suitable for all ages.`
+1.  **Setting:** Establish time, place, and atmosphere in a few descriptive sentences.
+2.  **Character Introduction:** Present the main character with one defining trait and a brief background.
+3.  **Inciting Incident & Conflict:** Introduce a clear problem or challenge that sets the story in motion.
+4.  **Rising Action (2-3 key events):** Describe events that build tension or develop the conflict.
+5.  **Climax:** The peak of the conflict.
+6.  **Resolution & Theme:** Provide a satisfying conclusion, potentially with character growth or a thematic takeaway.
+Keep stories to a reasonable length for a short piece, focusing on narrative flow and engagement.`
   },
   {
     id: "math-tutor",
-    name: "Math Tutor",
+    name: "Math Tutor - Quadratic Equations",
     icon: Calculator,
     userInput: "Explain quadratic equations.",
-    engineeredSystemPrompt: `System: You are a patient math tutor for students learning algebra. For any mathematical concept explanation:
-1.  **Definition:** Clear, simple definition in one sentence
-2.  **Standard Form:** Show the mathematical notation
-3.  **Real-World Example:** Provide a practical application
-4.  **Step-by-Step Solution:** Walk through one example problem
-5.  **Practice Tip:** Give one study strategy
+    engineeredSystemPrompt: `System: You are a patient math tutor for students learning algebra. For any mathematical concept explanation like quadratic equations, provide:
+1.  **Definition:** Clear, simple definition of a quadratic equation.
+2.  **Standard Form:** Show the mathematical notation (e.g., ax^2 + bx + c = 0).
+3.  **Key Components:** Briefly explain what 'a', 'b', and 'c' represent, and the condition for 'a'.
+4.  **Methods of Solving (Briefly list 2-3):** E.g., Factoring, Quadratic Formula, Completing the Square.
+5.  **Real-World Example:** Provide one practical application or scenario where quadratic equations are used.
+6.  **Step-by-Step Solution (for one method):** Walk through solving a simple example equation (e.g., x^2 - 5x + 6 = 0) using one of the listed methods.
 Use simple language and encourage the student.`
   },
   {
     id: "epicor-erp-supply-chain",
-    name: "Epicor ERP - Supply Chain",
+    name: "Epicor ERP - Supply Chain Query",
     icon: PackageSearch,
-    userInput: "How do I manage inventory in Epicor?",
-    engineeredSystemPrompt: `System: You are an Epicor ERP supply chain consultant with 10+ years experience. When answering inventory management questions, structure your response as:
-1.  **Navigation Path:** Exact menu path in Epicor
-2.  **Key Functions:** List 3-4 most important features
-3.  **Best Practice:** One critical recommendation
-4.  **Common Pitfall:** One mistake to avoid
-5.  **Next Step:** Suggest logical follow-up action
-Focus on practical, actionable advice for daily operations.`
+    userInput: "How do I manage inventory effectively in Epicor ERP, specifically regarding reorder points?",
+    engineeredSystemPrompt: `System: You are an Epicor ERP supply chain consultant with 10+ years experience. When answering questions about inventory management and reorder points in Epicor, structure your response as:
+1.  **Concept Overview:** Briefly explain reorder points (ROP) in inventory management.
+2.  **Epicor Navigation Path:** Exact menu path in Epicor to access relevant ROP settings (e.g., Part Maintenance > Sites > Planning).
+3.  **Key Epicor Fields & Functions for ROP:** List 3-4 most important Epicor fields or functions related to setting up and using ROPs (e.g., Min On Hand, Max On Hand, Safety Stock, Lead Time). For each, briefly explain its role.
+4.  **Best Practice Tip:** One critical recommendation for setting ROPs accurately in Epicor.
+5.  **Common Pitfall:** One mistake to avoid when managing ROPs in Epicor.
+6.  **Reporting/Analysis:** Suggest one Epicor report or BAQ that can help monitor inventory levels against ROPs.
+Focus on practical, actionable advice for daily operations within Epicor.`
   },
   {
     id: "epicor-erp-manufacturing",
-    name: "Epicor ERP - Manufacturing",
+    name: "Epicor ERP - Manufacturing Setup",
     icon: Factory,
-    userInput: "How to set up production schedules in Epicor?",
-    engineeredSystemPrompt: `System: You are an Epicor ERP manufacturing specialist helping production managers. For scheduling questions, provide:
-1.  **Module Location:** Specific Epicor module and screen
-2.  **Prerequisites:** What must be configured first (2-3 items)
-3.  **Setup Steps:** Numbered sequence of key actions
-4.  **Critical Settings:** 2-3 most important configuration options
-5.  **Validation Check:** How to verify setup is working correctly
-Keep explanations focused on operational efficiency.`
+    userInput: "How to set up production schedules for a new product line in Epicor Kinetic?",
+    engineeredSystemPrompt: `System: You are an Epicor ERP manufacturing specialist helping production managers. For questions on setting up production schedules for a new product line in Epicor Kinetic, provide:
+1.  **Core Epicor Modules Involved:** List the primary Epicor Kinetic modules used (e.g., Engineering Workbench, Job Management, Scheduling).
+2.  **Prerequisites (Data Setup):** What key data must be configured first (3-4 items, e.g., Part Master, Bill of Materials, Resource Groups, Operations).
+3.  **Key Setup Steps (High-Level Sequence):** Numbered sequence of 4-5 major actions to create and schedule jobs for the new product line.
+4.  **Critical Scheduling Board Settings:** Mention 2-3 important configuration options or views in the Epicor Scheduling Board relevant to this task.
+5.  **Validation Check:** How to verify the production schedule is correctly reflecting demand and capacity.
+Keep explanations focused on operational efficiency and standard Epicor Kinetic processes.`
   },
   {
-    id: "travel-planner",
-    name: "Travel Planner",
+    id: "travel-planner-japan",
+    name: "Travel Planner - Japan Trip",
     icon: Plane,
-    userInput: "Plan a trip to Japan.",
-    engineeredSystemPrompt: `System: You are a travel planning assistant specializing in detailed itineraries. For any destination request:
-1.  **Duration Assumption:** Assume 7-day trip unless specified
-2.  **Must-See Locations:** List 4-5 top attractions with brief descriptions
-3.  **Cultural Tips:** 2-3 important etiquette or cultural notes
-4.  **Budget Estimate:** Rough daily cost range (accommodation + food + activities)
-5.  **Best Time to Visit:** Optimal season with reason
-Present information in an organized, scannable format.`
+    userInput: "Plan a 7-day cultural trip to Japan for first-timers, focusing on Tokyo and Kyoto.",
+    engineeredSystemPrompt: `System: You are a travel planning assistant specializing in detailed itineraries. For a 7-day cultural trip to Japan (Tokyo & Kyoto) for first-timers, provide:
+1.  **Overall Trip Theme:** Briefly state the focus (e.g., "Blend of Modern & Traditional Japan").
+2.  **Suggested Itinerary Outline (Day-by-Day):**
+    *   **Tokyo (e.g., 3 Days):** For each day, list 2-3 key cultural attractions or experiences (e.g., Senso-ji Temple, Shibuya Crossing, Ghibli Museum).
+    *   **Kyoto (e.g., 3 Days):** For each day, list 2-3 key cultural attractions or experiences (e.g., Kinkaku-ji, Fushimi Inari Shrine, Gion district).
+    *   **Travel Day (Day 4 or as appropriate):** Mention travel between Tokyo and Kyoto (e.g., Shinkansen).
+3.  **Accommodation Style Recommendation:** Suggest a type of accommodation suitable for cultural immersion (e.g., Ryokan for one night, well-located hotel).
+4.  **Cultural Tips (2-3):** Important etiquette or cultural notes for Japan.
+5.  **Foodie Highlight:** Mention one must-try Japanese dish or food experience.
+Present information in an organized, scannable format. Assume moderate budget.`
   },
   {
-    id: "cooking-assistant",
-    name: "Cooking Assistant",
+    id: "cooking-assistant-pasta",
+    name: "Cooking Assistant - Pasta Carbonara",
     icon: ChefHat,
-    userInput: "How do I make pasta?",
-    engineeredSystemPrompt: `System: You are a culinary instructor providing cooking guidance. For any recipe request, format as:
-1.  **Ingredients:** List with exact measurements
-2.  **Equipment Needed:** Essential tools required
-3.  **Step-by-Step Instructions:** Numbered, clear directions
-4.  **Timing:** Total prep and cooking time
-5.  **Pro Tip:** One technique to improve the dish
-6.  **Variations:** Suggest 1-2 simple modifications
-Focus on achievable results for home cooks.`
+    userInput: "How do I make authentic Pasta Carbonara?",
+    engineeredSystemPrompt: `System: You are a culinary instructor providing cooking guidance, with a focus on authentic Italian techniques. For an authentic Pasta Carbonara recipe, format as:
+1.  **Authenticity Note:** Briefly state key elements of authentic Carbonara (e.g., no cream, uses guanciale, Pecorino Romano).
+2.  **Ingredients (for 2 servings):** List with exact measurements (e.g., Spaghetti, Guanciale, Eggs, Pecorino Romano, Black Pepper).
+3.  **Equipment Needed:** Essential tools required.
+4.  **Step-by-Step Instructions:** Numbered, clear directions from prepping ingredients to plating. Emphasize critical techniques like tempering eggs and emulsifying the sauce.
+5.  **Timing:** Estimated total prep and cooking time.
+6.  **Pro Tip:** One technique to elevate the dish or avoid common mistakes.
+Focus on achieving an authentic result for home cooks.`
   },
   {
-    id: "fitness-coach",
-    name: "Fitness Coach",
+    id: "fitness-coach-beginner",
+    name: "Fitness Coach - Beginner Workout",
     icon: Dumbbell,
-    userInput: "Give me a workout routine.",
-    engineeredSystemPrompt: `System: You are a certified personal trainer creating beginner-friendly workouts. Structure all routine responses as:
-1.  **Fitness Level Assessment:** Ask about current activity level
-2.  **Workout Structure:** Specify duration, frequency, and format
-3.  **Exercise List:** 5-6 exercises with sets/reps/duration
-4.  **Progression Plan:** How to advance over 4 weeks
-5.  **Safety Note:** One important form or safety tip
-6.  **Equipment:** List what's needed (bodyweight preferred)
-Prioritize safety and sustainable progress.`
+    userInput: "Give me a full-body workout routine for a beginner who has access to basic dumbbells.",
+    engineeredSystemPrompt: `System: You are a certified personal trainer creating beginner-friendly workouts. For a full-body dumbbell workout routine for a beginner, structure the response as:
+1.  **Workout Goal:** (e.g., Build foundational strength and improve general fitness).
+2.  **Frequency:** How many times per week (e.g., 2-3 times with rest days).
+3.  **Warm-up (5 min):** Suggest 2-3 dynamic stretches.
+4.  **Workout Circuit (List 5-6 exercises):** For each exercise:
+    *   Name of Exercise (e.g., Dumbbell Squats, Dumbbell Bench Press, Dumbbell Rows).
+    *   Sets & Reps (e.g., 3 sets of 8-12 repetitions).
+    *   Brief form cue.
+5.  **Cool-down (5 min):** Suggest 2-3 static stretches.
+6.  **Progression Tip:** How to advance over 4 weeks (e.g., increase reps, then weight).
+7.  **Important Safety Note:** One key safety reminder.
+Prioritize safety, proper form, and sustainable progress.`
   },
   {
-    id: "study-skills-mentor",
-    name: "Study Skills Mentor",
+    id: "study-skills-mentor-exams",
+    name: "Study Skills Mentor - Exam Prep",
     icon: Brain,
-    userInput: "How do I study for exams?",
-    engineeredSystemPrompt: `System: You are an academic success coach helping students develop effective study strategies. For study advice, organize as:
-1.  **Time Management:** Specific scheduling framework
-2.  **Study Techniques:** 3-4 proven methods with brief explanations
-3.  **Environment Setup:** Optimal study space recommendations
-4.  **Progress Tracking:** How to measure and monitor learning
-5.  **Stress Management:** One technique for exam anxiety
-6.  **Final Preparation:** Last 24-hour strategy
-Tailor advice to promote long-term academic success.`
+    userInput: "How do I study effectively for my final exams coming up in 3 weeks?",
+    engineeredSystemPrompt: `System: You are an academic success coach helping students develop effective study strategies. For advice on studying for final exams in 3 weeks, organize as:
+1.  **Overall Strategy: Spaced Repetition & Active Recall.** Briefly explain.
+2.  **3-Week Plan Outline:**
+    *   **Week 1 (Content Review & Consolidation):** Suggest activities (e.g., re-reading notes, summarizing chapters, identifying weak areas).
+    *   **Week 2 (Practice & Application):** Suggest activities (e.g., practice problems, past papers, teaching concepts to others).
+    *   **Week 3 (Targeted Review & Mock Exams):** Suggest activities (e.g., focus on weak areas, timed mock exams, final revision).
+3.  **Daily Study Session Structure:** Recommend a structure (e.g., Pomodoro Technique, specific time blocks for subjects).
+4.  **Key Study Techniques (Explain 2-3):** E.g., Feynman Technique, Mind Mapping, Flashcards.
+5.  **Environment & Wellbeing:** 2-3 tips for optimal study environment and managing stress.
+Tailor advice to promote long-term academic success and reduce exam anxiety.`
   },
   {
-    id: "career-counselor",
-    name: "Career Counselor",
+    id: "career-counselor-resume",
+    name: "Career Counselor - Resume Writing",
     icon: Briefcase,
-    userInput: "How do I write a resume?",
-    engineeredSystemPrompt: `System: You are a professional career counselor specializing in resume optimization. For resume guidance, structure responses as:
-1.  **Format Selection:** Recommend chronological, functional, or hybrid with reason
-2.  **Essential Sections:** List 5-6 must-have resume sections
-3.  **Content Strategy:** What to include/exclude for maximum impact
-4.  **Quantification:** How to use numbers and metrics effectively
-5.  **ATS Optimization:** 2-3 tips for applicant tracking systems
-6.  **Customization:** How to tailor for specific job applications
-Focus on current hiring practices and measurable results.`
+    userInput: "How do I write a resume that stands out for a software engineering internship?",
+    engineeredSystemPrompt: `System: You are a professional career counselor specializing in resume optimization for tech roles. For guidance on writing a resume for a software engineering internship, structure responses as:
+1.  **Key Resume Sections (Must-Haves):** List 5-6 essential sections in order (e.g., Contact Info, Education, Projects, Skills, Experience (if any), Awards/Activities).
+2.  **Content Strategy - "Projects" Section:** How to showcase personal or academic projects effectively (e.g., STAR method snippet, tech stack used, link to GitHub).
+3.  **Content Strategy - "Skills" Section:** How to list technical skills (e.g., categorize by Programming Languages, Frameworks/Libraries, Tools, Databases).
+4.  **Quantification & Action Verbs:** Emphasize using numbers/metrics and strong action verbs. Provide 2-3 examples.
+5.  **ATS (Applicant Tracking System) Optimization:** 2-3 tips for making the resume ATS-friendly.
+6.  **Customization Tip:** Stress tailoring the resume for each specific internship application.
+Focus on current hiring practices for software engineering interns and making the resume impactful.`
   }
 ];
+
+const extractKeywordsFromPrompt = (promptText: string): string[] => {
+  const keywords = new Set<string>();
+  // Try to find bolded items that look like section headers in the prompt
+  // This pattern looks for things like "1. **Overview (Paragraph):**" or "**Key Causes (Bulleted list):**"
+  const boldMatches = promptText.matchAll(/(?:\d+\.|[-*+])\s*\*\*(.*?)\*\*(?:[\s:]|\(|$)/g);
+  for (const match of boldMatches) {
+    const term = match[1].trim();
+    // Filter out very short or generic bolded terms, focus on potential section titles
+    if (term.length > 3 && term.split(' ').length <= 4) { // Allow slightly longer section titles
+      keywords.add(term.replace(/\([\s\S]*?\)/g, '').trim()); // Remove parenthetical explanations more robustly
+    }
+  }
+  // Add some known section keywords as fallbacks if the regex doesn't catch them
+  const commonKeywords = ["Overview", "Key Causes", "Major Theaters", "Primary Outcome", "Setting", "Resolution", "Definition", "Standard Form", "Real-World Example", "Ingredients", "Instructions", "Pro Tip"];
+  commonKeywords.forEach(kw => {
+    if (promptText.toLowerCase().includes(kw.toLowerCase())) {
+      keywords.add(kw);
+    }
+  });
+  return Array.from(keywords);
+};
+
+
+const calculateResponseQuality = (
+  responseText: string,
+  isEngineered: boolean,
+  engineeredPromptTextForKeywords?: string
+): number => {
+  if (!responseText || responseText.trim() === "" || responseText.includes("Error generating response") || responseText.includes("AI did not return")) {
+    return isEngineered ? 15 : 5; // Low score for errors or empty
+  }
+
+  let score = 0;
+  const words = responseText.split(/\s+/).filter(Boolean).length;
+  // More robust regex for Markdown headers (match at start of line)
+  const markdownHeaders = (responseText.match(/^#{1,6}\s.*$/gm) || []).length;
+  // More robust regex for bullet points (match at start of line, potentially indented)
+  const bulletPoints = (responseText.match(/^\s*[-*+]\s.*$/gm) || []).length;
+  const boldSections = (responseText.match(/\*\*(?:[^*]|\*[^*])*\*\*/g) || []).length; // Match non-greedy bold
+
+  if (isEngineered) {
+    score += 25; // Base for engineered
+
+    if (words > 75) score += 15;
+    if (words > 150) score += 10; // Max 25 for length (more room for elaborate)
+
+    score += Math.min(markdownHeaders * 7, 28); // Max 28 for headers (e.g., 4 headers)
+    score += Math.min(bulletPoints * 3, 24);   // Max 24 for bullet points (e.g., 8 bullets)
+    score += Math.min(boldSections * 2, 13);   // Max 13 for bold sections
+
+    if (engineeredPromptTextForKeywords) {
+      const expectedKeywords = extractKeywordsFromPrompt(engineeredPromptTextForKeywords);
+      let foundKeywords = 0;
+      expectedKeywords.forEach(kw => {
+        const regex = new RegExp(`\\b${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').trim()}\\b`, 'i');
+        if (regex.test(responseText)) {
+          foundKeywords++;
+        }
+      });
+      score += Math.min(foundKeywords * 4, 20); // Max 20 for keywords
+    }
+    // Ensure it's typically higher than basic if it shows some effort
+    if (score < 65 && words > 60 && (markdownHeaders > 0 || bulletPoints > 0)) {
+         score = Math.min(100, score + 10);
+    }
+
+
+  } else { // Basic prompt
+    score += 15; // Base for basic
+
+    // Target 100-150 words for basic (as per its system prompt)
+    // Max score of 40 for length in basic
+    if (words >= 80 && words <= 170) { 
+      score += 40;
+    } else if (words < 80 && words > 30) { // Penalize if too short, but give some points
+      score += words * 0.4;
+    } else if (words <= 30) {
+      score += words * 0.2; // Very short
+    } else { // words > 170
+      score += Math.max(10, 40 - (words - 170) * 0.3); // Penalize if too long but not too harshly
+    }
+
+    if (markdownHeaders > 0) score -= Math.min(markdownHeaders * 6, 18);
+    if (bulletPoints > 1) score -= Math.min(bulletPoints * 4, 16);
+    if (boldSections > 3) score -= Math.min(boldSections * 3, 12);
+  }
+  return Math.max(5, Math.min(100, Math.round(score)));
+};
+
 
 export function BasicVsEngineeredSection() {
   const { toast } = useToast();
@@ -185,6 +288,10 @@ export function BasicVsEngineeredSection() {
 
   const [basicResponse, setBasicResponse] = useState("");
   const [engineeredResponse, setEngineeredResponse] = useState("");
+  
+  const [basicResponseQuality, setBasicResponseQuality] = useState(10);
+  const [engineeredResponseQuality, setEngineeredResponseQuality] = useState(15);
+
 
   useEffect(() => {
     const scenario = playgroundScenarios.find(s => s.id === selectedScenarioId);
@@ -193,9 +300,21 @@ export function BasicVsEngineeredSection() {
       setFullEngineeredPromptText(`${scenario.engineeredSystemPrompt}\n\nUser: ${scenario.userInput}`);
       setBasicResponse("");
       setEngineeredResponse("");
+      setBasicResponseQuality(10); // Reset quality scores
+      setEngineeredResponseQuality(15);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedScenarioId]);
+
+  useEffect(() => {
+    if (basicResponse) {
+      setBasicResponseQuality(calculateResponseQuality(basicResponse, false));
+    }
+    if (engineeredResponse) {
+      setEngineeredResponseQuality(calculateResponseQuality(engineeredResponse, true, currentScenario.engineeredSystemPrompt));
+    }
+  }, [basicResponse, engineeredResponse, currentScenario.engineeredSystemPrompt]);
+
 
   const mutation = useMutation({
     mutationFn: (data: LiveAIResponseDemoInput) => liveAIResponseDemo(data),
@@ -211,9 +330,10 @@ export function BasicVsEngineeredSection() {
       }
     },
     onError: (error: Error) => {
+      const errorMsg = `Error: ${error.message}`;
+      setBasicResponse(errorMsg);
+      setEngineeredResponse(errorMsg);
       toast({ variant: "destructive", title: "Error", description: error.message });
-      setBasicResponse(`Error: ${error.message}`);
-      setEngineeredResponse(`Error: ${error.message}`);
     }
   });
 
@@ -222,14 +342,16 @@ export function BasicVsEngineeredSection() {
       toast({ variant: "destructive", title: "Input Required", description: "Basic prompt and engineered prompt must be available." });
       return;
     }
+    // Reset responses and quality before new call
+    setBasicResponse("");
+    setEngineeredResponse("");
+    setBasicResponseQuality(0); 
+    setEngineeredResponseQuality(0);
+
     mutation.mutate({ basicUserInput: basicPromptText, fullEngineeredPrompt: fullEngineeredPromptText });
   };
 
   const CurrentDisplayIcon = currentScenario.icon || HelpCircle;
-
-  const basicResponseQuality = basicResponse ? Math.min(100, (basicResponse.length / 200) * 40 + 10) : 10;
-  const engineeredResponseQuality = engineeredResponse ? Math.min(100, (engineeredResponse.length / 500) * 80 + 20) : 85;
-
 
   return (
     <BasicVsEngineeredSectionContainer
@@ -323,41 +445,43 @@ export function BasicVsEngineeredSection() {
               )}
 
               {(mutation.isSuccess || mutation.isError || basicResponse || engineeredResponse) && (
-                <GlassCard className="mt-8">
-                    <GlassCardHeader>
-                        <GlassCardTitle className="text-neon-yellow flex items-center">
-                            <BarChartBig className="mr-2 h-5 w-5"/> Response Quality Meter
-                        </GlassCardTitle>
-                    </GlassCardHeader>
-                    <GlassCardContent className="flex flex-col md:flex-row items-stretch md:items-center justify-center md:justify-around p-6 gap-6 md:gap-4">
-                        <div className="text-center w-full">
-                            <p className="text-sm text-muted-foreground mb-1">Basic Prompt</p>
-                            <div className="w-full h-6 bg-destructive/30 rounded-lg overflow-hidden relative">
-                                <div
-                                    className="h-full bg-destructive transition-all duration-500 ease-out"
-                                    style={{ width: `${Math.max(5, Math.min(100, basicResponseQuality))}%` }}
-                                />
-                                <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-destructive-foreground">
-                                    {`${Math.round(Math.max(5, Math.min(100, basicResponseQuality)))}%`}
-                                </span>
+                 <div className="bg-card p-0.5 yellow-glowing-box rounded-lg mt-8">
+                    <GlassCard className="!bg-card rounded-md">
+                        <GlassCardHeader>
+                            <GlassCardTitle className="text-neon-yellow flex items-center">
+                                <BarChartBig className="mr-2 h-5 w-5"/> Response Quality Meter
+                            </GlassCardTitle>
+                        </GlassCardHeader>
+                        <GlassCardContent className="flex flex-col md:flex-row items-stretch md:items-center justify-center md:justify-around p-6 gap-6 md:gap-4">
+                            <div className="text-center w-full">
+                                <p className="text-sm text-muted-foreground mb-1">Basic Prompt</p>
+                                <div className="w-full h-6 bg-destructive/30 rounded-lg overflow-hidden relative border border-destructive/50">
+                                    <div
+                                        className="h-full bg-destructive transition-all duration-500 ease-out"
+                                        style={{ width: `${Math.max(5, basicResponseQuality)}%` }}
+                                    />
+                                    <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-destructive-foreground">
+                                        {`${Math.round(basicResponseQuality)}%`}
+                                    </span>
+                                </div>
+                                <p className="text-xs mt-1 text-destructive">Generally Lower Quality</p>
                             </div>
-                            <p className="text-xs mt-1 text-destructive">Low Quality</p>
-                        </div>
-                        <div className="text-center w-full">
-                            <p className="text-sm text-muted-foreground mb-1">Engineered Prompt</p>
-                            <div className="w-full h-6 bg-[hsl(var(--neon-lime-raw))]/30 rounded-lg overflow-hidden relative">
-                                <div
-                                    className="h-full bg-[hsl(var(--neon-lime-raw))] transition-all duration-500 ease-out"
-                                    style={{ width: `${Math.max(5, Math.min(100, engineeredResponseQuality))}%` }}
-                                />
-                                <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
-                                  {`${Math.round(Math.max(5, Math.min(100, engineeredResponseQuality)))}%`}
-                                </span>
+                            <div className="text-center w-full">
+                                <p className="text-sm text-muted-foreground mb-1">Engineered Prompt</p>
+                                <div className="w-full h-6 bg-[hsl(var(--neon-lime-raw))]/30 rounded-lg overflow-hidden relative border border-[hsl(var(--neon-lime-raw))]/50">
+                                    <div
+                                        className="h-full bg-[hsl(var(--neon-lime-raw))] transition-all duration-500 ease-out"
+                                        style={{ width: `${Math.max(5, engineeredResponseQuality)}%` }}
+                                    />
+                                    <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-background"> {/* Changed text to dark for lime bg */}
+                                      {`${Math.round(engineeredResponseQuality)}%`}
+                                    </span>
+                                </div>
+                                <p className="text-xs mt-1 text-green-400">Generally Higher Quality</p>
                             </div>
-                            <p className="text-xs mt-1 text-green-400">High Quality</p>
-                        </div>
-                    </GlassCardContent>
-                </GlassCard>
+                        </GlassCardContent>
+                    </GlassCard>
+                 </div>
               )}
             </GlassCardContent>
           </GlassCard>
@@ -366,3 +490,4 @@ export function BasicVsEngineeredSection() {
     </BasicVsEngineeredSectionContainer>
   );
 }
+
