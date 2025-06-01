@@ -88,7 +88,8 @@ export function IntroductionSection() {
     <SectionContainer
       id="intro"
       title="What is Prompt Engineering?"
-      subtitle="Unlock the full potential of AI by mastering the art and science of crafting effective prompts."
+      subtitle="&quot;Prompt engineering is like giving an AI super-clear instructions for a task. It's the art of carefully choosing your words and structure when you ask an AI to do something. This helps the AI understand exactly what you want, leading to much better, more accurate, and more useful results. Think of it as being a great communicator, but with artificial intelligence.&quot;"
+      subtitleClassName="italic"
       className="!py-12 md:!py-16" // Ensure specific padding overrides default
       isContainedCard={true} // This will apply the large container card styling
     >
