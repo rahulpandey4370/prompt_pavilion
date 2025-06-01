@@ -86,7 +86,6 @@ export async function liveAIResponseDemo(input: LiveAIResponseDemoInput): Promis
     // Uses the full engineered prompt which contains system instructions and user input.
     const engineeredModelConfig = {
       temperature: 0.7,
-      max_tokens: 350, // Increased to allow for more elaborate responses
       top_p: 0.95,
       frequency_penalty: 0.0,
       presence_penalty: 0.0,
