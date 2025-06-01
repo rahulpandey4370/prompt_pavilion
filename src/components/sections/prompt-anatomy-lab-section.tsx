@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { SectionContainer } from "@/components/shared/section-container";
+import { SectionContainer } from "@/components/shared/section-container"; // Corrected/Ensured import
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
@@ -119,7 +119,8 @@ export function PromptAnatomyLabSection() {
     <SectionContainer
       id="anatomy"
       title="The Prompt Anatomy Lab"
-      subtitle="A well-crafted prompt is made of several key components. Click or hover on each block below to explore its role in guiding the AI."
+      subtitle={"\"Prompt engineering is like giving an AI super-clear instructions for a task. It's the art of carefully choosing your words and structure when you ask an AI to do something. This helps the AI understand exactly what you want, leading to much better, more accurate, and more useful results. Think of it as being a great communicator, but with artificial intelligence.\""}
+      subtitleClassName="italic"
       isContainedCard={true}
       className="!py-12 md:!py-16"
     >
@@ -192,5 +193,3 @@ export function PromptAnatomyLabSection() {
     </SectionContainer>
   );
 }
-
-    
