@@ -84,8 +84,8 @@ export function AnimatedTitle({
             style={{
               whiteSpace: part.match(/^\s+$/) ? 'pre' : 'normal', // Preserve whitespace if the part is only spaces
               // Add a slight delay for the overall container visibility to settle if needed,
-              // then stagger parts. Using index * 100 for stagger.
-              transitionDelay: `${isVisible ? index * 100 : 0}ms`,
+              // then stagger parts. Using index * 20 for stagger.
+              transitionDelay: `${isVisible ? index * 20 : 0}ms`,
               opacity: isVisible ? 1 : 0,
               transform: isVisible ? 'translateY(0px)' : 'translateY(10px)',
             }}
