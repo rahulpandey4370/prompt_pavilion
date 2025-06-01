@@ -1,7 +1,7 @@
 
 "use client";
 
-import { SectionContainer } from "@/components/shared/section-container"; // Corrected this import
+import { SectionContainer } from "@/components/shared/section-container";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -9,8 +9,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { liveAIResponseDemo, type LiveAIResponseDemoInput }  from "@/ai/flows/live-ai-response-demo";
 import { useMutation } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import { 
   Loader2, 
   Lightbulb, 
@@ -25,9 +28,6 @@ import {
   Dumbbell,
   Brain,
   Briefcase,
-  BarChartBig,
-  Code2,
-  MessageSquare
 } from "lucide-react";
 
 interface PlaygroundScenario {
@@ -57,13 +57,13 @@ When asked about a broad topic like 'World War 2', you MUST structure your respo
     icon: PenLine,
     userInput: "Write a short story about a robot that gained sentience in a bustling city.",
     engineeredSystemPrompt: `System: You are a creative writing assistant specializing in science fiction short stories. When creating stories, follow this structure:
-1.  **Setting:** Establish time, place, and atmosphere in a few descriptive sentences.
-2.  **Character Introduction:** Present the main character with one defining trait and a brief background.
-3.  **Inciting Incident & Conflict:** Introduce a clear problem or challenge that sets the story in motion.
-4.  **Rising Action (describe a few key events):** Detail events that build tension or develop the conflict.
+1.  **Setting:** Establish time, place, and atmosphere.
+2.  **Character Introduction:** Present the main character.
+3.  **Inciting Incident & Conflict:** Introduce a clear problem or challenge.
+4.  **Rising Action:** Detail events that build tension.
 5.  **Climax:** The peak of the conflict.
-6.  **Resolution & Theme:** Provide a satisfying conclusion, potentially with character growth or a thematic takeaway.
-Keep stories to a reasonable length for a short piece, focusing on narrative flow and engagement.`
+6.  **Resolution & Theme:** Provide a satisfying conclusion.
+Keep stories to a reasonable length, focusing on narrative flow and engagement.`
   },
   {
     id: "math-tutor",
@@ -71,12 +71,12 @@ Keep stories to a reasonable length for a short piece, focusing on narrative flo
     icon: Calculator,
     userInput: "Explain quadratic equations.",
     engineeredSystemPrompt: `System: You are a patient math tutor for students learning algebra. For any mathematical concept explanation like quadratic equations, provide:
-1.  **Definition:** Offer a clear, simple definition of a quadratic equation.
+1.  **Definition:** Offer a clear, simple definition.
 2.  **Standard Form:** Show the general mathematical notation.
 3.  **Key Components:** Briefly explain what 'a', 'b', and 'c' represent, and the condition for 'a'.
-4.  **Methods of Solving:** List a few common methods for solving these equations.
-5.  **Real-World Example:** Provide one practical application or scenario where quadratic equations are used.
-6.  **Step-by-Step Solution:** Walk through solving a simple example equation using one of the listed methods.
+4.  **Methods of Solving:** List common methods for solving.
+5.  **Real-World Example:** Provide one practical application.
+6.  **Step-by-Step Solution:** Walk through solving a simple example equation.
 Use simple language and encourage the student.`
   },
   {
@@ -85,13 +85,13 @@ Use simple language and encourage the student.`
     icon: PackageSearch,
     userInput: "How do I manage inventory effectively in Epicor ERP, specifically regarding reorder points?",
     engineeredSystemPrompt: `System: You are an Epicor ERP supply chain consultant with 10+ years experience. When answering questions about inventory management and reorder points in Epicor, structure your response as:
-1.  **Concept Overview:** Briefly explain reorder points (ROP) in inventory management.
-2.  **Epicor Navigation Path:** Detail the menu path in Epicor to access relevant ROP settings.
-3.  **Key Epicor Fields & Functions for ROP:** List the most important Epicor fields or functions related to setting up and using ROPs. For each, briefly explain its role.
-4.  **Best Practice Tip:** Offer one critical recommendation for setting ROPs accurately in Epicor.
-5.  **Common Pitfall:** Describe one mistake to avoid when managing ROPs in Epicor.
-6.  **Reporting/Analysis:** Suggest one Epicor report or BAQ that can help monitor inventory levels against ROPs.
-Focus on practical, actionable advice for daily operations within Epicor.`
+1.  **Concept Overview:** Briefly explain reorder points (ROP).
+2.  **Epicor Navigation Path:** Detail the menu path in Epicor.
+3.  **Key Epicor Fields & Functions for ROP:** List important Epicor fields or functions related to ROPs. Explain their role.
+4.  **Best Practice Tip:** Offer one critical recommendation for setting ROPs.
+5.  **Common Pitfall:** Describe one mistake to avoid with ROPs in Epicor.
+6.  **Reporting/Analysis:** Suggest an Epicor report or BAQ for monitoring.
+Focus on practical advice for Epicor.`
   },
   {
     id: "epicor-erp-manufacturing",
@@ -99,11 +99,11 @@ Focus on practical, actionable advice for daily operations within Epicor.`
     icon: Factory,
     userInput: "How to set up production schedules for a new product line in Epicor Kinetic?",
     engineeredSystemPrompt: `System: You are an Epicor ERP manufacturing specialist helping production managers. For questions on setting up production schedules for a new product line in Epicor Kinetic, provide:
-1.  **Core Epicor Modules Involved:** List the primary Epicor Kinetic modules used.
-2.  **Prerequisites (Data Setup):** Detail what key data must be configured first.
-3.  **Key Setup Steps (High-Level Sequence):** Offer a numbered sequence of major actions to create and schedule jobs for the new product line.
-4.  **Critical Scheduling Board Settings:** Mention important configuration options or views in the Epicor Scheduling Board relevant to this task.
-5.  **Validation Check:** Explain how to verify the production schedule is correctly reflecting demand and capacity.
+1.  **Core Epicor Modules Involved:** List primary Epicor Kinetic modules.
+2.  **Prerequisites (Data Setup):** Detail key data to configure first.
+3.  **Key Setup Steps (High-Level Sequence):** Offer a sequence of major actions.
+4.  **Critical Scheduling Board Settings:** Mention important configurations in the Epicor Scheduling Board.
+5.  **Validation Check:** Explain how to verify the schedule.
 Keep explanations focused on operational efficiency and standard Epicor Kinetic processes.`
   },
   {
@@ -125,13 +125,13 @@ Present information in an organized, scannable format. Assume moderate budget.`
     icon: ChefHat,
     userInput: "How do I make authentic Pasta Carbonara?",
     engineeredSystemPrompt: `System: You are a culinary instructor providing cooking guidance, with a focus on authentic Italian techniques. For an authentic Pasta Carbonara recipe, format as:
-1.  **Authenticity Note:** Briefly state key elements of authentic Carbonara.
-2.  **Ingredients (for 2 servings):** List with measurements.
-3.  **Equipment Needed:** Detail essential tools required.
-4.  **Step-by-Step Instructions:** Offer numbered, clear directions from prepping ingredients to plating. Emphasize critical techniques like tempering eggs and emulsifying the sauce.
+1.  **Authenticity Note:** Briefly state key elements.
+2.  **Ingredients:** List with measurements for 2 servings.
+3.  **Equipment Needed:** Detail essential tools.
+4.  **Step-by-Step Instructions:** Offer numbered, clear directions. Emphasize critical techniques.
 5.  **Timing:** Give an estimated total prep and cooking time.
-6.  **Pro Tip:** Provide one technique to elevate the dish or avoid common mistakes.
-Focus on achieving an authentic result for home cooks.`
+6.  **Pro Tip:** Provide one technique to elevate the dish.
+Focus on achieving an authentic result.`
   },
   {
     id: "fitness-coach-beginner",
@@ -139,12 +139,12 @@ Focus on achieving an authentic result for home cooks.`
     icon: Dumbbell,
     userInput: "Give me a full-body workout routine for a beginner who has access to basic dumbbells.",
     engineeredSystemPrompt: `System: You are a certified personal trainer creating beginner-friendly workouts. For a full-body dumbbell workout routine for a beginner, structure the response as:
-1.  **Workout Goal:** State the primary goal of the workout.
+1.  **Workout Goal:** State the primary goal.
 2.  **Frequency:** Recommend how many times per week.
-3.  **Warm-up (around 5 min):** Suggest some dynamic stretches.
-4.  **Workout Circuit (List several exercises):** For each exercise, include its name, suggested sets & reps, and a brief form cue.
-5.  **Cool-down (around 5 min):** Suggest some static stretches.
-6.  **Progression Tip:** Explain how to advance over 4 weeks.
+3.  **Warm-up:** Suggest dynamic stretches.
+4.  **Workout Circuit:** List exercises. For each, include name, sets & reps, and a brief form cue.
+5.  **Cool-down:** Suggest static stretches.
+6.  **Progression Tip:** Explain how to advance.
 7.  **Important Safety Note:** Offer one key safety reminder.
 Prioritize safety, proper form, and sustainable progress.`
   },
@@ -167,13 +167,13 @@ Tailor advice to promote long-term academic success and reduce exam anxiety.`
     icon: Briefcase,
     userInput: "How do I write a resume that stands out for a software engineering internship?",
     engineeredSystemPrompt: `System: You are a professional career counselor specializing in resume optimization for tech roles. For guidance on writing a resume for a software engineering internship, structure responses as:
-1.  **Key Resume Sections (Must-Haves):** List essential sections in order.
-2.  **Content Strategy - "Projects" Section:** Explain how to showcase personal or academic projects effectively.
+1.  **Key Resume Sections:** List essential sections.
+2.  **Content Strategy - "Projects" Section:** Explain how to showcase projects.
 3.  **Content Strategy - "Skills" Section:** Detail how to list technical skills.
-4.  **Quantification & Action Verbs:** Emphasize using numbers/metrics and strong action verbs. Provide some examples.
-5.  **ATS (Applicant Tracking System) Optimization:** Offer tips for making the resume ATS-friendly.
-6.  **Customization Tip:** Stress tailoring the resume for each specific internship application.
-Focus on current hiring practices for software engineering interns and making the resume impactful.`
+4.  **Quantification & Action Verbs:** Emphasize using numbers/metrics and strong action verbs.
+5.  **ATS (Applicant Tracking System) Optimization:** Offer tips for ATS-friendliness.
+6.  **Customization Tip:** Stress tailoring the resume.
+Focus on current hiring practices for software engineering interns.`
   }
 ];
 
@@ -238,10 +238,8 @@ const calculateResponseQuality = (
   } else { 
     score += 15; 
     
-    // Add random variance for basic prompt score
     const randomFactor = Math.floor(Math.random() * 21) - 10; // -10 to +10
     score += randomFactor;
-
 
     if (words >= 80 && words <= 170) { 
       score += 40;
@@ -259,6 +257,118 @@ const calculateResponseQuality = (
   }
   return Math.max(5, Math.min(100, Math.round(score)));
 };
+
+// Basic Markdown Preview Component (simplified)
+function BasicMarkdownPreview({ markdown }: { markdown: string | null }) {
+  if (!markdown) return null;
+
+  const elements: ReactNode[] = [];
+  const lines = markdown.split('\n');
+
+  let inList = false;
+  let listType: 'ul' | 'ol' | null = null;
+  let listItems: JSX.Element[] = [];
+
+  const formatInline = (text: string, keyPrefix: string): React.ReactNode[] => {
+    const parts: React.ReactNode[] = [];
+    let lastIndex = 0;
+    const regex = /(\*\*|__)(.*?)\1|(\*|_)(.*?)\3/g;
+    let match;
+    let count = 0;
+    while ((match = regex.exec(text)) !== null) {
+      if (lastIndex < match.index) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+      if (match[1]) { 
+        parts.push(<strong key={`${keyPrefix}-strong-${count++}`}>{match[2]}</strong>);
+      } else if (match[3]) { 
+        if (match[4].length > 0 && (!match[4].includes(' ') || match[4].trim() === match[4])) {
+             parts.push(<em key={`${keyPrefix}-italic-${count++}`}>{match[4]}</em>);
+        } else {
+            parts.push(match[0]); 
+        }
+      }
+      lastIndex = regex.lastIndex;
+    }
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+    return parts;
+  };
+  
+  const flushList = (keySuffix: string) => {
+    if (listItems.length > 0 && listType) {
+      if (listType === 'ul') {
+        elements.push(<ul key={`ul-${keySuffix}`} className="list-disc pl-6 my-2 space-y-1">{listItems}</ul>);
+      } else {
+        elements.push(<ol key={`ol-${keySuffix}`} className="list-decimal pl-6 my-2 space-y-1">{listItems}</ol>);
+      }
+    }
+    listItems = [];
+    inList = false;
+    listType = null;
+  };
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const lineKey = `line-${i}`;
+
+    if (line.startsWith('### ')) {
+      flushList(`${lineKey}-prev`);
+      elements.push(<h3 key={lineKey} className="text-xl font-semibold mt-3 mb-1">{formatInline(line.substring(4), lineKey)}</h3>);
+      continue;
+    }
+    if (line.startsWith('## ')) {
+      flushList(`${lineKey}-prev`);
+      elements.push(<h2 key={lineKey} className="text-2xl font-semibold mt-4 mb-2">{formatInline(line.substring(3), lineKey)}</h2>);
+      continue;
+    }
+    if (line.startsWith('# ')) {
+      flushList(`${lineKey}-prev`);
+      elements.push(<h1 key={lineKey} className="text-3xl font-semibold mt-5 mb-3">{formatInline(line.substring(2), lineKey)}</h1>);
+      continue;
+    }
+    if (line.match(/^(\-\-\-|\*\*\*|___)\s*$/)) {
+      flushList(`${lineKey}-prev`);
+      elements.push(<hr key={lineKey} className="my-4 border-border" />);
+      continue;
+    }
+
+    const ulMatch = line.match(/^(\*|-|\+)\s+(.*)/);
+    if (ulMatch) {
+      if (!inList || listType !== 'ul') {
+        flushList(`${lineKey}-prev-ul`);
+        inList = true;
+        listType = 'ul';
+      }
+      listItems.push(<li key={`${lineKey}-li`}>{formatInline(ulMatch[2], `${lineKey}-li-text`)}</li>);
+      if (i === lines.length - 1) flushList(`${lineKey}-last`); 
+      continue;
+    }
+
+    const olMatch = line.match(/^(\d+)\.\s+(.*)/);
+    if (olMatch) {
+      if (!inList || listType !== 'ol') {
+        flushList(`${lineKey}-prev-ol`);
+        inList = true;
+        listType = 'ol';
+      }
+      listItems.push(<li key={`${lineKey}-li`}>{formatInline(olMatch[2], `${lineKey}-li-text`)}</li>);
+      if (i === lines.length - 1) flushList(`${lineKey}-last`); 
+      continue;
+    }
+    
+    flushList(`${lineKey}-prev-p`); 
+    if (line.trim() !== '') {
+      elements.push(<p key={lineKey} className="my-2">{formatInline(line, lineKey)}</p>);
+    } else if (elements.length > 0 && !elements[elements.length -1]?.key?.toString().includes('-br-')) {
+      elements.push(<br key={`${lineKey}-br-${i}`} />);
+    }
+  }
+  flushList(`final`);
+
+  return <div className="text-foreground/90 p-1">{elements}</div>;
+}
 
 
 export function BasicVsEngineeredSection() {
@@ -278,6 +388,9 @@ export function BasicVsEngineeredSection() {
   
   const [basicResponseQuality, setBasicResponseQuality] = useState(10);
   const [engineeredResponseQuality, setEngineeredResponseQuality] = useState(15);
+  
+  const [basicPreviewMode, setBasicPreviewMode] = useState(false);
+  const [engineeredPreviewMode, setEngineeredPreviewMode] = useState(false);
 
 
   useEffect(() => {
@@ -289,6 +402,8 @@ export function BasicVsEngineeredSection() {
       setEngineeredResponse("");
       setBasicResponseQuality(10); 
       setEngineeredResponseQuality(15);
+      setBasicPreviewMode(false);
+      setEngineeredPreviewMode(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedScenarioId]);
@@ -315,6 +430,8 @@ export function BasicVsEngineeredSection() {
         setEngineeredResponse(data.engineeredResponse || "AI did not return a valid engineered response.");
         toast({ variant: "destructive", title: "Response Error", description: "One or both AI responses were incomplete." });
       }
+      setBasicPreviewMode(false); 
+      setEngineeredPreviewMode(false);
     },
     onError: (error: Error) => {
       const errorMsg = `Error: ${error.message}`;
@@ -333,11 +450,15 @@ export function BasicVsEngineeredSection() {
     setEngineeredResponse("");
     setBasicResponseQuality(0); 
     setEngineeredResponseQuality(0);
+    setBasicPreviewMode(false);
+    setEngineeredPreviewMode(false);
 
     mutation.mutate({ basicUserInput: basicPromptText, fullEngineeredPrompt: fullEngineeredPromptText });
   };
 
   const CurrentDisplayIcon = currentScenario.icon || HelpCircle;
+  const showResponseArea = mutation.isSuccess || mutation.isError || basicResponse || engineeredResponse;
+
 
   return (
     <SectionContainer
@@ -407,30 +528,72 @@ export function BasicVsEngineeredSection() {
                 </Button>
               </div>
 
-              {(mutation.isSuccess || mutation.isError || basicResponse || engineeredResponse) && (
+              {showResponseArea && (
                 <div className="grid md:grid-cols-2 gap-6 mt-4">
                   <div>
-                    <label className="block text-sm font-medium text-muted-foreground mb-1">Basic Prompt Response</label>
-                    <Textarea
-                      readOnly
-                      value={basicResponse}
-                      className="h-56 bg-card/50 border-0 resize-none text-foreground/90 custom-scrollbar"
-                      placeholder="AI response to basic prompt..."
-                    />
+                    <div className="flex justify-between items-center mb-1">
+                      <Label htmlFor="basicPromptResponse" className="block text-sm font-medium text-muted-foreground">Basic Prompt Response</Label>
+                      {basicResponse && !mutation.isPending && (
+                        <div className="flex items-center space-x-2">
+                          <Label htmlFor="basic-preview-switch" className="text-xs text-neon-yellow/80">Raw</Label>
+                          <Switch
+                            id="basic-preview-switch"
+                            checked={basicPreviewMode}
+                            onCheckedChange={setBasicPreviewMode}
+                            size="sm"
+                          />
+                          <Label htmlFor="basic-preview-switch" className="text-xs text-neon-yellow/80">Preview</Label>
+                        </div>
+                      )}
+                    </div>
+                    {basicPreviewMode && basicResponse ? (
+                       <div className="h-56 bg-card/50 resize-none text-foreground/90 custom-scrollbar rounded-md border border-transparent p-3 overflow-y-auto">
+                         <BasicMarkdownPreview markdown={basicResponse} />
+                       </div>
+                    ) : (
+                      <Textarea
+                        id="basicPromptResponse"
+                        readOnly
+                        value={basicResponse}
+                        className="h-56 bg-card/50 border-0 resize-none text-foreground/90 custom-scrollbar"
+                        placeholder="AI response to basic prompt..."
+                      />
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-muted-foreground mb-1">Engineered Prompt Response</label>
-                    <Textarea
-                      readOnly
-                      value={engineeredResponse}
-                      className="h-56 bg-card/50 border-0 resize-none text-foreground/90 custom-scrollbar"
-                      placeholder="AI response to engineered prompt..."
-                    />
+                     <div className="flex justify-between items-center mb-1">
+                      <Label htmlFor="engineeredPromptResponse" className="block text-sm font-medium text-muted-foreground">Engineered Prompt Response</Label>
+                      {engineeredResponse && !mutation.isPending && (
+                        <div className="flex items-center space-x-2">
+                          <Label htmlFor="engineered-preview-switch" className="text-xs text-neon-yellow/80">Raw</Label>
+                          <Switch
+                            id="engineered-preview-switch"
+                            checked={engineeredPreviewMode}
+                            onCheckedChange={setEngineeredPreviewMode}
+                            size="sm"
+                          />
+                          <Label htmlFor="engineered-preview-switch" className="text-xs text-neon-yellow/80">Preview</Label>
+                        </div>
+                      )}
+                    </div>
+                    {engineeredPreviewMode && engineeredResponse ? (
+                       <div className="h-56 bg-card/50 resize-none text-foreground/90 custom-scrollbar rounded-md border border-transparent p-3 overflow-y-auto">
+                         <BasicMarkdownPreview markdown={engineeredResponse} />
+                       </div>
+                    ) : (
+                      <Textarea
+                        id="engineeredPromptResponse"
+                        readOnly
+                        value={engineeredResponse}
+                        className="h-56 bg-card/50 border-0 resize-none text-foreground/90 custom-scrollbar"
+                        placeholder="AI response to engineered prompt..."
+                      />
+                    )}
                   </div>
                 </div>
               )}
 
-              {(mutation.isSuccess || mutation.isError || basicResponse || engineeredResponse) && (
+              {showResponseArea && (
                  <div className="mt-8">
                     How is the response quality being calculated here?
                  </div>
@@ -442,3 +605,4 @@ export function BasicVsEngineeredSection() {
     </SectionContainer>
   );
 }
+
