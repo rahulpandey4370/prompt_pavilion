@@ -530,13 +530,17 @@ export function PromptBuilderSection() {
                             <SelectTrigger id="scenario-select" className="w-full bg-card/80 border-neon-yellow/50 focus:ring-neon-yellow text-foreground">
                                 <SelectValue placeholder="Select a scenario" />
                             </SelectTrigger>
-                            <SelectContent className="bg-card border-neon-yellow text-foreground">
+                            <SelectContent className="bg-popover border-neon-yellow text-popover-foreground">
                                 {scenarios.map(scenario => (
-                                <SelectItem key={scenario.id} value={scenario.id} className="focus:bg-neon-yellow/20">
-                                    <div className="flex items-center">
-                                        {scenario.icon && <scenario.icon className="mr-2 h-4 w-4 text-muted-foreground"/>}
-                                        {scenario.name}
-                                    </div>
+                                <SelectItem
+                                  key={scenario.id}
+                                  value={scenario.id}
+                                  className="data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                                >
+                                  <div className="flex items-center">
+                                    {scenario.icon && <scenario.icon className="mr-2 h-4 w-4 text-primary" />}
+                                    {scenario.name}
+                                  </div>
                                 </SelectItem>
                                 ))}
                             </SelectContent>
