@@ -6,7 +6,17 @@ import { SectionContainer } from "@/components/shared/section-container";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
-import { Settings2, Puzzle, ListChecks, Eye, SlidersHorizontal, ShieldCheck, Wrench, Wand2, Info } from "lucide-react";
+import { 
+  Settings2, 
+  Puzzle, 
+  ListChecks, 
+  Eye, 
+  SlidersHorizontal, 
+  ShieldCheck, 
+  Wand2, 
+  Info,
+  Zap // Added Zap for Zero-Shot
+} from "lucide-react";
 
 interface AnatomyPart {
   id: string;
@@ -38,6 +48,24 @@ const anatomyParts: AnatomyPart[] = [
     conciseDescription: "The specific question or instruction from the user. Clarity and specificity are key for relevant AI responses. E.g., 'Suggest a 3-day Paris itinerary.'"
   },
   {
+    id: "zero_shot",
+    name: "Zero-Shot Prompting",
+    icon: Zap,
+    colorClass: "bg-sky-600", // Using a sky blue
+    textColorClass: "text-sky-100",
+    borderColorClass: "border-sky-500",
+    conciseDescription: "Instructs the AI to perform a task directly without any prior examples. Relies on the AI's pre-trained knowledge. E.g., 'Translate this to French: Hello world.'"
+  },
+  {
+    id: "few_shot",
+    name: "Few-Shot Prompting",
+    icon: Eye, // Re-using Eye icon
+    colorClass: "bg-prompt-examples", // Re-using teal color from previous 'Examples'
+    textColorClass: "text-teal-100",
+    borderColorClass: "border-teal-500",
+    conciseDescription: "Provides the AI with a small number of examples (shots) of the task being performed, guiding its response style and format. E.g., Showing input/output pairs for sentiment analysis."
+  },
+  {
     id: "rag",
     name: "Context / RAG",
     icon: ListChecks,
@@ -45,15 +73,6 @@ const anatomyParts: AnatomyPart[] = [
     textColorClass: "text-green-100",
     borderColorClass: "border-green-500",
     conciseDescription: "Provides external information (documents, database results) to ground AI responses in facts, reducing hallucination. E.g., Including product manuals for troubleshooting."
-  },
-  {
-    id: "examples",
-    name: "Examples (Few-shot)",
-    icon: Eye,
-    colorClass: "bg-prompt-examples",
-    textColorClass: "text-teal-100",
-    borderColorClass: "border-teal-500",
-    conciseDescription: "Illustrative input-output pairs demonstrating desired format, style, or reasoning. Helps AI understand nuanced requests. E.g., Showing 'good' vs 'bad' email styles."
   },
   {
     id: "constraints",
@@ -72,15 +91,6 @@ const anatomyParts: AnatomyPart[] = [
     textColorClass: "text-red-100",
     borderColorClass: "border-red-500",
     conciseDescription: "Ensures AI output is safe, ethical, and policy-aligned; avoids harmful or inappropriate content. Critical for responsible AI. E.g., 'Do not generate financial advice.'"
-  },
-  {
-    id: "tools",
-    name: "Tools / Functions",
-    icon: Wrench,
-    colorClass: "bg-prompt-tools",
-    textColorClass: "text-yellow-100",
-    borderColorClass: "border-yellow-500",
-    conciseDescription: "Allows AI to interact with external APIs or systems to perform actions or retrieve real-time data. E.g., A tool to fetch current weather."
   },
   {
     id: "output_format",
@@ -119,7 +129,7 @@ export function PromptAnatomyLabSection() {
     <SectionContainer
       id="anatomy"
       title="The Prompt Anatomy Lab"
-      subtitle="&quot;Understanding the distinct components of a prompt is crucial. Each part plays a strategic role in shaping the AI's understanding, focus, and the quality of its output. Mastering this anatomy transforms your prompts from simple questions into powerful instructions.&quot;"
+      subtitle="Understanding the distinct components of a prompt is crucial. Each part plays a strategic role in shaping the AI's understanding, focus, and the quality of its output. Mastering this anatomy transforms your prompts from simple questions into powerful instructions."
       subtitleClassName="italic"
       isContainedCard={true}
       className="!py-12 md:!py-16"
@@ -177,7 +187,7 @@ export function PromptAnatomyLabSection() {
                     onMouseLeave={() => setHoveredItemId(null)}
                   >
                     <div className="flex items-start">
-                      <Info className={cn("w-5 h-5 mr-2 shrink-0 mt-0.5", part.textColorClass === "text-yellow-100" ? "text-background" : "")} />
+                      <Info className={cn("w-5 h-5 mr-2 shrink-0 mt-0.5", part.textColorClass === "text-yellow-100" ? "text-background" : part.textColorClass === "text-sky-100" ? "text-background" : "")} />
                       <p className="flex-1">{part.conciseDescription}</p>
                     </div>
                   </PopoverContent>

@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -70,8 +71,9 @@ export default {
         'prompt-rag': 'hsl(var(--prompt-rag))',
         'prompt-constraints': 'hsl(var(--prompt-constraints))',
         'prompt-guardrails': 'hsl(var(--prompt-guardrails))',
-        'prompt-tools': 'hsl(var(--prompt-tools))',
-        'prompt-examples': 'hsl(var(--prompt-examples))',
+        /* 'prompt-tools' removed */
+        'prompt-examples': 'hsl(var(--prompt-examples))', /* Used for Few-Shot Prompting */
+        /* New colors for Zero-Shot can be added here if needed or use Tailwind direct classes like bg-sky-600 */
         'icon-predictable-pricing': 'var(--icon-predictable-pricing-bg)',
         'icon-fast-turnaround': 'var(--icon-fast-turnaround-bg)',
         'icon-highest-quality': 'var(--icon-highest-quality-bg)',

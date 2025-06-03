@@ -86,8 +86,10 @@ html {
     --prompt-rag: 130 60% 45%;
     --prompt-constraints: 30 80% 60%;
     --prompt-guardrails: 0 70% 55%;
-    --prompt-tools: 50 90% 60%;
-    --prompt-examples: 180 70% 50%;
+    /* --prompt-tools: 50 90% 60%; /* Removed as 'Tools' component is removed */
+    --prompt-examples: 180 70% 50%; /* This is for Few-Shot, which uses teal */
+    /* --prompt-zero-shot: 199 89% 43%; /* Example: Sky Blue - if using Tailwind direct, this is not needed */
+
 
     /* Icon chip background colors (from "WHY CHOOSE SUBSCRIPTION" example) */
     --icon-predictable-pricing-bg: hsl(220, 90%, 60%);
