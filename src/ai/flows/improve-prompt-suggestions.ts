@@ -74,7 +74,6 @@ export async function improvePromptSuggestions(
     const chatCompletion = await azureClient.chat.completions.create({
       model: azureDeploymentId,
       messages: [{ role: 'user', content: userMessageContent }],
-      // response_format: { type: "json_object" }, // If supported
       temperature: 0.5,
     });
 
@@ -84,11 +83,18 @@ export async function improvePromptSuggestions(
       throw new Error("AI returned an empty response for prompt suggestions.");
     }
     
+    let cleanedResponseText = responseText.trim();
+    const jsonRegex = /^```json\s*([\s\S]*?)\s*```$/;
+    const match = cleanedResponseText.match(jsonRegex);
+    if (match && match[1]) {
+      cleanedResponseText = match[1];
+    }
+
     let parsedOutput: ImprovePromptSuggestionsOutput;
     try {
-      parsedOutput = JSON.parse(responseText);
+      parsedOutput = JSON.parse(cleanedResponseText);
     } catch (e) {
-      console.error("Failed to parse JSON response from AI for suggestions:", responseText, e);
+      console.error("Failed to parse JSON response from AI for suggestions:", cleanedResponseText, e);
       throw new Error("AI returned an invalid JSON format for suggestions. Raw response: " + responseText);
     }
 

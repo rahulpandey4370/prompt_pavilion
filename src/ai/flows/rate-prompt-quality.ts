@@ -76,7 +76,6 @@ export async function ratePromptQuality(
     const chatCompletion = await azureClient.chat.completions.create({
       model: azureDeploymentId,
       messages: [{ role: 'user', content: userMessageContent }],
-      // response_format: { type: "json_object" }, // If supported
       temperature: 0.2,
     });
 
@@ -86,11 +85,18 @@ export async function ratePromptQuality(
       throw new Error("AI returned an empty response for prompt rating.");
     }
     
+    let cleanedResponseText = responseText.trim();
+    const jsonRegex = /^```json\s*([\s\S]*?)\s*```$/;
+    const match = cleanedResponseText.match(jsonRegex);
+    if (match && match[1]) {
+      cleanedResponseText = match[1];
+    }
+    
     let parsedOutput: RatePromptQualityOutput;
     try {
-      parsedOutput = JSON.parse(responseText);
+      parsedOutput = JSON.parse(cleanedResponseText);
     } catch (e) {
-      console.error("Failed to parse JSON response from AI for rating:", responseText, e);
+      console.error("Failed to parse JSON response from AI for rating:", cleanedResponseText, e);
       throw new Error("AI returned an invalid JSON format for rating. Raw response: " + responseText);
     }
     

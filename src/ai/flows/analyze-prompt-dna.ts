@@ -111,9 +111,7 @@ export async function analyzePromptDNA(
     const chatCompletion = await azureClient.chat.completions.create({
       model: azureDeploymentId,
       messages: [{ role: 'user', content: userMessageContent }],
-      // Consider response_format for models that support it for more reliable JSON
-      // response_format: { type: "json_object" }, // If supported by your deployment & API version
-      temperature: 0.2, // Lower temperature for more deterministic structured output
+      temperature: 0.2,
     });
 
     const responseText = chatCompletion.choices[0]?.message?.content;
@@ -122,16 +120,21 @@ export async function analyzePromptDNA(
       throw new Error("AI returned an empty response for DNA analysis.");
     }
 
-    // Attempt to parse the JSON response
+    let cleanedResponseText = responseText.trim();
+    const jsonRegex = /^```json\s*([\s\S]*?)\s*```$/;
+    const match = cleanedResponseText.match(jsonRegex);
+    if (match && match[1]) {
+      cleanedResponseText = match[1];
+    }
+
     let parsedOutput: AnalyzePromptDNAOutput;
     try {
-      parsedOutput = JSON.parse(responseText);
+      parsedOutput = JSON.parse(cleanedResponseText);
     } catch (e) {
-      console.error("Failed to parse JSON response from AI for DNA analysis:", responseText, e);
+      console.error("Failed to parse JSON response from AI for DNA analysis:", cleanedResponseText, e);
       throw new Error("AI returned an invalid JSON format for DNA analysis. Raw response: " + responseText);
     }
     
-    // Validate against Zod schema
     const validationResult = AnalyzePromptDNAOutputSchema.safeParse(parsedOutput);
     if (!validationResult.success) {
         console.error("AI response for DNA analysis failed Zod validation:", validationResult.error.issues);
@@ -143,7 +146,6 @@ export async function analyzePromptDNA(
 
   } catch (error: any) {
     console.error("Error in analyzePromptDNA:", error.message);
-    // Return a structured error response if appropriate for the frontend
     return {
       overallAssessment: "Could not analyze the prompt due to an error.",
       clarityScore: "Error",
